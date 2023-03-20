@@ -3,10 +3,10 @@
 Basic:
 
 - Game starting
-- I matching
-- L matching
-- U matching
-- Z matching
+- I matching		--> done (gameboard.cpp)
+- L matching		--> done (gameboard.cpp)
+- U matching		--> done (gameboard.cpp)
+- Z matching		--> done (gameboard.cpp)
 - Game finish verify
 
 Advanced:
@@ -16,7 +16,7 @@ Advanced:
 - Visual effects
 - Background
 - Leaderboard
-- Move suggestion
+- Move suggestion	--> done (gameboard.cpp)
 
 Extra-advanced:
 

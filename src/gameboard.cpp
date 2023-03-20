@@ -59,7 +59,7 @@ public:
 			memcpy(map[y+1] + 1, gamedata[y], sizeof(gamedata[y][0]) * _w); // mid
 		}
 
-		buildVst();
+		prepBFS();
 	}
 
 	/**
@@ -74,8 +74,18 @@ public:
 	/**
 	 * @ suggestion
 	 * 
-	 * 
+	 * brute force to find a matching pair (y0, x0) (y1, x1)
+	 * returns in following format:
+	 * 		(y0<<24) | (x0<<16) | (y1<<8) | (x1<<0)
 	 * */
+	uint32_t suggest() {
+		for (int y = 1; y < h-1; y++) for (int x = 1; x < w-1; x++) if (map[y][x] != EmptyCell) {
+			uint32_t self  = (y<<8|x)<<16;
+			uint16_t other = BFS(y, x);
+			if (other != 0) return self|other;
+		}
+		return 0; // the map is corrupted
+	}
 
 private:
 	/**
@@ -83,7 +93,7 @@ private:
 	 * */
 	bool*** vst;
 
-	void buildVst() {
+	void prepBFS() {
 		// vst[d][y, x] == true
 		// --> cell (y, x) was visited via `d` turns
 		vst = new bool**[3];
