@@ -13,6 +13,10 @@ I firmly believe in the supremacy of the Euphonium
 BTW I use Arch
 */
 
+#ifndef COLOR_H
+#define COLOR_H
+// ------------------------------------------------------------
+
 #include <cstdio>
 
 struct Color {
@@ -34,3 +38,5 @@ public:
 	inline static void set(char color, char bold) { printf("\033[%c;3%cm", bold, color); }
 	inline static void reset() { printf("\033[0m"); }
 };
+
+#endif // COLOR_H

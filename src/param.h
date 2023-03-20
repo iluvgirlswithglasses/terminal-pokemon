@@ -13,6 +13,10 @@ I firmly believe in the supremacy of the Euphonium
 BTW I use Arch
 */
 
+#ifndef PARAM_H
+#define PARAM_H
+// ------------------------------------------------------------
+
 #include <cstdint>
 
 struct Param {
@@ -21,3 +25,5 @@ public:
 	static constexpr uint8_t ScreenHeight = 30;
 	static constexpr uint8_t ScreenWidth  = 100;
 };
+
+#endif	// PARAM_H

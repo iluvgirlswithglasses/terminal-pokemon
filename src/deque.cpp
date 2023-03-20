@@ -13,136 +13,74 @@ I firmly believe in the supremacy of the Euphonium
 BTW I use Arch
 */
 
-/*
-@ about this:
-	a very inefficient deque
-	implemented via a linked list
+#include "deque.h"
 
-note that whenever this deque removes an item,
-it will only free that memory cell, 
-and it won't change the program's memory allocation
+template<typename T> Deque<T>::Node::Node(T _val, Node* _l, Node* _r) {
+	val = _val;
+	l = _l;
+	r = _r;
+}
 
-in other words, it wouldn't create any memory leak,
-but it wouldn't shrink its RAM usage either.
-*/
+template<typename T> Deque<T>::Deque() {
+	m_count = 0;
+	first = nullptr;
+	last = nullptr;
+}
 
-template <typename T> struct Deque {
+template<typename T> Deque<T>::~Deque() {
+	clear();
+}
 
-public:
-	/**
-	 * @ this node is used in this deque only
-	 * */
-	struct Node {
-		T     val;	// value of this node
-		Node* l;	// the left node
-		Node* r;	// the right node
-
-		Node(T _val, Node* _l, Node* _r) {
-			val = _val;
-			l = _l;
-			r = _r;
-		}
-	};
-
-	/**
-	 * @ constructor
-	 * */
-	Deque() {
-		m_count = 0;
-		first = nullptr;
-		last = nullptr;
-	}
-
-	~Deque() {
-		clear();
-	}
-
-	/**
-	 * @ getters
-	 * */
-	int count() { return m_count; }
-	T front() { return first->val; }
-	T back() { return last->val; }
-
-	/**
-	 * @ inserting
-	 * */
-	void push_front(T v) {
-		Node* cr = new Node(v, nullptr, first);
-		if (++m_count == 1)
-			last = cr;
-		else
-			first->l = cr;
-		first = cr;
-	}
-
-	void push_back(T v) {
-		Node* cr = new Node(v, last, nullptr);
-		if (++m_count == 1)
-			first = cr;
-		else
-			last->r = cr;
+template<typename T> void Deque<T>::push_front(T v) {
+	Node* cr = new Node(v, nullptr, first);
+	if (++m_count == 1)
 		last = cr;
+	else
+		first->l = cr;
+	first = cr;
+}
+
+template<typename T> void Deque<T>::push_back(T v) {
+	Node* cr = new Node(v, last, nullptr);
+	if (++m_count == 1)
+		first = cr;
+	else
+		last->r = cr;
+	last = cr;
+}
+
+template<typename T> T Deque<T>::pop_front() {
+	T res = front();
+	Node* cr = first;
+	Node* nxt = first->r;
+	
+	if (--m_count == 0) {
+		first = last = nullptr;
+	} else {
+		first = nxt;
+		first->l = nullptr;
 	}
+	delete cr;
+	return res;
+}
 
-	/**
-	 * @ popping
-	 * 
-	 * throws an error if `count() == 0` when called
-	 * */
-	T pop_front() {
-		T res = front();
-		Node* cr = first;
-		Node* nxt = first->r;
-		
-		if (--m_count == 0) {
-			first = last = nullptr;
-		} else {
-			first = nxt;
-			first->l = nullptr;
-		}
-		delete cr;
-		return res;
+template<typename T> T Deque<T>::pop_back() {
+	T res = back();
+	Node* cr = last;
+	Node* nxt = last->l;
+
+	if (--m_count == 0) {
+		first = last = nullptr;
+	} else {
+		last = nxt;
+		last->r = nullptr;
 	}
+	delete cr;
+	return res;
+}
 
-	T pop_back() {
-		T res = back();
-		Node* cr = last;
-		Node* nxt = last->l;
-
-		if (--m_count == 0) {
-			first = last = nullptr;
-		} else {
-			last = nxt;
-			last->r = nullptr;
-		}
-		delete cr;
-		return res;
-	}
-
-	void clear() {
-		int iterations = m_count;
-		while (iterations--) pop_back();
-		m_count = 0;
-	}
-
-	/**
-	 * @ debug
-	 * */
-	/*
-	void deb() {
-		Node* cr = first;
-		int iterations = m_count;
-		while (iterations--) {
-			printf("%d ", cr->val);
-			cr = cr->r;
-		}
-		printf("\n");
-	}
-	*/
-
-private:
-	int m_count;
-	Node* first;
-	Node* last;
-};
+template<typename T> void Deque<T>::clear() {
+	int iterations = m_count;
+	while (iterations--) pop_back();
+	m_count = 0;
+}

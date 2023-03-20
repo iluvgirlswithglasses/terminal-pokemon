@@ -204,14 +204,10 @@ private:
 		vst[0][y0][x0] = vst[1][y0][x0] = vst[2][y0][x0] = true;
 
 		while (qy.count()) {
-			uint8_t y = qy.front(), 
-			        x = qx.front(), 
-			        t = qt.front(), 
-			        d = qd.front();
-			qy.pop_front();
-			qx.pop_front();
-			qt.pop_front();
-			qd.pop_front();
+			uint8_t y = qy.pop_front(), 
+			        x = qx.pop_front(), 
+			        t = qt.pop_front(), 
+			        d = qd.pop_front();
 			for (int move = 0; move < RC; move++) {
 				// if `ans != 0` in the end of this iteration
 				// its mean that we found an answer
