@@ -16,6 +16,8 @@ BTW I use Arch
 #include <cstdio>
 #include <cstring>
 
+#include "color.h"
+#include "param.h"
 #include "deque.cpp"
 
 int main() {
