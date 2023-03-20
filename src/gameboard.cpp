@@ -62,6 +62,12 @@ public:
 		prepBFS();
 	}
 
+	~GameBoard() {
+		deprebBFS();
+		for (int y = 0; y < h; y++) delete[] map[y];
+		delete[] map;
+	}
+
 	/**
 	 * @ validator
 	 * 
@@ -129,6 +135,21 @@ private:
 			for (int y = 0; y < h; y++)
 				trace[d][y] = new uint32_t[w];
 		}
+	}
+
+	void deprebBFS() {
+		// clear BFS memory usage
+		// or what I call "de-preparation"
+		for (int d = 0; d < 3; d++) {
+			for (int y = 0; y < h; y++) {
+				delete[] vst[d][y];
+				delete[] trace[d][y];
+			}
+			delete[] vst[d];
+			delete[] trace[d];
+		}
+		delete[] vst;
+		delete[] trace;
 	}
 
 	void resetVst() {
