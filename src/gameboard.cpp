@@ -98,7 +98,7 @@ private:
 		// set all vst's content to 0
 		for (int d = 0; d < 3; d++)
 			for (int y = 0; y < h; y++)
-				memset(vst[d][y], 0, sizeof(vst[d][y]) * w);
+				memset(vst[d][y], 0, sizeof(vst[d][y][0]) * w);
 	}
 
 	// encodes (y, x)
@@ -166,11 +166,18 @@ private:
 				if (t != RC && move != t) nxtD++;
 				if (nxtD > 2) continue;
 
+				// this cell is already visited
+				if (vst[nxtD][nxtY][nxtX]) continue;
+
 				// check if found the destination
-				if (fixed)
+				if (fixed) {
 					if (nxtY == y1 && nxtX == x1) return key(nxtY, nxtX);
-				else
+				} else {
 					if (map[nxtY][nxtX] == map[y0][x0]) return key(nxtY, nxtX);
+				}
+
+				// neither a destination nor an empty cell
+				if (map[nxtY][nxtX] != EmptyCell) continue;
 
 				// move to the next cell
 				vst[nxtD][nxtY][nxtX] = true;

@@ -33,8 +33,17 @@ GameBoard read() {
     return GameBoard(h, w, data);
 }
 
+void prf_board(GameBoard &board) {
+    for (int y = 0; y < board.h; y++) {
+        for (int x = 0; x < board.w; x++)
+            printf("%d ", board.map[y][x]);
+        printf("\n");
+    }
+}
+
 int main() {
     GameBoard board = read();
+    prf_board(board);
     while (true) {
         int y0, x0, y1, x1;
         scanf("%d %d %d %d", &y0, &x0, &y1, &x1);
