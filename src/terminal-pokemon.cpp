@@ -16,35 +16,8 @@ BTW I use Arch
 #include <cstdio>
 #include <cstring>
 
-#include <iostream>
-
 #include "deque.cpp"
 
 int main() {
-	Deque<int> q;
-	while (true) {
-		char operation; std::cin >> operation;
-		int v;
-
-		switch (operation) {
-		case 'b':
-			std::cin >> v;
-			q.push_back(v);
-			break;
-		case 'f':
-			std::cin >> v;
-			q.push_front(v);
-			break;
-		case 'r':
-			q.pop_back();
-			break;
-		case 'l':
-			q.pop_front();
-			break;
-		case 'd':
-			q.deb();
-			break;
-		}
-	}
 	return 0;
 }

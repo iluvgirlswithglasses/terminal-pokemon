@@ -53,7 +53,7 @@ public:
 	 * @ inserting
 	 * */
 	void push_front(T v) {
-		Node cr = new Node(v, nullptr, first);
+		Node* cr = new Node(v, nullptr, first);
 		if (++m_count == 1)
 			last = cr;
 		else
