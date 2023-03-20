@@ -34,11 +34,15 @@ GameBoard read() {
 }
 
 void prf_board(GameBoard &board) {
+    printf("gameboard:\n");
     for (int y = 0; y < board.h; y++) {
-        for (int x = 0; x < board.w; x++)
-            printf("%d ", board.map[y][x]);
+        for (int x = 0; x < board.w; x++) {
+            if (board.map[y][x]) printf("%d ", board.map[y][x]);
+            else printf(". ");
+        }
         printf("\n");
     }
+    printf("\n");
 }
 
 int main() {
@@ -47,10 +51,18 @@ int main() {
     while (true) {
         int y0, x0, y1, x1;
         scanf("%d %d %d %d", &y0, &x0, &y1, &x1);
-        if (board.validate(y0, x0, y1, x1))
+        if (board.validate(y0, x0, y1, x1)) {
             printf("ok\n");
-        else
+            Deque<uint16_t> path = board.get_path(y0, x0, y1, x1);
+            while (path.count()) {
+                printf("(%d, %d) ", path.front()>>8, path.front()&GameBoard::MSK8);
+                path.pop_front();
+            }
+            printf("\n");
+
+        } else {
             printf("not ok\n");
+        }
     }
 	return 0;
 }

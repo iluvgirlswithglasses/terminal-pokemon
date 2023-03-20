@@ -87,11 +87,30 @@ public:
 		return 0; // the map is corrupted
 	}
 
+	/**
+	 * @ tracer
+	 * 
+	 * get the path from (y0, x0) -> (y1, x1)
+	 * which was previously traced
+	 * */
+	Deque<uint16_t> get_path(uint8_t y0, uint8_t x0, uint8_t y1, uint8_t x1) {
+		Deque<uint16_t> ans;
+		uint8_t depth = 3;
+		for (int d = 0; d < 3; d++) if (vst[d][y1][x1]) {
+			depth = d;
+			break;
+		}
+		ans.push_front(y1<<8|x1);
+		traceDFS(ans, y0, x0, y1, x1, depth);
+		return ans;
+	}
+
 private:
 	/**
 	 * @ BFS helpers
 	 * */
 	bool*** vst;
+	uint32_t*** trace;
 
 	void prepBFS() {
 		// vst[d][y, x] == true
@@ -101,6 +120,14 @@ private:
 			vst[d] = new bool*[h];			// 2d array
 			for (int y = 0; y < h; y++)
 				vst[d][y] = new bool[w];	// 1d array
+		}
+		// trace[d][y, x] == (pd<<16) | (py<<8) | px
+		//                   where `p` means parent
+		trace = new uint32_t**[3];
+		for (int d = 0; d < 3; d++) {
+			trace[d] = new uint32_t*[h];
+			for (int y = 0; y < h; y++)
+				trace[d][y] = new uint32_t[w];
 		}
 	}
 
@@ -165,6 +192,10 @@ private:
 			qt.pop_front();
 			qd.pop_front();
 			for (int move = 0; move < RC; move++) {
+				// if `ans != 0` in the end of this iteration
+				// its mean that we found an answer
+				uint16_t ans = 0;
+
 				// check if index out of bound
 				int nxtY32 = RY[move] + static_cast<int>(y),
 				    nxtX32 = RX[move] + static_cast<int>(x);
@@ -181,16 +212,21 @@ private:
 
 				// check if found the destination
 				if (fixed) {
-					if (nxtY == y1 && nxtX == x1) return key(nxtY, nxtX);
+					if (nxtY == y1 && nxtX == x1) ans = key(nxtY, nxtX);
 				} else {
-					if (map[nxtY][nxtX] == map[y0][x0]) return key(nxtY, nxtX);
+					if (map[nxtY][nxtX] == map[y0][x0]) ans = key(nxtY, nxtX);
 				}
 
-				// neither a destination nor an empty cell
+				// trace
+				vst[nxtD][nxtY][nxtX] = true;
+				trace[nxtD][nxtY][nxtX] = (static_cast<uint32_t>(d)<<16) | (static_cast<uint32_t>(y)<<8) | (static_cast<uint32_t>(x));
+
+				if (ans != 0) return ans;	// only returns after tracing
+
+				// not an empty cell --> cant move here
 				if (map[nxtY][nxtX] != EmptyCell) continue;
 
-				// move to the next cell
-				vst[nxtD][nxtY][nxtX] = true;
+				// move to next cell
 				qy.push_back(nxtY);
 				qx.push_back(nxtX);
 				qt.push_back(move);
@@ -199,5 +235,18 @@ private:
 		}
 
 		return 0;
+	}
+
+	/**
+	 * @ tracer
+	 * */
+	void traceDFS(Deque<uint16_t> &q, uint8_t dy, uint8_t dx, uint8_t y, uint8_t x, uint8_t d) {
+		uint32_t nxt = trace[d][y][x];
+		uint8_t nxtX = nxt       & MSK8,
+		        nxtY = (nxt>>8)  & MSK8,
+		        nxtD = (nxt>>16) & MSK8;
+		q.push_front(nxtY<<8|nxtX);
+		if (nxtY == dy && nxtX == dx) return;
+		traceDFS(q, dy, dx, nxtY, nxtX, nxtD);
 	}
 };
