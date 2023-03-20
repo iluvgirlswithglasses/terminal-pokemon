@@ -45,6 +45,7 @@ public:
 	 * */
 	uint8_t h, w;
 	uint8_t** map;
+	bool** vst;
 
 	/**
 	 * @ constructors
@@ -68,6 +69,12 @@ public:
 			map[y+1][0] = map[y+1][w-1] = EmptyCell; 						// left & right
 			memcpy(map[y+1] + 1, gamedata[y], sizeof(gamedata[y][0]) * _w); // mid
 		}
+
+		// build visited
+		bool** vst = new bool*[h];
+		for (int y = 0; y < h; y++)
+			vst[y] = new bool[w];
+		resetVst();
 	}
 
 	/**
@@ -75,34 +82,57 @@ public:
 	 * */
 	// check whether (y0, x0) can match with (y1, x1)
 	bool validate(uint8_t y0, uint8_t x0, uint8_t y1, uint8_t x1) {
-		if (map[y0][x0] != map[y1][x1]) return false;
-		// bfs
-
-		return false;
+		return BFS(y0, x0, true, y1, x1);
 	}
 
-	/**
-	 * @ move suggestion
-	 * */
 	// automatically find a match pair
 	// return format: `(y0<<24) | (x0<<16) | (y1<<8) | (x1<<0)`
 	// if there's no match, `0` is returned (only happens when the board is corrupted)
 	uint32_t suggest() {
-
+		// this is a shameless bruteforce
+		for (uint8_t y = 1; y < h-1; y++) for (uint8_t x = 1; x < w-1; x++) if (map[y][x] != EmptyCell) {
+			uint16_t nxt = BFS(y, x);
+			if (nxt != 0) {
+				return (y<<24) | (x<<16) | nxt;
+			}
+		}
 		return 0;
 	}
 
-	// automatically find a match for (y0, x0)
-	// return format: `y<<8|x`
-	// if there's no match, `0` is returned
-	uint16_t suggestBFS(uint8_t y0, uint8_t x0) {
+private:
+	/**
+	 * @ decode 2 values into 1
+	 * */
+	uint16_t key(uint8_t y0, uint8_t x0) {
+		uint16_t ans = y0;
+		return ans<<8|x0;
+	}
 
-		// visited
-		bool** vst = new bool*[h];
-		for (int y = 0; y < h; y++) {
-			vst[y] = new bool[w];
+	uint32_t key(uint16_t a, uint16_t b) {
+		uint32_t ans = a;
+		return ans<<16|b;
+	}
+
+	/**
+	 * @ BFS
+	 * */
+	void resetVst() {
+		for (int y = 0; y < h; y++)
 			memset(vst[y], 0, sizeof(vst[y]) * w);
-		}
+	}
+
+	/*
+	find a match for (y0, x0)
+	return format: `y<<8|x`
+	if there's no match, `0` is returned
+	
+	if `fixed` is set to true
+	this function will check if (y0, x0) can be matched with (y1, x1)
+	assuming that map[y0][x0] == map[y1][x1]
+	*/
+	uint16_t BFS(uint8_t y0, uint8_t x0, bool fixed = false, uint8_t y1 = 0, uint8_t x1 = 0) {
+
+		resetVst();
 		vst[y0][x0] = true;
 
 		//
@@ -128,7 +158,16 @@ public:
 				int nxty32 = y + RY[move],
 				    nxtx32 = x + RX[move];
 				if (nxty32 >= h || nxtx32 >= w || nxty32 < 0 || nxtx32 < 0) continue;
-				if (vst[nxty32][nxtx32]) continue;
+				uint8_t nxty = nxty32, nxtx = nxtx32;
+
+				// found it
+				if (!fixed)
+					if (map[nxty][nxtx] == map[y0][x0]) return key(nxty, nxtx);
+				else
+					if (nxty == y1 && nxtx == x1) return key(nxty, nxtx);
+
+				// cant move here
+				if (vst[nxty][nxtx] || map[nxty][nxtx] != EmptyCell) continue;
 
 				// check depth
 				uint8_t nxtd = depth;
@@ -136,8 +175,6 @@ public:
 				if (nxtd > 2) continue;
 
 				// move to this new cell
-				uint8_t nxty = nxty32, nxtx = nxtx32;
-				if (map[nxty][nxtx] == map[y0][x0]) return key(nxty, nxtx);
 				vst[nxty][nxtx] = true;
 
 				q.push_back(key(nxty, nxtx));
@@ -147,19 +184,5 @@ public:
 		}
 
 		return 0;
-	}
-
-private:
-	/**
-	 * @ decode 2 values into 1
-	 * */
-	uint16_t key(uint8_t y0, uint8_t x0) {
-		uint16_t ans = y0;
-		return ans<<8|x0;
-	}
-
-	uint32_t key(uint16_t a, uint16_t b) {
-		uint32_t ans = a;
-		return ans<<16|b;
 	}
 };
