@@ -18,8 +18,22 @@ BTW I use Arch
 
 #include "color.h"
 #include "param.h"
-#include "deque.cpp"
+#include "gameboard.cpp"
+
+int h, w;
+uint8_t** data;
+
+GameBoard read() {
+    scanf("%d%d", &h, &w);
+    data = new uint8_t*[h];
+    for (int i = 0; i < h; i++) {
+        data[i] = new uint8_t[w];
+        for (int j = 0; j < w; j++) scanf("%d", &data[i][j]);
+    }
+    return GameBoard(h, w, data);
+}
 
 int main() {
+    GameBoard board = read();
 	return 0;
 }
