@@ -28,17 +28,7 @@ public:
 	 * @ special values
 	 * */
 	static constexpr uint8_t EmptyCell = 0;
-
-	/**
-	 * @ BFS
-	 * */
-	static constexpr int 
-		MSK8 = (1<<8) - 1;			// 1111 1111
-	static constexpr int
-		RC = 4;						// number of moves
-	static constexpr int 
-		RY[RC] = {-1, 0, 1, 0, },	// relative `y` cells {t, l, d, r}
-		RX[RC] = {0, -1, 0, 1, };	// relative `x` cells {t, l, d, r}
+	static constexpr int MSK8 = (1<<8) - 1;	// 1111 1111
 
 	/**
 	 * @ public fields
@@ -71,6 +61,21 @@ public:
 
 		buildVst();
 	}
+
+	/**
+	 * @ validator
+	 * 
+	 * check if (y0, x0) can be matched with (y1, x1)
+	 * */
+	bool validate(uint8_t y0, uint8_t x0, uint8_t y1, uint8_t x1) {
+		return BFS(y0, x0, true, y1, x1);
+	}
+
+	/**
+	 * @ suggestion
+	 * 
+	 * 
+	 * */
 
 private:
 	/**
@@ -115,6 +120,13 @@ private:
 	 * 		y<<8|x
 	 * */
 	uint16_t BFS(uint8_t y0, uint8_t x0, bool fixed = false, uint8_t y1 = 0, uint8_t x1 = 0) {
+		// BFS settings
+		static constexpr int
+			RC = 4;
+		static constexpr int 
+			RY[RC] = { -1, 0, 1, 0, },	// relative `y` cells {t, l, d, r}
+			RX[RC] = { 0, -1, 0, 1, };	// relative `x` cells {t, l, d, r}
+
 		// even the type is different
 		if (fixed && map[y0][x0] != map[y1][x1]) return 0;
 
@@ -151,7 +163,7 @@ private:
 
 				// check if out of turning points (maximum = 2)
 				uint8_t nxtD = d;
-				if (move != t) nxtD++;
+				if (t != RC && move != t) nxtD++;
 				if (nxtD > 2) continue;
 
 				// check if found the destination

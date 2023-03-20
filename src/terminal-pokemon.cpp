@@ -35,5 +35,13 @@ GameBoard read() {
 
 int main() {
     GameBoard board = read();
+    while (true) {
+        int y0, x0, y1, x1;
+        scanf("%d %d %d %d", &y0, &x0, &y1, &x1);
+        if (board.validate(y0, x0, y1, x1))
+            printf("ok\n");
+        else
+            printf("not ok\n");
+    }
 	return 0;
 }
