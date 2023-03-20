@@ -45,7 +45,7 @@ public:
 	 * */
 	uint8_t h, w;
 	uint8_t** map;
-	bool** vst;
+	bool*** vst;
 
 	/**
 	 * @ constructors
@@ -71,32 +71,7 @@ public:
 		}
 
 		// build visited
-		bool** vst = new bool*[h];
-		for (int y = 0; y < h; y++)
-			vst[y] = new bool[w];
 		resetVst();
-	}
-
-	/**
-	 * @ matcher
-	 * */
-	// check whether (y0, x0) can match with (y1, x1)
-	bool validate(uint8_t y0, uint8_t x0, uint8_t y1, uint8_t x1) {
-		return BFS(y0, x0, true, y1, x1);
-	}
-
-	// automatically find a match pair
-	// return format: `(y0<<24) | (x0<<16) | (y1<<8) | (x1<<0)`
-	// if there's no match, `0` is returned (only happens when the board is corrupted)
-	uint32_t suggest() {
-		// this is a shameless bruteforce
-		for (uint8_t y = 1; y < h-1; y++) for (uint8_t x = 1; x < w-1; x++) if (map[y][x] != EmptyCell) {
-			uint16_t nxt = BFS(y, x);
-			if (nxt != 0) {
-				return (y<<24) | (x<<16) | nxt;
-			}
-		}
-		return 0;
 	}
 
 private:
@@ -116,73 +91,5 @@ private:
 	/**
 	 * @ BFS
 	 * */
-	void resetVst() {
-		for (int y = 0; y < h; y++)
-			memset(vst[y], 0, sizeof(vst[y]) * w);
-	}
-
-	/*
-	find a match for (y0, x0)
-	return format: `y<<8|x`
-	if there's no match, `0` is returned
-	
-	if `fixed` is set to true
-	this function will check if (y0, x0) can be matched with (y1, x1)
-	assuming that map[y0][x0] == map[y1][x1]
-	*/
-	uint16_t BFS(uint8_t y0, uint8_t x0, bool fixed = false, uint8_t y1 = 0, uint8_t x1 = 0) {
-
-		resetVst();
-		vst[y0][x0] = true;
-
-		//
-		Deque<uint16_t> q;	// bfs queue
-		Deque<uint8_t>  d;	// (depth) number of turns performed (maximum = 2)
-		Deque<uint8_t>  t;	// the last turning type
-
-		q.push_back(key(y0, x0));
-		d.push_back(0);
-		t.push_back(RC);
-
-		while (q.count()) {
-			int y = q.front()>>8;
-			int x = q.front()&MSK8;
-
-			uint8_t depth = d.front();
-			uint8_t turn  = t.front();
-			q.pop_front();
-			d.pop_front();
-			t.pop_front();
-
-			for (uint8_t move = 0; move < RC; move++) {
-				int nxty32 = y + RY[move],
-				    nxtx32 = x + RX[move];
-				if (nxty32 >= h || nxtx32 >= w || nxty32 < 0 || nxtx32 < 0) continue;
-				uint8_t nxty = nxty32, nxtx = nxtx32;
-
-				// found it
-				if (!fixed)
-					if (map[nxty][nxtx] == map[y0][x0]) return key(nxty, nxtx);
-				else
-					if (nxty == y1 && nxtx == x1) return key(nxty, nxtx);
-
-				// cant move here
-				if (vst[nxty][nxtx] || map[nxty][nxtx] != EmptyCell) continue;
-
-				// check depth
-				uint8_t nxtd = depth;
-				if (turn != RC && move != turn) nxtd++;
-				if (nxtd > 2) continue;
-
-				// move to this new cell
-				vst[nxty][nxtx] = true;
-
-				q.push_back(key(nxty, nxtx));
-				d.push_back(nxtd);
-				t.push_back(move);
-			}
-		}
-
-		return 0;
-	}
+	void resetVst();
 };
