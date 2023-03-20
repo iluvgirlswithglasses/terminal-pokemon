@@ -53,20 +53,20 @@ public:
 	 * @ inserting
 	 * */
 	void push_front(T v) {
-		Node cr(v, nullptr, first);
+		Node cr = new Node(v, nullptr, first);
 		if (++m_count == 1)
-			last = &cr;
+			last = cr;
 		else
-			first->l = &cr;
+			first->l = cr;
 		first = cr;
 	}
 
 	void push_back(T v) {
-		Node cr(v, last, nullptr);
+		Node* cr = new Node(v, last, nullptr);
 		if (++m_count == 1)
-			first = &cr;
+			first = cr;
 		else
-			last->r = &cr;
+			last->r = cr;
 		last = cr;
 	}
 
@@ -77,7 +77,8 @@ public:
 	 * */
 	T pop_front() {
 		T res = front();
-		Node* cr = first, nxt = first->r;
+		Node* cr = first;
+		Node* nxt = first->r;
 		
 		if (--m_count == 0) {
 			first = last = nullptr;
@@ -91,7 +92,8 @@ public:
 
 	T pop_back() {
 		T res = back();
-		Node* cr = last, nxt = last->l;
+		Node* cr = last;
+		Node* nxt = last->l;
 
 		if (--m_count == 0) {
 			first = last = nullptr;
@@ -102,6 +104,21 @@ public:
 		delete cr;
 		return res;
 	}
+
+	/**
+	 * @ debug
+	 * */
+	/*
+	void deb() {
+		Node* cr = first;
+		int iterations = m_count;
+		while (iterations--) {
+			printf("%d ", cr->val);
+			cr = cr->r;
+		}
+		printf("\n");
+	}
+	*/
 
 private:
 	int m_count;
