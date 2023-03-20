@@ -20,7 +20,7 @@ BTW I use Arch
 
 note that whenever this deque removes an item,
 it will only free that memory cell, 
-it won't change the program's memory allocation
+and it won't change the program's memory allocation
 
 in other words, it wouldn't create any memory leak,
 but it wouldn't shrink its RAM usage either.
