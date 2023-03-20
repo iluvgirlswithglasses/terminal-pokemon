@@ -18,7 +18,7 @@ BTW I use Arch
 
 #include "color.h"
 #include "param.h"
-#include "gameboard.cpp"
+#include "gameboard.h"
 
 int h, w;
 uint8_t** data;
