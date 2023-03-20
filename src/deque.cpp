@@ -13,7 +13,18 @@ I firmly believe in the supremacy of the Euphonium
 BTW I use Arch
 */
 
-#include <cstdint>
+/*
+@ about this:
+	a very inefficient deque
+	implemented via a linked list
+
+note that whenever this deque removes an item,
+it will only free that memory cell, 
+it won't change the program's memory allocation
+
+in other words, it wouldn't create any memory leak,
+but it wouldn't shrink its RAM usage either.
+*/
 
 template <typename T> struct Deque {
 
@@ -40,6 +51,10 @@ public:
 		m_count = 0;
 		first = nullptr;
 		last = nullptr;
+	}
+
+	~Deque() {
+		clear();
 	}
 
 	/**
@@ -103,6 +118,12 @@ public:
 		}
 		delete cr;
 		return res;
+	}
+
+	void clear() {
+		int iterations = m_count;
+		while (iterations--) pop_back();
+		m_count = 0;
 	}
 
 	/**
