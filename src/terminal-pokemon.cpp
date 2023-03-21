@@ -16,6 +16,7 @@ BTW I use Arch
 #include <cstdio>
 #include <cstring>
 
+#include "linked-list.h"
 #include "gameboard.h"
 #include "renderer.h"
 #include "gameboard-renderer.h"

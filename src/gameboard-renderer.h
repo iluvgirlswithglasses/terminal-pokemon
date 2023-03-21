@@ -47,8 +47,8 @@ private:
 	void draw_cell(uint8_t y, uint8_t x);	// draws tile map[y, x]
 	void draw_empty_cell(uint8_t y, uint8_t x);
 
-	uint8_t get_ry(uint8_t y) { return top + CellSize * y };
-	uint8_t get_rx(uint8_t x) { return lft + CellSize * x };
+	uint8_t get_ry(uint8_t y) { return top + CellSize * y; }
+	uint8_t get_rx(uint8_t x) { return lft + CellSize * x; }
 };
 
 #endif	// GAMEBOARD_RENDERER_H

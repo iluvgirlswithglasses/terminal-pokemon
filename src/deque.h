@@ -30,7 +30,7 @@ in other words, it wouldn't create any memory leak,
 but it wouldn't shrink its RAM usage either.
 */
 
-template<typename T> struct Deque {
+template<typename T> class Deque {
 
 public:
 	/**
@@ -59,7 +59,7 @@ public:
 
 	void clear();			// clear the deque
 
-private:
+protected:
 	int m_count;
 	Node* first;
 	Node* last;
