@@ -18,6 +18,7 @@ BTW I use Arch
 #include <cstdint>
 #include "renderer.h"
 #include "gameboard-renderer.h"
+#include "gameboard-logic-easy.h"
 #include "gameboard-logic-normal.h"
 
 int h, w;
@@ -47,14 +48,17 @@ void prf_board(Gameboard &board) {
 
 int main() {
     Gameboard board = read();
-    GameboardLogicNormal logic(board.h, board.w, board.map);
     prf_board(board);
+    
+    GameboardLogicNormal logicN(board.h, board.w, board.map);
+    GameboardLogicEasy   logicE(board.h, board.w, board.map);
+    
     while (true) {
         int y0, x0, y1, x1;
         scanf("%d %d %d %d", &y0, &x0, &y1, &x1);
-        if (logic.validate(y0, x0, y1, x1)) {
+        if (logicN.validate(y0, x0, y1, x1)) {
             printf("ok\n");
-            Deque<uint16_t> path = logic.get_path(y0, x0, y1, x1);
+            Deque<uint16_t> path = logicN.get_path(y0, x0, y1, x1);
             while (path.count()) {
                 printf("(%d, %d) ", path.front()>>8, path.front()&GameboardLogic::MSK8);
                 path.pop_front();
