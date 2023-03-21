@@ -52,13 +52,14 @@ GameBoard::~GameBoard() {
  * */
 Deque<uint16_t> GameBoard::get_path(uint8_t y0, uint8_t x0, uint8_t y1, uint8_t x1) {
 	Deque<uint16_t> ans;
-	uint8_t depth = 3;
-	for (int d = 0; d < 3; d++) if (vst[d][y1][x1]) {
-		depth = d;
+	uint8_t move = RC;
+	for (int t = 0; t < RC; t++) if (vst[t][y1][x1]) {
+		move = t;
 		break;
 	}
+	if (move == RC) return ans;
 	ans.push_front(y1<<8|x1);
-	traceDFS(ans, y0, x0, y1, x1, depth);
+	traceDFS(ans, y0, x0, y1, x1, move);
 	return ans;
 }
 
@@ -92,34 +93,33 @@ uint32_t GameBoard::suggest() {
  * @ BFS Utils
  * */
 void GameBoard::prepBFS() {
-	// vst[d][y, x] == true
-	// --> cell (y, x) was visited via `d` turns
-	vst = new bool**[3];
-	for (int d = 0; d < 3; d++) {
-		vst[d] = new bool*[h];			// 2d array
+	// vst[t][y, x] == d
+	// --> cell (y, x) was visited via a `t` move with `d-1` turns remaining
+	//     if d == 0, its mean that the cell was not visited
+	vst = new uint8_t**[RC];
+	for (int t = 0; t < RC; t++) {
+		vst[t] = new uint8_t*[h];			// 2d array
 		for (int y = 0; y < h; y++)
-			vst[d][y] = new bool[w];	// 1d array
+			vst[t][y] = new uint8_t[w];	// 1d array
 	}
-	// trace[d][y, x] == (pd<<16) | (py<<8) | px
+	// trace[t][y, x] == (pt<<16) | (py<<8) | px
 	//                   where `p` means parent
-	trace = new uint32_t**[3];
-	for (int d = 0; d < 3; d++) {
-		trace[d] = new uint32_t*[h];
+	trace = new uint32_t**[RC];
+	for (int t = 0; t < RC; t++) {
+		trace[t] = new uint32_t*[h];
 		for (int y = 0; y < h; y++)
-			trace[d][y] = new uint32_t[w];
+			trace[t][y] = new uint32_t[w];
 	}
 }
 
 void GameBoard::deprebBFS() {
-	// clear BFS memory usage
-	// or what I call "de-preparation"
-	for (int d = 0; d < 3; d++) {
+	for (int t = 0; t < RC; t++) {
 		for (int y = 0; y < h; y++) {
-			delete[] vst[d][y];
-			delete[] trace[d][y];
+			delete[] vst[t][y];
+			delete[] trace[t][y];
 		}
-		delete[] vst[d];
-		delete[] trace[d];
+		delete[] vst[t];
+		delete[] trace[t];
 	}
 	delete[] vst;
 	delete[] trace;
@@ -127,18 +127,12 @@ void GameBoard::deprebBFS() {
 
 void GameBoard::resetVst() {
 	// set all vst's content to 0
-	for (int d = 0; d < 3; d++)
+	for (int t = 0; t < RC; t++)
 		for (int y = 0; y < h; y++)
-			memset(vst[d][y], 0, sizeof(vst[d][y][0]) * w);
+			memset(vst[t][y], 0, sizeof(vst[t][y][0]) * w);
 }
 
 uint16_t GameBoard::BFS(uint8_t y0, uint8_t x0, bool fixed, uint8_t y1, uint8_t x1) {
-	// BFS settings
-	static constexpr int
-		RC = 4;
-	static constexpr int 
-		RY[RC] = { -1, 0, 1, 0, },	// relative `y` cells {t, l, d, r}
-		RX[RC] = { 0, -1, 0, 1, };	// relative `x` cells {t, l, d, r}
 
 	// even the type is different
 	if (fixed && map[y0][x0] != map[y1][x1]) return 0;
@@ -149,14 +143,15 @@ uint16_t GameBoard::BFS(uint8_t y0, uint8_t x0, bool fixed, uint8_t y1, uint8_t 
 	Deque<uint8_t> qy;	// y deque
 	Deque<uint8_t> qx;	// x deque
 	Deque<uint8_t> qt;	// the last turn taken
-	Deque<uint8_t> qd;	// the number of turns taken (depth)
+	Deque<uint8_t> qd;	// the number of turns remaining (depth+1)
 
 	qy.push_back(y0);
 	qx.push_back(x0);
 	qt.push_back(RC);
-	qd.push_back(0);
+	qd.push_back(MaxDepth+1);
 
-	vst[0][y0][x0] = vst[1][y0][x0] = vst[2][y0][x0] = true;
+	for (int t = 0; t < RC; t++)
+		vst[t][y0][x0] = true;
 
 	while (qy.count()) {
 		uint8_t y = qy.pop_front(), 
@@ -176,11 +171,11 @@ uint16_t GameBoard::BFS(uint8_t y0, uint8_t x0, bool fixed, uint8_t y1, uint8_t 
 
 			// check if out of turning points (maximum = 2)
 			uint8_t nxtD = d;
-			if (t != RC && move != t) nxtD++;
-			if (nxtD > 2) continue;
+			if (t != RC && move != t) nxtD--;
+			if (nxtD == 0) continue;
 
-			// this cell is already visited
-			if (vst[nxtD][nxtY][nxtX]) continue;
+			// this cell is already visited via a path with less depth
+			if (vst[move][nxtY][nxtX] >= nxtD) continue;
 
 			// check if found the destination
 			if (fixed) {
@@ -190,8 +185,8 @@ uint16_t GameBoard::BFS(uint8_t y0, uint8_t x0, bool fixed, uint8_t y1, uint8_t 
 			}
 
 			// trace
-			vst[nxtD][nxtY][nxtX] = true;
-			trace[nxtD][nxtY][nxtX] = (static_cast<uint32_t>(d)<<16) | (static_cast<uint32_t>(y)<<8) | (static_cast<uint32_t>(x));
+			vst[move][nxtY][nxtX] = nxtD;
+			trace[move][nxtY][nxtX] = (static_cast<uint32_t>(t)<<16) | (static_cast<uint32_t>(y)<<8) | (static_cast<uint32_t>(x));
 
 			if (ans != 0) return ans;	// only returns after tracing
 
