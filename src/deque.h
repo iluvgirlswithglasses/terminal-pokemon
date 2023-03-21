@@ -59,10 +59,29 @@ public:
 
 	void clear();			// clear the deque
 
+	/**
+	 * @ linked list functions
+	 * 
+	 * linked list is ineffective, and so are the following functions
+	 * avoid using those unless it's required in the project statement
+	 * */
+	T get_index(int i);		// get the i-th item
+	T remove_index(int i);	// pop the i-th item
+	bool remove_value(T v);	// remove the first item with the value `v`
+	                        // if there isn't `v` in deque, returns `0`
+
 private:
 	int m_count;
 	Node* first;
 	Node* last;
+
+	/**
+	 * @ linked list functions
+	 * 
+	 * linked list is ineffective, and so are the following functions
+	 * avoid using those unless it's required in the project statement
+	 * */
+	T remove_node(Node* n);	// pops node `n`; only works with middle nodes
 };
 
 #endif	// DEQUE_H

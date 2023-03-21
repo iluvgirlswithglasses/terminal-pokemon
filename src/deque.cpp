@@ -84,3 +84,59 @@ template<typename T> void Deque<T>::clear() {
 	while (iterations--) pop_back();
 	m_count = 0;
 }
+
+/**
+ * @ linked list functions
+ * 
+ * linked list is ineffective, and so are the following functions
+ * avoid using those unless it's required in the project statement
+ * */
+template<typename T> T Deque<T>::get_index(int i) {
+	// assert i < m_count
+	Node* cr = first;
+	while (i--) cr = cr->r;
+	return cr->val;
+}
+
+template<typename T> T Deque<T>::remove_index(int i) {
+	// assert i < m_count
+	if (i == 0) return pop_front();
+	if (i == m_count - 1) return pop_back();
+	Node* cr = first;
+	while (i--) cr = cr->r;
+	return remove_node(cr);
+}
+
+template<typename T> bool Deque<T>::remove_value(T v) {
+	int i = 0;
+	Node* cr = first;
+	for (; i < m_count; i++, cr = cr->r) {
+		if (cr->val == v) break;
+	}
+	if (i == 0) {
+		pop_front();
+		return true;
+	}
+	if (i == m_count - 1) {
+		pop_back();
+		return true;
+	}
+	if (0 < i && i < m_count) {
+		remove_node(cr);
+		return true;
+	}
+	return false;
+}
+
+template<typename T> T Deque<T>::remove_node(Node* n) {
+	// assert n->l and n->r are not null
+	Node* l = n->l;
+	Node* r = n->r;
+	l->r = r;
+	r->l = l;
+	m_count--;
+
+	T val = n->val;
+	delete n;
+	return val;
+}

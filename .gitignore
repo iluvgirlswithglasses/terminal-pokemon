@@ -4,3 +4,6 @@
 # ignore debug files
 *debug
 *.test
+
+# ignore school's files
+local
