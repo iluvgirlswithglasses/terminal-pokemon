@@ -26,7 +26,7 @@ BTW I use Arch
 	operates the gameboard
 */
 
-struct GameBoard {
+struct Gameboard {
 public:
 	/**
 	 * @ special values
@@ -39,8 +39,8 @@ public:
 	uint8_t** map;
 
 	// constructors & deconstructors
-	GameBoard(uint8_t _h, uint8_t _w, uint8_t** gamedata);
-	~GameBoard();
+	Gameboard(uint8_t _h, uint8_t _w, uint8_t** gamedata);
+	~Gameboard();
 
 	// check if (y0, x0) can be matched with (y1, x1)
 	bool validate(uint8_t y0, uint8_t x0, uint8_t y1, uint8_t x1);

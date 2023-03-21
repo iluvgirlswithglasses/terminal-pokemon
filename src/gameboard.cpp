@@ -18,7 +18,7 @@ BTW I use Arch
 /**
  * @ constructors & deconstructors
  * */
-GameBoard::GameBoard(uint8_t _h, uint8_t _w, uint8_t** gamedata) {
+Gameboard::Gameboard(uint8_t _h, uint8_t _w, uint8_t** gamedata) {
 	// assume the area of the board which contains tiles has the size of _h*_w
 	// then the size of `map` is (_h+2)*(_w+2), or h*w
 	// which implies `map` has a 1 unit padding for each edge
@@ -41,7 +41,7 @@ GameBoard::GameBoard(uint8_t _h, uint8_t _w, uint8_t** gamedata) {
 	prepBFS();
 }
 
-GameBoard::~GameBoard() {
+Gameboard::~Gameboard() {
 	deprebBFS();
 	for (int y = 0; y < h; y++) delete[] map[y];
 	delete[] map;
@@ -50,7 +50,7 @@ GameBoard::~GameBoard() {
 /**
  * @ Tracing DFS
  * */
-Deque<uint16_t> GameBoard::get_path(uint8_t y0, uint8_t x0, uint8_t y1, uint8_t x1) {
+Deque<uint16_t> Gameboard::get_path(uint8_t y0, uint8_t x0, uint8_t y1, uint8_t x1) {
 	Deque<uint16_t> ans;
 	uint8_t move = RC;
 	for (int t = 0; t < RC; t++) if (vst[t][y1][x1]) {
@@ -63,7 +63,7 @@ Deque<uint16_t> GameBoard::get_path(uint8_t y0, uint8_t x0, uint8_t y1, uint8_t 
 	return ans;
 }
 
-void GameBoard::traceDFS(Deque<uint16_t> &q, uint8_t dy, uint8_t dx, uint8_t y, uint8_t x, uint8_t d) {
+void Gameboard::traceDFS(Deque<uint16_t> &q, uint8_t dy, uint8_t dx, uint8_t y, uint8_t x, uint8_t d) {
 	uint32_t nxt = trace[d][y][x];
 	uint8_t nxtX = nxt       & MSK8,
 	        nxtY = (nxt>>8)  & MSK8,
@@ -76,11 +76,11 @@ void GameBoard::traceDFS(Deque<uint16_t> &q, uint8_t dy, uint8_t dx, uint8_t y, 
 /**
  * @ BFS
  * */
-bool GameBoard::validate(uint8_t y0, uint8_t x0, uint8_t y1, uint8_t x1) {
+bool Gameboard::validate(uint8_t y0, uint8_t x0, uint8_t y1, uint8_t x1) {
 	return BFS(y0, x0, true, y1, x1);
 }
 
-uint32_t GameBoard::suggest() {
+uint32_t Gameboard::suggest() {
 	for (int y = 1; y < h-1; y++) for (int x = 1; x < w-1; x++) if (map[y][x] != EmptyCell) {
 		uint32_t self  = (y<<8|x)<<16;
 		uint16_t other = BFS(y, x);
@@ -92,7 +92,7 @@ uint32_t GameBoard::suggest() {
 /**
  * @ BFS Utils
  * */
-void GameBoard::prepBFS() {
+void Gameboard::prepBFS() {
 	// vst[t][y, x] == d
 	// --> cell (y, x) was visited via a `t` move with `d-1` turns remaining
 	//     if d == 0, its mean that the cell was not visited
@@ -112,7 +112,7 @@ void GameBoard::prepBFS() {
 	}
 }
 
-void GameBoard::deprebBFS() {
+void Gameboard::deprebBFS() {
 	for (int t = 0; t < RC; t++) {
 		for (int y = 0; y < h; y++) {
 			delete[] vst[t][y];
@@ -125,14 +125,14 @@ void GameBoard::deprebBFS() {
 	delete[] trace;
 }
 
-void GameBoard::resetVst() {
+void Gameboard::resetVst() {
 	// set all vst's content to 0
 	for (int t = 0; t < RC; t++)
 		for (int y = 0; y < h; y++)
 			memset(vst[t][y], 0, sizeof(vst[t][y][0]) * w);
 }
 
-uint16_t GameBoard::BFS(uint8_t y0, uint8_t x0, bool fixed, uint8_t y1, uint8_t x1) {
+uint16_t Gameboard::BFS(uint8_t y0, uint8_t x0, bool fixed, uint8_t y1, uint8_t x1) {
 
 	// move rules
 	static constexpr int 
