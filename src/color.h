@@ -35,7 +35,11 @@ public:
 		Regular = '0',
 		Bold = '1';
 
-	inline static void set(char color, char bold) { printf("\033[%c;3%cm", bold, color); }
+	// set foreground & thickness
+	inline static void setft(char fg, char th) { printf("\033[%c;3%cm", th, fg); }
+	// set foreground & background
+	inline static void setfb(char fg, char bg) { printf("\033[4%c;3%cm", bg, fg); }
+	// reset
 	inline static void reset() { printf("\033[0m"); }
 };
 
