@@ -66,10 +66,7 @@ private:
 	static constexpr int
 		MaxDepth = 2;				// maximum turns
 	static constexpr int
-		RC = 4;						// number of moves (number of adj cells)
-	static constexpr inline int 
-		RY[RC] = { -1, 0, 1, 0, },	// adj `y` cells {t, l, d, r}
-		RX[RC] = { 0, -1, 0, 1, };	// adj `x` cells {t, l, d, r}
+		RC = 4;						// number of adj cells
 
 	uint8_t*** vst;
 	uint32_t*** trace;

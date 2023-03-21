@@ -55,6 +55,6 @@ void Renderer::clrscr() {
 #if __linux__
 	system("clear");
 #elif _WIN32
-	system("clr");
+	system("cls");
 #endif
 }
