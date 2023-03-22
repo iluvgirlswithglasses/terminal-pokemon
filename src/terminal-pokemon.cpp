@@ -46,6 +46,20 @@ void prf_board(Gameboard &board) {
     printf("\n");
 }
 
+void check(GameboardLogic &logic, int y0, int x0, int y1, int x1) {
+    if (logic.validate(y0, x0, y1, x1)) {
+        printf("ok\n");
+        Deque<uint16_t> path = logic.get_path(y0, x0, y1, x1);
+        while (path.count()) {
+            printf("(%d, %d) ", path.front()>>8, path.front()&GameboardLogic::MSK8);
+            path.pop_front();
+        }
+        printf("\n");
+    } else {
+        printf("not ok\n");
+    }
+}
+
 int main() {
     Gameboard board = read();
     prf_board(board);
@@ -56,18 +70,8 @@ int main() {
     while (true) {
         int y0, x0, y1, x1;
         scanf("%d %d %d %d", &y0, &x0, &y1, &x1);
-        if (logicN.validate(y0, x0, y1, x1)) {
-            printf("ok\n");
-            Deque<uint16_t> path = logicN.get_path(y0, x0, y1, x1);
-            while (path.count()) {
-                printf("(%d, %d) ", path.front()>>8, path.front()&GameboardLogic::MSK8);
-                path.pop_front();
-            }
-            printf("\n");
-
-        } else {
-            printf("not ok\n");
-        }
+        check(logicN, y0, x0, y1, x1);
+        check(logicE, y0, x0, y1, x1);
     }
 	return 0;
 }

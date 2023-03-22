@@ -27,7 +27,7 @@ BTW I use Arch
 	I, L, U, Z shapes
 */
 
-class GameboardLogicEasy: GameboardLogic {
+class GameboardLogicEasy: public GameboardLogic {
 public:
 	GameboardLogicEasy(uint8_t h, uint8_t w, uint8_t** map);
 	~GameboardLogicEasy();

@@ -14,6 +14,7 @@ BTW I use Arch
 */
 
 #include "gameboard-logic-easy.h"
+#include <cstdio>
 
 /**
  * @ initializer & deconstructor
@@ -102,7 +103,7 @@ uint16_t GameboardLogicEasy::BFS(uint8_t y0, uint8_t x0, bool fixed, uint8_t y1,
 			uint16_t ans = 0;
 			int nxtY32 = static_cast<int>(y) + RY[t], 
 			    nxtX32 = static_cast<int>(x) + RX[t];
-			if (0 < nxtY32 || 0 < nxtX32 || nxtY32 >= h || nxtX32 >= w) continue;
+			if (nxtY32 < 0 || nxtX32 < 0 || nxtY32 >= h || nxtX32 >= w) continue;
 			uint8_t nxtY = nxtY32, nxtX = nxtX32;
 			if (vst[nxtY][nxtX]) continue;
 
@@ -115,7 +116,7 @@ uint16_t GameboardLogicEasy::BFS(uint8_t y0, uint8_t x0, bool fixed, uint8_t y1,
 
 			// trace
 			vst[nxtY][nxtX] = true;
-			trace[nxtY][nxtX] = key(y0, x0);
+			trace[nxtY][nxtX] = key(y, x);
 			if (ans) return ans;
 
 			// move to this cell
