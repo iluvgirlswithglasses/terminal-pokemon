@@ -68,11 +68,12 @@ int main() {
     GameboardLogicNormal logicN(board.h, board.w, board.map);
     GameboardLogicEasy   logicE(board.h, board.w, board.map);
     
-    while (true) {
-        int y0, x0, y1, x1;
-        scanf("%d %d %d %d", &y0, &x0, &y1, &x1);
-        check(logicN, y0, x0, y1, x1);
-        check(logicE, y0, x0, y1, x1);
-    }
+    Renderer rdr;
+    GameboardRenderer gameboardRdr(board.map, &rdr, board.h, board.w, 4, 4);
+    gameboardRdr.burn();
+    rdr.render();
+
+    int dummy; scanf("%d", dummy);
+    rdr.clrscr();
 	return 0;
 }

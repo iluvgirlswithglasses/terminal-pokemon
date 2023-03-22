@@ -42,7 +42,7 @@ public:
 	void burn();			// burns the gameboard into the screen grid
 
 private:
-	static constexpr uint8_t CellSize = 7;	// size of a cell on screen grid
+	static constexpr uint8_t CellSize = 5;	// size of a cell on screen grid
 
 	void draw_cell(uint8_t y, uint8_t x);	// draws tile map[y, x]
 	void reset();							// reset the screen

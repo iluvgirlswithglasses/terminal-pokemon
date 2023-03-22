@@ -43,8 +43,8 @@ void GameboardRenderer::draw_cell(uint8_t y, uint8_t x) {
 	}
 	// vertical lines
 	for (int y = t; y < d; y++) {
-		assign_cell_border('|', l, y);
-		assign_cell_border('|', r-1, y);
+		assign_cell_border('|', y, l);
+		assign_cell_border('|', y, r-1);
 	}
 	// a '+' for each corner
 	assign_cell_border('+', t, l);
@@ -59,9 +59,10 @@ void GameboardRenderer::draw_cell(uint8_t y, uint8_t x) {
 void GameboardRenderer::reset() {
 	// insert background image here
 	// just memcpy the background instead of memset
-	uint8_t t = get_ry(0), d = get_ry(row);
-	for (int y = t; y < d; y++)
-		memset(scr->map[y], 0, sizeof(scr->map[y][0]) * CellSize * col);
+	uint8_t t = get_ry(0), d = get_ry(row), l = get_rx(0), r = get_rx(col);
+	for (int y = t; y < d; y++) 
+		for (int x = l; x < r; x++)
+			scr->map[y][x] = ' ';
 }
 
 /**
