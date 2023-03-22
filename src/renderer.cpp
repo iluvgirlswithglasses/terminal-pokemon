@@ -43,7 +43,7 @@ void Renderer::render() {
 	clrscr();
 	for (int y = 0; y < h; y++) {
 		for (int x = 0; x < w; x++) {
-			if (usg[y][x] == 0) Color::setfb(fgc[y][x], bgc[y][x]);
+			if (usg[y][x] == UseBackground) Color::setfb(fgc[y][x], bgc[y][x]);
 			else Color::setft(fgc[y][x], thk[y][x]);
 			printf("%c", map[y][x]);
 		}
@@ -54,7 +54,7 @@ void Renderer::render() {
 void Renderer::clrscr() {
 #if __linux__
 	system("clear");
-#if __APPLE__
+#elif __APPLE__
 	system("clear");
 #elif _WIN32
 	system("cls");

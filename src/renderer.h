@@ -29,6 +29,8 @@ BTW I use Arch
 struct Renderer {
 public:
 
+	static constexpr bool UseBackground = 0, UseThickness = 1;
+
 	uint8_t h = Param::ScreenHeight, w = Param::ScreenWidth;
 
 	char** map;	// screen grid

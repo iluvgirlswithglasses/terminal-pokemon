@@ -17,6 +17,7 @@ BTW I use Arch
 #include <cstring>
 #include <cstdint>
 #include "renderer.h"
+#include "gameboard.h"
 #include "gameboard-renderer.h"
 #include "gameboard-logic-easy.h"
 #include "gameboard-logic-normal.h"
