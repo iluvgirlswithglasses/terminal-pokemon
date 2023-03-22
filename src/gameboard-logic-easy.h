@@ -47,7 +47,7 @@ private:
 	static constexpr int RC = 4;	// number of adj cells
 
 	uint8_t** vst;
-	uint32_t** trace;
+	uint16_t** trace;
 
 	// reset memory allocation for vst
 	void reset_vst();

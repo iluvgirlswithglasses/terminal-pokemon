@@ -38,8 +38,6 @@ public:
 private:
 	// get_path() dfs trace
 	void traceDFS(Deque<uint16_t> &q, uint8_t dy, uint8_t dx, uint8_t y, uint8_t x, uint8_t d);
-	// encodes (y, x)
-	uint16_t key(uint8_t y0, uint8_t x0) { return static_cast<uint16_t>(y0)<<8|x0; }
 
 	/**
 	 * @ BFS

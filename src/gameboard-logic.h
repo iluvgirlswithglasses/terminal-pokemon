@@ -48,6 +48,9 @@ protected:
 	// the game map & its size
 	uint8_t h, w;
 	uint8_t** map;
+
+	// encodes (y, x)
+	uint16_t key(uint8_t y0, uint8_t x0) { return static_cast<uint16_t>(y0)<<8|x0; }
 };
 
 #endif	// GAMEBOARD_LOGIC_H
