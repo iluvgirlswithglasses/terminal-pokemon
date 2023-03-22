@@ -42,13 +42,13 @@ public:
 	void burn();			// burns the gameboard into the screen grid
 
 private:
-	static constexpr uint8_t CellSize = 5;	// size of a cell on screen grid
+	static constexpr uint8_t CellHeight = 4, CellWidth = 6;
 
 	void draw_cell(uint8_t y, uint8_t x);	// draws tile map[y, x]
 	void reset();							// reset the screen
 
-	uint8_t get_ry(uint8_t y) { return top + CellSize * y; }
-	uint8_t get_rx(uint8_t x) { return lft + CellSize * x; }
+	uint8_t get_ry(uint8_t y) { return top + CellHeight * y; }
+	uint8_t get_rx(uint8_t x) { return lft + CellWidth * x; }
 
 	// pixel configures
 	void assign_cell_border(char c, uint8_t y, uint8_t x);

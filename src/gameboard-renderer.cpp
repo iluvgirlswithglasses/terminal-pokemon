@@ -39,21 +39,21 @@ void GameboardRenderer::draw_cell(uint8_t y, uint8_t x) {
 	// horizontal lines
 	for (int x = l; x < r; x++) {
 		assign_cell_border('-', t, x);
-		assign_cell_border('-', d-1, x);
+		assign_cell_border('-', d, x);
 	}
 	// vertical lines
 	for (int y = t; y < d; y++) {
 		assign_cell_border('|', y, l);
-		assign_cell_border('|', y, r-1);
+		assign_cell_border('|', y, r);
 	}
 	// a '+' for each corner
 	assign_cell_border('+', t, l);
-	assign_cell_border('+', t, r-1);
-	assign_cell_border('+', d-1, l);
-	assign_cell_border('+', d-1, r-1);
+	assign_cell_border('+', t, r);
+	assign_cell_border('+', d, l);
+	assign_cell_border('+', d, r);
 	// and our main character
-	constexpr uint8_t Mid = CellSize>>1;
-	assign_cell_core(map[y][x], t + Mid, l + Mid);
+	constexpr uint8_t MidY = CellHeight>>1, MidX = CellWidth>>1;
+	assign_cell_core(map[y][x], t + MidY, l + MidX);
 }
 
 void GameboardRenderer::reset() {

@@ -69,7 +69,7 @@ int main() {
     GameboardLogicEasy   logicE(board.h, board.w, board.map);
     
     Renderer rdr;
-    GameboardRenderer gameboardRdr(board.map, &rdr, board.h, board.w, 4, 4);
+    GameboardRenderer gameboardRdr(board.map, &rdr, board.h, board.w, 2, 0);
     gameboardRdr.burn();
     rdr.render();
 

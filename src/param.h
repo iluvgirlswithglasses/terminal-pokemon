@@ -22,7 +22,7 @@ BTW I use Arch
 struct Param {
 public:
 	// screen size, measured in characters
-	static constexpr uint8_t ScreenHeight = 40;
+	static constexpr uint8_t ScreenHeight = 30;
 	static constexpr uint8_t ScreenWidth  = 100;
 };
 
