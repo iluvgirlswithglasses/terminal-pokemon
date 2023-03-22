@@ -54,6 +54,8 @@ void Renderer::render() {
 void Renderer::clrscr() {
 #if __linux__
 	system("clear");
+#if __APPLE__
+	system("clear");
 #elif _WIN32
 	system("cls");
 #endif
