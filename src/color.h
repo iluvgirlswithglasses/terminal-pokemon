@@ -22,7 +22,7 @@ BTW I use Arch
 struct Color {
 public:
 	static constexpr char
-		Black  = '0',
+		Black  = '9',	// not true black '0', but default terminal color
 		Red    = '1',
 		Green  = '2',
 		Yellow = '3',

@@ -62,18 +62,44 @@ void check(GameboardLogic &logic, int y0, int x0, int y1, int x1) {
 }
 
 int main() {
+
+    // load gameboard
     Gameboard board = read();
     prf_board(board);
     
+    // load logic
     GameboardLogicNormal logicN(board.h, board.w, board.map);
     GameboardLogicEasy   logicE(board.h, board.w, board.map);
     
+    // load renderer
     Renderer rdr;
     GameboardRenderer gameboardRdr(board.map, &rdr, board.h, board.w, 2, 0);
     gameboardRdr.burn();
     rdr.render();
 
-    int dummy; scanf("%d", dummy);
-    rdr.clrscr();
+    //
+    while (true) {
+        char cmd; scanf("%c", &cmd);
+        int y, x;
+
+        switch (cmd) {
+        case 'h':
+            scanf("%d%d", &y, &x);
+            gameboardRdr.burn();
+            gameboardRdr.hover_cell(y, x);
+            break;
+        case 's':
+            scanf("%d%d", &y, &x);
+            gameboardRdr.burn();
+            gameboardRdr.select_cell(y, x);
+            break;
+        case 'r':
+            scanf("%d%d", &y, &x);
+            board.map[y][x] = Gameboard::EmptyCell;
+            gameboardRdr.burn();
+        }
+        rdr.render();
+    }
+
 	return 0;
 }

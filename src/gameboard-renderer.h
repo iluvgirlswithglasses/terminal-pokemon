@@ -41,18 +41,24 @@ public:
 	GameboardRenderer(uint8_t** map, Renderer* scr, uint8_t row, uint8_t col, uint8_t top, uint8_t lft);
 	void burn();			// burns the gameboard into the screen grid
 
-private:
-	static constexpr uint8_t CellHeight = 4, CellWidth = 6;
+	// change the color of some cells
+	// `burn()` overrides these methods' effect
+	void hover_cell(uint8_t y, uint8_t x) { draw_border(y, x, Color::Red); }
+	void select_cell(uint8_t y, uint8_t x) { draw_border(y, x, Color::Green); }
 
-	void draw_cell(uint8_t y, uint8_t x);	// draws tile map[y, x]
+private:
+	static constexpr uint8_t CellHeight = 4, CellWidth = 8;	// must be even
+
 	void reset();							// reset the screen
+	void draw_cell(uint8_t y, uint8_t x);	// draws tile map[y, x]
+	void draw_border(uint8_t y, uint8_t x, char fg);	// draw border for a cell
 
 	uint8_t get_ry(uint8_t y) { return top + CellHeight * y; }
 	uint8_t get_rx(uint8_t x) { return lft + CellWidth * x; }
 
 	// pixel configures
-	void assign_cell_border(char c, uint8_t y, uint8_t x);
-	void assign_cell_core(uint8_t c, uint8_t y, uint8_t x);
+	void assign_border_pixel(char c, uint8_t y, uint8_t x, char fg);
+	void assign_core_pixel(uint8_t c, uint8_t y, uint8_t x);
 };
 
 #endif	// GAMEBOARD_RENDERER_H
