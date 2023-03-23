@@ -35,8 +35,8 @@ void GameboardRenderer::reset() {
 	// insert background image here
 	// just memcpy the background instead of memset
 	uint8_t t = get_ry(0), d = get_ry(row), l = get_rx(0), r = get_rx(col);
-	for (uint8_t y = t; y < d; y++) 
-		for (uint8_t x = l; x < r; x++)
+	for (uint8_t y = t; y <= d; y++) 		// [t, d], not [t, d) because border
+		for (uint8_t x = l; x <= r; x++)	// same here
 			scr->map[y][x] = ' ';
 }
 

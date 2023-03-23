@@ -14,12 +14,10 @@ BTW I use Arch
 */
 
 #include <cstdio>
-#include "input.h"
+#include "game-operator.h"
 
 int main() {
-	while (true) {
-		char c = Input::wait_keypress();
-		printf("you pressed: %c\n", c);
-	}
+	GameOperator game;
+	game.start();
 	return 0;
 }
