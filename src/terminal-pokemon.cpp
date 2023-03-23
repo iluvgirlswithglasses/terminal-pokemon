@@ -14,92 +14,12 @@ BTW I use Arch
 */
 
 #include <cstdio>
-#include <cstring>
-#include <cstdint>
-#include "renderer.h"
-#include "gameboard.h"
-#include "gameboard-renderer.h"
-#include "gameboard-logic-easy.h"
-#include "gameboard-logic-normal.h"
-
-int h, w;
-uint8_t** data;
-
-Gameboard read() {
-    scanf("%d%d", &h, &w);
-    data = new uint8_t*[h];
-    for (int i = 0; i < h; i++) {
-        data[i] = new uint8_t[w];
-        for (int j = 0; j < w; j++) scanf("%d", &data[i][j]);
-    }
-    return Gameboard(h, w, data);
-}
-
-void prf_board(Gameboard &board) {
-    printf("gameboard:\n");
-    for (int y = 0; y < board.h; y++) {
-        for (int x = 0; x < board.w; x++) {
-            if (board.map[y][x]) printf("%d ", board.map[y][x]);
-            else printf(". ");
-        }
-        printf("\n");
-    }
-    printf("\n");
-}
-
-void check(GameboardLogic &logic, int y0, int x0, int y1, int x1) {
-    if (logic.validate(y0, x0, y1, x1)) {
-        printf("ok\n");
-        Deque<uint16_t> path = logic.get_path(y0, x0, y1, x1);
-        while (path.count()) {
-            printf("(%d, %d) ", path.front()>>8, path.front()&GameboardLogic::MSK8);
-            path.pop_front();
-        }
-        printf("\n");
-    } else {
-        printf("not ok\n");
-    }
-}
+#include "input.h"
 
 int main() {
-
-    // load gameboard
-    Gameboard board = read();
-    prf_board(board);
-    
-    // load logic
-    GameboardLogicNormal logicN(board.h, board.w, board.map);
-    GameboardLogicEasy   logicE(board.h, board.w, board.map);
-    
-    // load renderer
-    Renderer rdr;
-    GameboardRenderer gameboardRdr(board.map, &rdr, board.h, board.w, 2, 0);
-    gameboardRdr.burn();
-    rdr.render();
-
-    //
-    while (true) {
-        char cmd; scanf("%c", &cmd);
-        int y, x;
-
-        switch (cmd) {
-        case 'h':
-            scanf("%d%d", &y, &x);
-            gameboardRdr.burn();
-            gameboardRdr.hover_cell(y, x);
-            break;
-        case 's':
-            scanf("%d%d", &y, &x);
-            gameboardRdr.burn();
-            gameboardRdr.select_cell(y, x);
-            break;
-        case 'r':
-            scanf("%d%d", &y, &x);
-            board.map[y][x] = Gameboard::EmptyCell;
-            gameboardRdr.burn();
-        }
-        rdr.render();
-    }
-
+	while (true) {
+		char c = Input::wait_keypress();
+		printf("you pressed: %c\n", c);
+	}
 	return 0;
 }
