@@ -85,7 +85,7 @@ void GameOperator::start() {
 }
 
 /**
- * @ deb
+ * @ utils
  * */
 Gameboard* GameOperator::read() {
 	int h, w;
@@ -96,4 +96,29 @@ Gameboard* GameOperator::read() {
 		for (int j = 0; j < w; j++) scanf("%d", &data[i][j]);
 	}
 	return new Gameboard(h, w, data);
+}
+
+bool GameOperator::handle_matching(uint32_t loc) {
+	uint8_t y0 = (loc>>24) & MSK8, 
+	        x0 = (loc>>16) & MSK8, 
+	        y1 = (loc>> 8) & MSK8, 
+	        x1 = (loc    ) & MSK8;
+	if (logic->validate(y0, x0, y1, x1)) {
+		board->map[y0][x0] = board->map[y1][x1] = Gameboard::EmptyCell;
+		visualize_match(y0, x0, y1, x1);
+		return true;
+	}
+	return false;
+}
+
+void GameOperator::visualize_match(uint8_t y0, uint8_t x0, uint8_t y1, uint8_t x1) {
+	Deque<uint16_t> q = logic->get_path(y0, x0, y1, x1);
+	uint16_t pre = q.pop_front();
+	while (q.count()) {
+		uint16_t nxt = q.pop_front();
+		gameRdr->draw_path(pre>>8, pre&MSK8, nxt>>8, nxt&MSK8, Color::Green);
+		rdr->render();
+		pre = nxt;
+		sleep(150);
+	}
 }

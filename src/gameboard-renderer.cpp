@@ -35,9 +35,14 @@ void GameboardRenderer::reset() {
 	// insert background image here
 	// just memcpy the background instead of memset
 	uint8_t t = get_ry(0), d = get_ry(row), l = get_rx(0), r = get_rx(col);
-	for (uint8_t y = t; y <= d; y++) 		// [t, d], not [t, d) because border
-		for (uint8_t x = l; x <= r; x++)	// same here
+	for (uint8_t y = t; y <= d; y++) { 		// [t, d], not [t, d) because border
+		for (uint8_t x = l; x <= r; x++) {	// same here
 			scr->map[y][x] = ' ';
+			scr->bgc[y][x] = Color::Black;
+			scr->thk[y][x] = Color::Regular;
+			scr->usg[y][x] = Renderer::UseBackground;
+		}	
+	}
 }
 
 /**
@@ -48,7 +53,6 @@ void GameboardRenderer::draw_cell(uint8_t y, uint8_t x) {
 	// draw border
 	draw_border(y, x, Color::White);
 	// then assign the tile
-	constexpr uint8_t MidY = CellHeight>>1, MidX = CellWidth>>1;
 	assign_core_pixel(map[y][x], t + MidY, l + MidX);
 }
 
@@ -72,6 +76,26 @@ void GameboardRenderer::draw_border(uint8_t y, uint8_t x, char fg) {
 	assign_border_pixel('+', t, r, fg);
 	assign_border_pixel('+', d, l, fg);
 	assign_border_pixel('+', d, r, fg);
+}
+
+void GameboardRenderer::draw_path(uint8_t y0, uint8_t x0, uint8_t y1, uint8_t x1, char bg) {
+	y0 = get_ry(y0) + MidY;
+	x0 = get_rx(x0) + MidX;
+	y1 = get_ry(y1) + MidY;
+	x1 = get_rx(x1) + MidX;
+
+	auto min = [=](uint8_t a, uint8_t b) { return a < b ? a : b; };
+	auto max = [=](uint8_t a, uint8_t b) { return a > b ? a : b; };
+
+	if (y0 == y1) {
+		for (uint8_t x = min(x0, x1); x <= max(x0, x1); x++)
+			if (scr->usg[y0][x] == Renderer::UseBackground)
+				scr->bgc[y0][x] = bg;
+	} else if (x0 == x1) {
+		for (uint8_t y = min(y0, y1); y <= max(y0, y1); y++)
+			if (scr->usg[y][x0] == Renderer::UseBackground)
+				scr->bgc[y][x0] = bg;
+	}
 }
 
 /**

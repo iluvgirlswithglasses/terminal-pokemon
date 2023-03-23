@@ -27,6 +27,10 @@ BTW I use Arch
 #include "renderer.h"
 #include "gameboard-renderer.h"
 
+// access to sleep
+#include <chrono>
+#include <thread>
+
 /*
 @ about this:
 	operate the game scene
@@ -57,19 +61,10 @@ protected:
 
 	// handle a match by player
 	// return true if matched
-	bool handle_matching(uint32_t loc) {
-		uint8_t y0 = (loc>>24) & MSK8, 
-		        x0 = (loc>>16) & MSK8, 
-		        y1 = (loc>> 8) & MSK8, 
-		        x1 = (loc    ) & MSK8;
-		if (logic->validate(y0, x0, y1, x1)) {
-			board->map[y0][x0] = board->map[y1][x1] = Gameboard::EmptyCell;
-			// visualize here
+	bool handle_matching(uint32_t loc);
+	void visualize_match(uint8_t y0, uint8_t x0, uint8_t y1, uint8_t x1);
 
-			return true;
-		}
-		return false;
-	}
+	void sleep(int ms) { std::this_thread::sleep_for(std::chrono::milliseconds(ms)); }
 };
 
 #endif	// GAME_OPERATOR_H

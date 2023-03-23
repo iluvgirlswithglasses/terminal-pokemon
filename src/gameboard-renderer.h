@@ -42,11 +42,16 @@ public:
 	void burn();			// burns the gameboard into the screen grid
 
 	// change the color of some cells
-	// `burn()` overrides these methods' effect
+	// `burn()` overrides this method's effect
 	void draw_border(uint8_t y, uint8_t x, char fg);
+
+	// draw a path between 2 points
+	// `burn()` overrides this method's effect
+	void draw_path(uint8_t y0, uint8_t x0, uint8_t y1, uint8_t x1, char bg);
 
 private:
 	static constexpr uint8_t CellHeight = 4, CellWidth = 8;	// must be even
+	static constexpr uint8_t MidY = CellHeight>>1, MidX = CellWidth>>1;
 
 	void reset();							// reset the screen
 	void draw_cell(uint8_t y, uint8_t x);	// draws tile map[y, x]
