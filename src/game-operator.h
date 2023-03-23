@@ -18,6 +18,7 @@ BTW I use Arch
 // ------------------------------------------------------------
 
 #include <cstdio>
+#include "color.h"
 #include "deque.h"
 #include "input.h"
 
@@ -32,25 +33,43 @@ BTW I use Arch
 */
 class GameOperator {
 public:
-    // constructors & destructors
-    GameOperator();
-    ~GameOperator();
+	// constructors & destructors
+	GameOperator();
+	~GameOperator();
 
-    // start the game
-    // only break once the game is finished
-    void start();
+	// start the game
+	// only break once the game is finished
+	void start();
 
-    // maybe get some stats after finishing the game here
-
-    // debugging functions
-    Gameboard* read();
+	// maybe get some stats after finishing the game here
 
 protected:
-    // get the gameboard logic operator
-    Gameboard* board;
-    GameboardLogic* logic;
-    Renderer* rdr;
-    GameboardRenderer* gameRdr;
+	static constexpr uint32_t MSK8 = (1<<8) - 1;
+
+	// get the gameboard logic operator
+	Gameboard* board;
+	GameboardLogic* logic;
+	Renderer* rdr;
+	GameboardRenderer* gameRdr;
+
+	// change this to reading files later
+	Gameboard* read();
+
+	// handle a match by player
+	// return true if matched
+	bool handle_matching(uint32_t loc) {
+		uint8_t y0 = (loc>>24) & MSK8, 
+		        x0 = (loc>>16) & MSK8, 
+		        y1 = (loc>> 8) & MSK8, 
+		        x1 = (loc    ) & MSK8;
+		if (logic->validate(y0, x0, y1, x1)) {
+			board->map[y0][x0] = board->map[y1][x1] = Gameboard::EmptyCell;
+			// visualize here
+
+			return true;
+		}
+		return false;
+	}
 };
 
 #endif	// GAME_OPERATOR_H

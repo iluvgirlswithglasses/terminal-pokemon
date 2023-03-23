@@ -23,7 +23,10 @@ GameOperator::GameOperator() {
 }
 
 GameOperator::~GameOperator() {
-
+	delete board;
+	delete logic;
+	delete rdr;
+	delete gameRdr;
 }
 
 /**
@@ -38,10 +41,11 @@ void GameOperator::start() {
 	
 	// cursor
 	uint8_t cur_y = 1, cur_x = 1;
+	uint32_t selection = 0;
 
 	// init
 	gameRdr->burn();
-	gameRdr->hover_cell(cur_y, cur_x);
+	gameRdr->draw_border(cur_y, cur_x, Color::Red);
 	rdr->render();
 	// run
 	while (true) {
@@ -60,10 +64,22 @@ void GameOperator::start() {
 		case 'd':
 			cur_x = cur_x + 1 >= board->w ? cur_x : cur_x + 1;
 			break;
+		// handle selection
+		case 'j':
+			selection = (selection<<16) | (cur_y<<8) | cur_x;
+			if (selection>>16) {
+				handle_matching(selection);
+				selection = 0;
+			}
+			break;
 		}
 		// render
 		gameRdr->burn();
-		gameRdr->hover_cell(cur_y, cur_x);
+		gameRdr->draw_border(cur_y, cur_x, Color::Red);	// cursor
+		if (selection)
+			gameRdr->draw_border(selection>>8&MSK8, selection&MSK8, Color::Green);	// selection a
+		if (selection>>16)
+			gameRdr->draw_border(selection>>24&MSK8, selection>>16&MSK8, Color::Green);	// selection b
 		rdr->render();
 	}
 }

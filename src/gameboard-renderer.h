@@ -43,15 +43,13 @@ public:
 
 	// change the color of some cells
 	// `burn()` overrides these methods' effect
-	void hover_cell(uint8_t y, uint8_t x) { draw_border(y, x, Color::Red); }
-	void select_cell(uint8_t y, uint8_t x) { draw_border(y, x, Color::Green); }
+	void draw_border(uint8_t y, uint8_t x, char fg);
 
 private:
 	static constexpr uint8_t CellHeight = 4, CellWidth = 8;	// must be even
 
 	void reset();							// reset the screen
 	void draw_cell(uint8_t y, uint8_t x);	// draws tile map[y, x]
-	void draw_border(uint8_t y, uint8_t x, char fg);	// draw border for a cell
 
 	uint8_t get_ry(uint8_t y) { return top + CellHeight * y; }
 	uint8_t get_rx(uint8_t x) { return lft + CellWidth * x; }
