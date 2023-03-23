@@ -9,5 +9,5 @@ Libraries used:
 
 Additionally, based on the operating system which this repository is built on, some more libraries are included to detect keypress. Specifically:
 
-- Linux: `termios.h`, `<sys/ioctl.h>`, `sys/select.h>`
+- Linux: `termios.h`, `sys/ioctl.h`, `sys/select.h`
 - Windows: `conio.h`
