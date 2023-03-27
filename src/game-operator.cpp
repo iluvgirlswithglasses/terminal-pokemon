@@ -32,10 +32,12 @@ GameOperator::~GameOperator() {
 /**
  * @ main
  * */
-void GameOperator::start() {
+void GameOperator::start(int diff) {
+	difficulty = diff;
+
 	// load game
 	board = read();
-	logic = new GameboardLogicNormal(board->h, board->w, board->map);
+	logic = get_logic(diff);
 	rdr = new Renderer();
 	gameRdr = new GameboardRenderer(board->map, rdr, board->h, board->w, 2, 1);
 	
@@ -96,6 +98,17 @@ Gameboard* GameOperator::read() {
 		for (int j = 0; j < w; j++) scanf("%d", &data[i][j]);
 	}
 	return new Gameboard(h, w, data);
+}
+
+GameboardLogic* GameOperator::get_logic(int diff) {
+	switch (diff) {
+	case GameOperator::DiffEasy:
+		return new GameboardLogicEasy(board->h, board->w, board->map);
+	case GameOperator::DiffNorm:
+	case GameOperator::DiffHard:
+	default:
+		return new GameboardLogicNormal(board->h, board->w, board->map);
+	}
 }
 
 bool GameOperator::handle_matching(uint32_t loc) {
