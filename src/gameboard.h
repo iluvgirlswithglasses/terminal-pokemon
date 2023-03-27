@@ -35,6 +35,7 @@ public:
 	// the game map & its size
 	uint8_t h, w;
 	uint8_t** map;
+	int remaining;
 
 	// constructors & deconstructors
 	Gameboard(uint8_t _h, uint8_t _w, uint8_t** gamedata);

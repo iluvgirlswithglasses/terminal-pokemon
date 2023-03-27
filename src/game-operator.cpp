@@ -71,9 +71,19 @@ void GameOperator::start(int diff) {
 		case 'j':
 			selection = (selection<<16) | (cur_y<<8) | cur_x;
 			if (selection>>16) {
-				if (handle_matching(selection) && difficulty == DiffHard) {
-					// sliding tiles time!
-					slide_tiles(selection);
+				int matchCode = handle_matching(selection);
+
+				switch (matchCode)
+				{
+				case MatchSuccess:
+					if (difficulty == DiffHard) slide_tiles(selection);
+					break;
+				case MatchVictory:
+					printf("you win --tmp\n");
+					return;
+				case MatchGameover:
+					printf("you sucks --tmp\n");
+					return;
 				}
 				selection = 0;
 			}
@@ -115,17 +125,23 @@ GameboardLogic* GameOperator::get_logic(int diff) {
 	}
 }
 
-bool GameOperator::handle_matching(uint32_t loc) {
+int GameOperator::handle_matching(uint32_t loc) {
 	uint8_t y0 = (loc>>24) & MSK8, 
 	        x0 = (loc>>16) & MSK8, 
 	        y1 = (loc>> 8) & MSK8, 
 	        x1 = (loc    ) & MSK8;
 	if (logic->validate(y0, x0, y1, x1)) {
 		board->map[y0][x0] = board->map[y1][x1] = Gameboard::EmptyCell;
+		board->remaining -= 2;
+
 		visualize_match(y0, x0, y1, x1);
-		return true;
+
+		if (board->remaining == 0) return MatchVictory;
+		if (logic->suggest() == 0) return MatchGameover;
+
+		return MatchSuccess;
 	}
-	return false;
+	return MatchInvalid;
 }
 
 void GameOperator::visualize_match(uint8_t y0, uint8_t x0, uint8_t y1, uint8_t x1) {

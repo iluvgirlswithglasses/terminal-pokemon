@@ -125,7 +125,7 @@ uint16_t GameboardLogicNormal::BFS(uint8_t y0, uint8_t x0, bool fixed, uint8_t y
 	qd.push_back(MaxDepth+1);
 
 	for (int t = 0; t < RC; t++)
-		vst[t][y0][x0] = true;
+		vst[t][y0][x0] = MaxDepth + 10;	// never to visit this cell again
 
 	while (qy.count()) {
 		uint8_t y = qy.pop_front(), 

@@ -19,6 +19,11 @@ BTW I use Arch
  * @ constructors & deconstructors
  * */
 Gameboard::Gameboard(uint8_t _h, uint8_t _w, uint8_t** gamedata) {
+	remaining = 0;
+	for (int y = 0; y < _h; y++)
+		for (int x = 0; x < _w; x++)
+			if (gamedata[y][x]) remaining++;
+
 	// assume the area of the board which contains tiles has the size of _h*_w
 	// then the size of `map` is (_h+2)*(_w+2), or h*w
 	// which implies `map` has a 1 unit padding for each edge
