@@ -30,6 +30,11 @@ public:
 	// this mask is necessary for coord encoding in every gameboard logic module
 	static constexpr int MSK8 = (1<<8) - 1;	// 1111 1111
 
+	// adjacent tiles rule
+	static constexpr int RC = 4;
+	const int RY[RC] = { -1, 0, 1, 0, },	// adj `y` cells {t, l, d, r}
+	          RX[RC] = { 0, -1, 0, 1, };	// adj `x` cells {t, l, d, r}
+
 	GameboardLogic() {}
 
 	// check if (y0, x0) can be matched with (y1, x1)

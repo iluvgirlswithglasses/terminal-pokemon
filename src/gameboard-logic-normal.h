@@ -42,9 +42,7 @@ private:
 	/**
 	 * @ BFS
 	 * */	
-	static constexpr int
-		MaxDepth = 2,	// maximum turns
-		RC = 4;			// number of adj cells
+	static constexpr int MaxDepth = 2;	// maximum turns
 
 	uint8_t*** vst;
 	uint32_t*** trace;

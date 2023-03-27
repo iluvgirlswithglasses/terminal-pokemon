@@ -70,7 +70,10 @@ void GameOperator::start(int diff) {
 		case 'j':
 			selection = (selection<<16) | (cur_y<<8) | cur_x;
 			if (selection>>16) {
-				handle_matching(selection);
+				if (handle_matching(selection) && difficulty == DiffHard) {
+					// sliding tiles time!
+					slide_tiles(selection);
+				}
 				selection = 0;
 			}
 			break;
@@ -134,4 +137,11 @@ void GameOperator::visualize_match(uint8_t y0, uint8_t x0, uint8_t y1, uint8_t x
 		pre = nxt;
 		sleep(150);
 	}
+}
+
+void GameOperator::slide_tiles(uint32_t loc) {
+	uint8_t y1 = (loc>> 8) & MSK8, 
+	        x1 = (loc    ) & MSK8;	// temporarily only handle the last
+	Deque<uint16_t> candidates;
+
 }

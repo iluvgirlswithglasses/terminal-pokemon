@@ -108,11 +108,6 @@ void GameboardLogicNormal::reset_vst() {
 }
 
 uint16_t GameboardLogicNormal::BFS(uint8_t y0, uint8_t x0, bool fixed, uint8_t y1, uint8_t x1) {
-	// move rules
-	static constexpr int 
-		RY[RC] = { -1, 0, 1, 0, },	// adj `y` cells {t, l, d, r}
-		RX[RC] = { 0, -1, 0, 1, };	// adj `x` cells {t, l, d, r}
-
 	// even the type is different
 	if (fixed && map[y0][x0] != map[y1][x1]) return 0;
 

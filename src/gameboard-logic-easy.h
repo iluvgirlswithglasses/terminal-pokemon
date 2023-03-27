@@ -43,9 +43,7 @@ private:
 
 	/**
 	 * @ BFS
-	 * */	
-	static constexpr int RC = 4;	// number of adj cells
-
+	 * */
 	uint8_t** vst;
 	uint16_t** trace;
 

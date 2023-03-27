@@ -71,6 +71,9 @@ protected:
 	bool handle_matching(uint32_t loc);
 	void visualize_match(uint8_t y0, uint8_t x0, uint8_t y1, uint8_t x1);
 
+	// sliding tiles on hard difficulty
+	void slide_tiles(uint32_t loc);
+
 	void sleep(int ms) { std::this_thread::sleep_for(std::chrono::milliseconds(ms)); }
 };
 
