@@ -51,12 +51,33 @@ void Renderer::render() {
 		printf("\n");
 	}
 }
+
+void Renderer::clrscr() {
+	system("clear");
+}
+
 #elif _WIN32	// ----------------------------------------------------------------
-/** 
- * windows stdout is too slow 
- * I have to do extra calculations to reduce terminal output 
+/**
+ * Windows is so incredibly bad 
+ * I had to write an entire section to optimize it
+ * 
+ * Basically, I ran this game on console, 8 colors, size 120*40
+ * 
+ * On native debian linux, it performed at 140fps
+ * On WSL, it performed at 90fps
+ * 
+ * On native windows, on a same computer which ran the WSL test
+ * this program performed at less than 1fps
+ * 
+ * I mean... WTF? HOW????
  * */
 void Renderer::render() {
+	/**
+	 * after various experiments, I've concluded that
+	 * printf() should handle invisible output
+	 * while putchar should handle the visible ones
+	 * */
+	fflush(stdout);
 	clrscr();
 	for (int y = 0; y < h; y++) {
 		bool preUsg = !usg[y][0];
@@ -76,22 +97,17 @@ void Renderer::render() {
 					Color::setft(fgc[y][x], thk[y][x]);
 			}
 
-			printf("%c", map[y][x]);
+			putchar(map[y][x]);
 
 			preUsg = usg[y][x];
 			preKey = key;
 		}
-		printf("\n");
+		putchar('\n');
 	}
 }
-#endif			// __linux__ _WIN32	-----------------------------------------------
 
 void Renderer::clrscr() {
-#if __linux__
-	system("clear");
-#elif __APPLE__
-	system("clear");
-#elif _WIN32
 	system("cls");
-#endif
 }
+
+#endif			// __linux__ _WIN32	-----------------------------------------------
