@@ -14,7 +14,6 @@ BTW I use Arch
 */
 
 #include "gameboard-logic-easy.h"
-#include <cstdio>
 
 /**
  * @ initializer & deconstructor

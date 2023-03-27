@@ -26,7 +26,6 @@ BTW I use Arch
 */
 
 #include <cstdint>
-#include <cstdio>
 #include <cstring>
 #include "color.h"
 #include "renderer.h"
