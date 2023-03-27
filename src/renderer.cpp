@@ -39,6 +39,7 @@ Renderer::Renderer() {
 	}
 }
 
+#if __linux__	// ----------------------------------------------------------------
 void Renderer::render() {
 	clrscr();
 	for (int y = 0; y < h; y++) {
@@ -50,6 +51,40 @@ void Renderer::render() {
 		printf("\n");
 	}
 }
+#elif _WIN32	// ----------------------------------------------------------------
+/** 
+ * windows stdout is too slow 
+ * I have to do extra calculations to reduce terminal output 
+ * */
+void Renderer::render() {
+	clrscr();
+	for (int y = 0; y < h; y++) {
+		bool preUsg = !usg[y][0];
+		int  preKey = 0;
+
+		for (int x = 0; x < w; x++) {
+			int key = fgc[y][x];
+
+			// only re-format this cell if it's different than before
+			if (usg[y][x] == UseBackground) {
+				key = key<<8|bgc[y][x];
+				if (usg[y][x] != preUsg || key != preKey)
+					Color::setfb(fgc[y][x], bgc[y][x]);
+			} else {
+				key = key<<8|thk[y][x];
+				if (usg[y][x] != preUsg || key != preKey)
+					Color::setft(fgc[y][x], thk[y][x]);
+			}
+
+			printf("%c", map[y][x]);
+
+			preUsg = usg[y][x];
+			preKey = key;
+		}
+		printf("\n");
+	}
+}
+#endif			// __linux__ _WIN32	-----------------------------------------------
 
 void Renderer::clrscr() {
 #if __linux__
