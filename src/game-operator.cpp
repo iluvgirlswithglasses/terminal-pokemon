@@ -33,6 +33,7 @@ GameOperator::~GameOperator() {
  * @ main
  * */
 void GameOperator::start(int diff) {
+	std::srand(time(NULL));
 	difficulty = diff;
 
 	// load game
@@ -141,7 +142,22 @@ void GameOperator::visualize_match(uint8_t y0, uint8_t x0, uint8_t y1, uint8_t x
 
 void GameOperator::slide_tiles(uint32_t loc) {
 	uint8_t y1 = (loc>> 8) & MSK8, 
-	        x1 = (loc    ) & MSK8;	// temporarily only handle the last
+	        x1 = (loc    ) & MSK8;
 	Deque<uint16_t> candidates;
+	for (int t = 0; t < GameboardLogic::RC; t++) {
+		check_sliding_candidate(candidates, y1, x1, t);
+	}
+	if (candidates.count() == 0) return;
 
+	uint16_t chosen = candidates.get_index(std::rand() % candidates.count());
+	uint8_t cy = chosen>>8, cx = chosen&MSK8;
+	board->map[y1][x1] = board->map[cy][cx];
+	board->map[cy][cx] = Gameboard::EmptyCell;
+}
+
+void GameOperator::check_sliding_candidate(Deque<uint16_t> &candidates, uint8_t y0, uint8_t x0, int t) {
+	int ny = logic->RY[t] + y0, nx = logic->RX[t] + x0;
+	if (ny < 0 || nx < 0 || ny >= board->h || nx >= board->w) return;
+	if (board->map[ny][nx] != Gameboard::EmptyCell) 
+		candidates.push_back(ny<<16|nx);
 }
