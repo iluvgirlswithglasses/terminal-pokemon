@@ -59,6 +59,8 @@ public:
 
 	void clear();			// clear the deque
 
+	Deque<T> clone();		// clone this deque
+
 	/**
 	 * @ linked list functions
 	 * 

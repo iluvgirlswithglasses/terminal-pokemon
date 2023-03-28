@@ -85,6 +85,16 @@ template<typename T> void Deque<T>::clear() {
 	m_count = 0;
 }
 
+template<typename T> Deque<T> Deque<T>::clone() {
+	Deque<T> ans;
+	Node* cr = first;
+	do {
+		ans.push_back(cr->val);
+		cr = cr->r;
+	} while (cr != nullptr);
+	return ans;
+}
+
 /**
  * @ linked list functions
  * 

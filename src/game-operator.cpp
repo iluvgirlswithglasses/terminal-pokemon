@@ -186,6 +186,15 @@ int GameOperator::handle_matching(uint32_t loc) {
 
 		return MatchSuccess;
 	}
+
+#if _WIN32
+	// selections must be deselected manually in windows
+	gameRdr->draw_border(y0, x0, Color::White);
+	gameRdr->draw_border(y1, x1, Color::White);
+	gameRdr->direct_render_cell(y0, x0);
+	gameRdr->direct_render_cell(y1, x1);
+#endif
+
 	return MatchInvalid;
 }
 
@@ -247,11 +256,10 @@ void GameOperator::slide_tiles(uint32_t loc) {
 #elif _WIN32	// --------------------------------------------------------------------------------
 void GameOperator::visualize_match(uint8_t y0, uint8_t x0, uint8_t y1, uint8_t x1) {
 	Deque<uint16_t> q = logic->get_path(y0, x0, y1, x1);
-	Deque<uint16_t> p;	// clone of `q`
+	Deque<uint16_t> p = q.clone();
 	uint16_t pre = q.pop_front();
 	while (q.count()) {
 		uint16_t nxt = q.pop_front();
-		p.push_back(nxt);
 		gameRdr->draw_path(pre>>8, pre&MSK8, nxt>>8, nxt&MSK8, Color::Green);
 		/*
 		@FLAW
@@ -301,10 +309,14 @@ void GameOperator::slide_tiles(uint32_t loc) {
 	// draw a line which indicates the incoming sliding tile
 	gameRdr->draw_path(cy, cx, y1, x1, Color::Red);
 	sleep(400);
+	gameRdr->draw_path(cy, cx, y1, x1, Color::Black);	// redo the line
 
 	// update the gameboard (the rest of the rendering is up to the main function)
 	board->map[y1][x1] = board->map[cy][cx];
 	board->map[cy][cx] = Gameboard::EmptyCell;
+
+	// windows must directly render
+	gameRdr->burn();
 	gameRdr->direct_render_cell(y1, x1);
 	gameRdr->direct_render_cell(cy, cx);
 }
