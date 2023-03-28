@@ -55,6 +55,17 @@ bool GameOperator::start(int diff) {
 	// run
 	while (true) {
 		char c = Input::wait_keypress();
+
+#if _WIN32
+		// windows' cursor must be unhovered manually
+		// but you know what? gameRdr->burn() takes a few nanoseconds
+		// while rendering only a 9x5 cell takes 25 miliseconds on windows
+		gameRdr->burn();
+		gameRdr->direct_render_cell(cur_y, cur_x);
+		// i still dont know why windows is still popular
+		// or office
+#endif
+
 		switch (c) {
 		// handle moves
 		case 'w':
@@ -107,7 +118,23 @@ bool GameOperator::start(int diff) {
 			gameRdr->draw_border(selection>>8&MSK8, selection&MSK8, Color::Green);	// selection a
 		if (selection>>16)
 			gameRdr->draw_border(selection>>24&MSK8, selection>>16&MSK8, Color::Green);	// selection b
+
+#if __linux__	// ------------------------------------------------------------
+		/* 
+		linux terminal is strong enough
+		to just burn & re-render the whole screen after each frame 
+		*/
 		rdr->render();
+#elif _WIN32	// ------------------------------------------------------------
+		/*
+		windows terminal, on the other hand
+		too bad
+		*/
+		// the removed cells are already render at `visualize_match`
+		gameRdr->direct_render_cell(cur_y, cur_x);
+		gameRdr->direct_render_cell(selection>>8&MSK8, selection&MSK8);
+		gameRdr->direct_render_cell(selection>>24&MSK8, selection>>16&MSK8);
+#endif			// __linux__ _WIN32 -------------------------------------------
 	}
 }
 
@@ -220,9 +247,11 @@ void GameOperator::slide_tiles(uint32_t loc) {
 #elif _WIN32	// --------------------------------------------------------------------------------
 void GameOperator::visualize_match(uint8_t y0, uint8_t x0, uint8_t y1, uint8_t x1) {
 	Deque<uint16_t> q = logic->get_path(y0, x0, y1, x1);
+	Deque<uint16_t> p;	// clone of `q`
 	uint16_t pre = q.pop_front();
 	while (q.count()) {
 		uint16_t nxt = q.pop_front();
+		p.push_back(nxt);
 		gameRdr->draw_path(pre>>8, pre&MSK8, nxt>>8, nxt&MSK8, Color::Green);
 		/*
 		@FLAW
@@ -240,10 +269,25 @@ void GameOperator::visualize_match(uint8_t y0, uint8_t x0, uint8_t y1, uint8_t x
 		pre = nxt;
 		sleep(150);
 	}
+	// redo the tracing visual
+	pre = p.pop_front();
+	while (p.count()) {
+		uint16_t nxt = p.pop_front();
+		gameRdr->draw_path(pre>>8, pre&MSK8, nxt>>8, nxt&MSK8, Color::Black);
+		pre = nxt;
+	}
+
+	// erases the matched cells on screen
+	gameRdr->burn();
+	gameRdr->direct_render_cell(y0, x0);
+	gameRdr->direct_render_cell(y1, x1);
+	sleep(400);
 }
 
 void GameOperator::slide_tiles(uint32_t loc) {
-	uint8_t y1 = (loc>> 8) & MSK8, 
+	uint8_t y0 = (loc>>24) & MSK8,
+            x0 = (loc>>16) & MSK8,
+	        y1 = (loc>> 8) & MSK8, 
 	        x1 = (loc    ) & MSK8;
 	Deque<uint16_t> candidates;
 	for (int t = 0; t < GameboardLogic::RC; t++) {
@@ -254,18 +298,15 @@ void GameOperator::slide_tiles(uint32_t loc) {
 	uint16_t chosen = candidates.get_index(std::rand() % candidates.count());
 	uint8_t cy = chosen>>8, cx = chosen&MSK8;
 
-	// erases the matched cells on screen first
-	gameRdr->burn();
-	rdr->render();
-	sleep(400);
-
-	// then draw a line which indicates the incoming sliding tile
+	// draw a line which indicates the incoming sliding tile
 	gameRdr->draw_path(cy, cx, y1, x1, Color::Red);
 	sleep(400);
 
 	// update the gameboard (the rest of the rendering is up to the main function)
 	board->map[y1][x1] = board->map[cy][cx];
 	board->map[cy][cx] = Gameboard::EmptyCell;
+	gameRdr->direct_render_cell(y1, x1);
+	gameRdr->direct_render_cell(cy, cx);
 }
 
 #endif	// __linux__ _WIN32	-----------------------------------------------------------------------

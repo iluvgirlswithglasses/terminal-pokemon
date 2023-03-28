@@ -52,6 +52,18 @@ public:
 	// `burn()` overrides this method's effect
 	void draw_path(uint8_t y0, uint8_t x0, uint8_t y1, uint8_t x1, char bg);
 
+#if _WIN32	// ----------------------------------------------------------------
+	/*
+	somethings to boost windows' terrible performance 
+	these methods burns to Renderer & then directly renders via WindowsConsole
+
+	these method DOES NOT use Renderer::render() nor modify the gameboard
+	which still follows the overall rules of this struct to some degree
+	*/
+	// usage: call this to render just a cell and not the whole scene
+	void direct_render_cell(uint8_t y, uint8_t x);
+#endif		// _WIN32 ---------------------------------------------------------
+
 private:
 	static constexpr uint8_t CellHeight = 4, CellWidth = 8;	// must be even
 	static constexpr uint8_t MidY = CellHeight>>1, MidX = CellWidth>>1;

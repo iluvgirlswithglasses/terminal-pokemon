@@ -139,3 +139,27 @@ void GameboardRenderer::assign_core_pixel(uint8_t c, uint8_t y, uint8_t x) {
 	scr->thk[y][x] = Color::Bold;
 	scr->usg[y][x] = Renderer::UseThickness;
 }
+
+/**
+ * @ windows
+ * */
+#if _WIN32	// ----------------------------------------------------------------
+// this method does not burn nor modify anything
+// it only calls WindowsConsole
+void GameboardRenderer::direct_render_cell(uint8_t y, uint8_t x) {
+	uint8_t t = get_ry(y), d = get_ry(y+1), l = get_rx(x), r = get_rx(x+1);
+	// horizontal lines
+	for (uint8_t x = l; x <= r; x++) {
+		WindowsConsole::plot_pixel(scr, t, x);
+		WindowsConsole::plot_pixel(scr, d, x);
+	}
+	// vertical lines
+	for (uint8_t y = t; y <= d; y++) {
+		WindowsConsole::plot_pixel(scr, y, l);
+		WindowsConsole::plot_pixel(scr, y, r);
+	}
+	// the core
+	WindowsConsole::plot_pixel(scr, t + MidY, l + MidX);
+	WindowsConsole::reset_cursor();
+}
+#endif		// ----------------------------------------------------------------
