@@ -18,6 +18,6 @@ BTW I use Arch
 
 int main() {
 	GameOperator game;
-	game.start(GameOperator::DiffNorm);
+	game.start(GameOperator::DiffHard);
 	return 0;
 }

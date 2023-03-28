@@ -89,7 +89,9 @@ void GameOperator::start(int diff) {
 			}
 			break;
 		}
-		// render
+		// rendering
+		// note that this block is executed after all operations above
+		// and it'll override all changes those operations did to the screen
 		gameRdr->burn();
 		gameRdr->draw_border(cur_y, cur_x, Color::Red);	// cursor
 		if (selection)
@@ -167,6 +169,18 @@ void GameOperator::slide_tiles(uint32_t loc) {
 
 	uint16_t chosen = candidates.get_index(std::rand() % candidates.count());
 	uint8_t cy = chosen>>8, cx = chosen&MSK8;
+
+	// erases the matched cells on screen first
+	gameRdr->burn();
+	rdr->render();
+	sleep(400);
+
+	// then draw a line which indicates the incoming sliding tile
+	gameRdr->draw_path(cy, cx, y1, x1, Color::Red);
+	rdr->render();
+	sleep(400);
+
+	// update the gameboard (the rest of the rendering is up to the main function)
 	board->map[y1][x1] = board->map[cy][cx];
 	board->map[cy][cx] = Gameboard::EmptyCell;
 }
@@ -175,5 +189,5 @@ void GameOperator::check_sliding_candidate(Deque<uint16_t> &candidates, uint8_t 
 	int ny = logic->RY[t] + y0, nx = logic->RX[t] + x0;
 	if (ny < 0 || nx < 0 || ny >= board->h || nx >= board->w) return;
 	if (board->map[ny][nx] != Gameboard::EmptyCell) 
-		candidates.push_back(ny<<16|nx);
+		candidates.push_back(ny<<8|nx);
 }
