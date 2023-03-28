@@ -1,6 +1,6 @@
 cd .\src
 
-clang++.exe -target x86_64-pc-windows-msvc -Wno-deprecated -c *.h *.cpp
+clang++.exe -O3 -target x86_64-pc-windows-msvc -Wno-deprecated -c *.h *.cpp
 clang++.exe *.o *.gch -o o-win-clang++.exe
 del *.o *.gch
 
