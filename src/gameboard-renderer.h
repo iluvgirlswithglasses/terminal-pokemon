@@ -30,6 +30,10 @@ BTW I use Arch
 #include "color.h"
 #include "renderer.h"
 
+#if _WIN32
+#include "windows-console.h"
+#endif	// _WIN32
+
 struct GameboardRenderer {
 public:
 	uint8_t** map;			// the gameboard

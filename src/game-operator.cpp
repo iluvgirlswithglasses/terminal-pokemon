@@ -112,7 +112,7 @@ bool GameOperator::start(int diff) {
 }
 
 /**
- * @ utils
+ * @ loaders
  * */
 Gameboard* GameOperator::read() {
 	int h, w;
@@ -140,6 +140,9 @@ GameboardLogic* GameOperator::get_logic(int diff) {
 	}
 }
 
+/**
+ * @ on-match handlers
+ * */
 int GameOperator::handle_matching(uint32_t loc) {
 	uint8_t y0 = (loc>>24) & MSK8, 
 	        x0 = (loc>>16) & MSK8, 
@@ -159,6 +162,22 @@ int GameOperator::handle_matching(uint32_t loc) {
 	return MatchInvalid;
 }
 
+void GameOperator::check_sliding_candidate(Deque<uint16_t> &candidates, uint8_t y0, uint8_t x0, int t) {
+	int ny = logic->RY[t] + y0, nx = logic->RX[t] + x0;
+	if (ny < 0 || nx < 0 || ny >= board->h || nx >= board->w) return;
+	if (board->map[ny][nx] != Gameboard::EmptyCell) 
+		candidates.push_back(ny<<8|nx);
+}
+
+/**
+ * @ matching visualizators
+ * 
+ * splited into 2 blocks: 
+ * 		one for linux, another for windows
+ * both block contains 2 methods:
+ * 		visualize_match and slide_tiles
+ * */
+#if __linux__	// --------------------------------------------------------------------------------
 void GameOperator::visualize_match(uint8_t y0, uint8_t x0, uint8_t y1, uint8_t x1) {
 	Deque<uint16_t> q = logic->get_path(y0, x0, y1, x1);
 	uint16_t pre = q.pop_front();
@@ -198,9 +217,55 @@ void GameOperator::slide_tiles(uint32_t loc) {
 	board->map[cy][cx] = Gameboard::EmptyCell;
 }
 
-void GameOperator::check_sliding_candidate(Deque<uint16_t> &candidates, uint8_t y0, uint8_t x0, int t) {
-	int ny = logic->RY[t] + y0, nx = logic->RX[t] + x0;
-	if (ny < 0 || nx < 0 || ny >= board->h || nx >= board->w) return;
-	if (board->map[ny][nx] != Gameboard::EmptyCell) 
-		candidates.push_back(ny<<8|nx);
+#elif _WIN32	// --------------------------------------------------------------------------------
+void GameOperator::visualize_match(uint8_t y0, uint8_t x0, uint8_t y1, uint8_t x1) {
+	Deque<uint16_t> q = logic->get_path(y0, x0, y1, x1);
+	uint16_t pre = q.pop_front();
+	while (q.count()) {
+		uint16_t nxt = q.pop_front();
+		gameRdr->draw_path(pre>>8, pre&MSK8, nxt>>8, nxt&MSK8, Color::Green);
+		/*
+		@FLAW
+
+		by initial design, GameboardRenderer should never be allowed to 
+		directly render anything to the screen,
+		but to write GameboardContent to the Renderer only
+
+		however, Windows' appalling performance broke every design ever
+		so... deal with it
+
+		the rendering for matching visuallization 
+		will be done in gameRdr->draw_path()
+		*/
+		pre = nxt;
+		sleep(150);
+	}
 }
+
+void GameOperator::slide_tiles(uint32_t loc) {
+	uint8_t y1 = (loc>> 8) & MSK8, 
+	        x1 = (loc    ) & MSK8;
+	Deque<uint16_t> candidates;
+	for (int t = 0; t < GameboardLogic::RC; t++) {
+		check_sliding_candidate(candidates, y1, x1, t);
+	}
+	if (candidates.count() == 0) return;
+
+	uint16_t chosen = candidates.get_index(std::rand() % candidates.count());
+	uint8_t cy = chosen>>8, cx = chosen&MSK8;
+
+	// erases the matched cells on screen first
+	gameRdr->burn();
+	rdr->render();
+	sleep(400);
+
+	// then draw a line which indicates the incoming sliding tile
+	gameRdr->draw_path(cy, cx, y1, x1, Color::Red);
+	sleep(400);
+
+	// update the gameboard (the rest of the rendering is up to the main function)
+	board->map[y1][x1] = board->map[cy][cx];
+	board->map[cy][cx] = Gameboard::EmptyCell;
+}
+
+#endif	// __linux__ _WIN32	-----------------------------------------------------------------------

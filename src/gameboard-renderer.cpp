@@ -96,6 +96,20 @@ void GameboardRenderer::draw_path(uint8_t y0, uint8_t x0, uint8_t y1, uint8_t x1
 			if (scr->usg[y][x0] == Renderer::UseBackground)
 				scr->bgc[y][x0] = bg;
 	}
+
+#if _WIN32	// ------------------------------------------------------------------------
+	/** the design flaw of this block is mentioned at @FLAW in `game-operator.cpp` */
+	if (y0 == y1) {
+		for (uint8_t x = min(x0, x1); x <= max(x0, x1); x++)
+			if (scr->usg[y0][x] == Renderer::UseBackground)
+				WindowsConsole::plot_pixel(scr, y0, x);
+	} else if (x0 == x1) {
+		for (uint8_t y = min(y0, y1); y <= max(y0, y1); y++)
+			if (scr->usg[y][x0] == Renderer::UseBackground)
+				WindowsConsole::plot_pixel(scr, y, x0);
+	}
+	WindowsConsole::reset_cursor();
+#endif		// _WIN32 -----------------------------------------------------------------
 }
 
 /**

@@ -71,6 +71,11 @@ public:
 		COORD cursor = { x, y };	// COORD(x, y)
 		SetConsoleCursorPosition(console, cursor);
 	}
+
+	static void reset_cursor() {
+		set_cursor(0, 0);
+		Color::setfb(Color::Black, Color::Black);
+	}
 };
 
 #endif	// _WIN32
