@@ -45,8 +45,10 @@ public:
 	~GameOperator();
 
 	// start the game
-	// only break once the game is finished
-	void start(int diff);
+	// once the game is finished:
+	// return `1` --> the player won the game
+	//        `0` otherwise
+	bool start(int diff);
 
 	// maybe get some stats after finishing the game here
 

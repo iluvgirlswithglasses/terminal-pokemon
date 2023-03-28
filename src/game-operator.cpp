@@ -31,8 +31,10 @@ GameOperator::~GameOperator() {
 
 /**
  * @ main
+ * 
+ * returns `true` if win, `false` if otherwise
  * */
-void GameOperator::start(int diff) {
+bool GameOperator::start(int diff) {
 	std::srand(time(NULL));
 	difficulty = diff;
 
@@ -79,15 +81,22 @@ void GameOperator::start(int diff) {
 					if (difficulty == DiffHard) slide_tiles(selection);
 					break;
 				case MatchVictory:
-					printf("you win --tmp\n");
-					return;
+					return true;
 				case MatchGameover:
-					printf("you sucks --tmp\n");
-					return;
+					return false;
 				}
 				selection = 0;
 			}
 			break;
+		// suggestion
+		case 'k':
+			selection = logic->suggest();
+			handle_matching(selection);
+			selection = 0;
+			break;
+		// skip this iteration
+		default:
+			continue;
 		}
 		// rendering
 		// note that this block is executed after all operations above

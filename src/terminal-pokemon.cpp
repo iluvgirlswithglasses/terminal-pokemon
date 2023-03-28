@@ -18,6 +18,9 @@ BTW I use Arch
 
 int main() {
 	GameOperator game;
-	game.start(GameOperator::DiffHard);
+	if (game.start(GameOperator::DiffHard)) 
+		printf("you won --tmp\n");
+	else
+		printf("bruh --tmp\n");
 	return 0;
 }
