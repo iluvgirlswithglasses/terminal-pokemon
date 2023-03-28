@@ -17,6 +17,12 @@ BTW I use Arch
 #include "game-operator.h"
 
 int main() {
+
+#if _WIN32	// something to deal with windows' terrible performance
+	WindowsConsole::init();
+#endif
+
+	// operate the game
 	GameOperator game;
 	if (game.start(GameOperator::DiffHard)) 
 		printf("you won --tmp\n");

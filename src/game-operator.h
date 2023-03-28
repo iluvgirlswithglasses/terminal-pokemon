@@ -34,6 +34,10 @@ BTW I use Arch
 #include <chrono>
 #include <thread>
 
+#if _WIN32
+#include "windows-console.h"
+#endif	// _WIN32
+
 /*
 @ about this:
 	operate the game scene

@@ -120,7 +120,11 @@ Gameboard* GameOperator::read() {
 	uint8_t** data = new uint8_t*[h];
 	for (int i = 0; i < h; i++) {
 		data[i] = new uint8_t[w];
-		for (int j = 0; j < w; j++) scanf("%d", &data[i][j]);
+		for (int j = 0; j < w; j++) 
+			scanf("%2hhx", &data[i][j]);
+			//     ^ this means unsigned char
+			//       normally I'd just use "%d"
+			//       but now I don't want to lie to my compiler
 	}
 	return new Gameboard(h, w, data);
 }
