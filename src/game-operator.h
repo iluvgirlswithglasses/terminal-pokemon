@@ -27,6 +27,8 @@ BTW I use Arch
 #include "gameboard.h"
 #include "gameboard-logic-easy.h"
 #include "gameboard-logic-normal.h"
+#include "sliding-logic.h"
+
 #include "renderer.h"
 #include "gameboard-renderer.h"
 
@@ -53,7 +55,13 @@ public:
 	// maybe get some stats after finishing the game here
 
 	// difficulty levels
-	static constexpr int DiffEasy = 0, DiffNorm = 1, DiffHard = 2;
+	static constexpr int 
+		DiffEasy = 0, 
+		DiffNorm = 1, 
+		DiffHardTop = 2,
+		DiffHardLft = 3,
+		DiffHardDwn = 4,
+		DiffHardRgt = 5;
 	int difficulty;
 
 protected:
@@ -62,6 +70,7 @@ protected:
 	// get the gameboard logic operator
 	Gameboard* board;
 	GameboardLogic* logic;
+	SlidingLogic* slidingLogic;
 	Renderer* rdr;
 	GameboardRenderer* gameRdr;
 
@@ -69,6 +78,7 @@ protected:
 	Gameboard* read();
 
 	GameboardLogic* get_logic(int diff);
+	SlidingLogic* get_sliding_logic(int diff);
 
 	/**
 	 * @ usage:
@@ -84,6 +94,9 @@ protected:
 	static constexpr int MatchInvalid = 0, MatchSuccess = 1, MatchGameover = 2, MatchVictory = 3;
 	int handle_matching(uint32_t loc);
 	void visualize_match(uint8_t y0, uint8_t x0, uint8_t y1, uint8_t x1);
+
+	void slide_tiles(uint8_t y0, uint8_t x0, uint8_t y1, uint8_t x1);
+	void visualize_sliding(Deque<uint16_t> &q);
 
 	void sleep(int ms) { std::this_thread::sleep_for(std::chrono::milliseconds(ms)); }
 };

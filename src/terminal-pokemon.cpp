@@ -24,7 +24,7 @@ int main() {
 
 	// operate the game
 	GameOperator game;
-	if (game.start(GameOperator::DiffHard)) 
+	if (game.start(GameOperator::DiffHardLft)) 
 		printf("you won --tmp\n");
 	else
 		printf("bruh --tmp\n");
