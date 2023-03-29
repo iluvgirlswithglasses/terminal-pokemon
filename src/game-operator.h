@@ -80,23 +80,15 @@ protected:
 	GameboardLogic* get_logic(int diff);
 	SlidingLogic* get_sliding_logic(int diff);
 
-	/**
-	 * @ usage:
-	 * 
-	 * handle a match by player
-	 * 
-	 * return codes:
-	 * 		0 - match invalid
-	 * 		1 - match successfully
-	 * 		2 - no more valid match after this
-	 * 		3 - victory
-	 * */
-	static constexpr int MatchInvalid = 0, MatchSuccess = 1, MatchGameover = 2, MatchVictory = 3;
-	int handle_matching(uint32_t loc);
+	bool handle_matching(uint32_t loc);
 	void visualize_match(uint8_t y0, uint8_t x0, uint8_t y1, uint8_t x1);
 
 	void slide_tiles(uint8_t y0, uint8_t x0, uint8_t y1, uint8_t x1);
+#if __linux__
 	void visualize_sliding(Deque<uint16_t> &q);
+#elif _WIN32
+	void visualize_sliding(Deque<uint16_t> &q, char color);
+#endif
 
 	void sleep(int ms) { std::this_thread::sleep_for(std::chrono::milliseconds(ms)); }
 };

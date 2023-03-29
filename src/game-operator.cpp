@@ -39,7 +39,7 @@ bool GameOperator::start(int diff) {
 	std::srand(time(NULL));
 	difficulty = diff;
 
-	// load game
+	// @ load game
 	board = read();
 	logic = get_logic(diff);
 	rdr = new Renderer();
@@ -47,16 +47,16 @@ bool GameOperator::start(int diff) {
 
 	if (difficulty >= DiffHardTop) slidingLogic = get_sliding_logic(diff);
 	
-	// cursor
+	// @ cursor
 	uint8_t cur_y = 1, cur_x = 1;
 	uint32_t selection = 0;
 
-	// init
+	// @ init
 	gameRdr->burn();
 	gameRdr->draw_border(cur_y, cur_x, Color::Red);
 	rdr->render();
 
-	// run
+	// @ iteration
 	while (true) {
 		char c = Input::wait_keypress();
 
@@ -71,7 +71,7 @@ bool GameOperator::start(int diff) {
 #endif
 
 		switch (c) {
-		// handle moves
+		// @ handle moves
 		case 'w':
 			cur_y = cur_y == 0 ? cur_y : cur_y - 1;
 			break;
@@ -84,27 +84,16 @@ bool GameOperator::start(int diff) {
 		case 'd':
 			cur_x = cur_x + 1 >= board->w ? cur_x : cur_x + 1;
 			break;
-		// handle selection
+		// @ handle selection
 		case 'j':
 			selection = (selection<<16) | (cur_y<<8) | cur_x;
 			if (selection>>16) {
-				int matchCode = handle_matching(selection);
-
-				switch (matchCode)
-				{
-				case MatchSuccess:
-					if (difficulty >= DiffHardTop) {
-						uint8_t y0 = (selection>>24) & MSK8, 
-						        x0 = (selection>>16) & MSK8, 
-						        y1 = (selection>> 8) & MSK8, 
-						        x1 = (selection    ) & MSK8;
-						slide_tiles(y0, x0, y1, x1);
-					}
-					break;
-				case MatchVictory:
-					return true;
-				case MatchGameover:
-					return false;
+				if (handle_matching(selection) && difficulty >= DiffHardTop) {
+					uint8_t y0 = (selection>>24) & MSK8, 
+					        x0 = (selection>>16) & MSK8, 
+					        y1 = (selection>> 8) & MSK8, 
+					        x1 = (selection    ) & MSK8;
+					slide_tiles(y0, x0, y1, x1);
 				}
 				selection = 0;
 			}
@@ -119,7 +108,8 @@ bool GameOperator::start(int diff) {
 		default:
 			continue;
 		}
-		// rendering
+
+		// @ rendering
 		// note that this block is executed after all operations above
 		// and it'll override all changes those operations did to the screen
 		gameRdr->burn();
@@ -145,6 +135,10 @@ bool GameOperator::start(int diff) {
 		gameRdr->direct_render_cell(selection>>8&MSK8, selection&MSK8);
 		gameRdr->direct_render_cell(selection>>24&MSK8, selection>>16&MSK8);
 #endif			// __linux__ _WIN32 -------------------------------------------
+
+		// @ gamestate check
+		if (board->remaining == 0) return true;
+		if (logic->suggest() == 0) return false;
 	}
 }
 
@@ -192,7 +186,7 @@ SlidingLogic* GameOperator::get_sliding_logic(int diff) {
 /**
  * @ on-match handlers
  * */
-int GameOperator::handle_matching(uint32_t loc) {
+bool GameOperator::handle_matching(uint32_t loc) {
 	uint8_t y0 = (loc>>24) & MSK8, 
 	        x0 = (loc>>16) & MSK8, 
 	        y1 = (loc>> 8) & MSK8, 
@@ -203,10 +197,7 @@ int GameOperator::handle_matching(uint32_t loc) {
 
 		visualize_match(y0, x0, y1, x1);
 
-		if (board->remaining == 0) return MatchVictory;
-		if (logic->suggest() == 0) return MatchGameover;
-
-		return MatchSuccess;
+		return true;
 	}
 
 #if _WIN32
@@ -217,7 +208,7 @@ int GameOperator::handle_matching(uint32_t loc) {
 	gameRdr->direct_render_cell(y1, x1);
 #endif
 
-	return MatchInvalid;
+	return false;
 }
 
 /**
@@ -248,11 +239,13 @@ void GameOperator::slide_tiles(uint8_t y0, uint8_t x0, uint8_t y1, uint8_t x1) {
 	// so here it goes to render the removed cells first
 	gameRdr->burn();
 	rdr->render();
-	sleep(400);
 
+	// this modifies the gameboard
 	Deque<uint16_t> q0 = slidingLogic->slide(y0, x0);
 	Deque<uint16_t> q1 = slidingLogic->slide(y1, x1);
-
+	if (q0.count() == 0 || q1.count() == 0) return;
+	
+	sleep(400);	// wait for a little bit before visualizing
 	visualize_sliding(q0);
 	visualize_sliding(q1);
 	sleep(400);
@@ -261,7 +254,6 @@ void GameOperator::slide_tiles(uint8_t y0, uint8_t x0, uint8_t y1, uint8_t x1) {
 }
 
 void GameOperator::visualize_sliding(Deque<uint16_t> &q) {
-	if (q.count() == 0) return;
 	uint16_t pre = q.pop_back();
 	while (q.count()) {
 		uint16_t nxt = q.pop_back();
@@ -310,11 +302,38 @@ void GameOperator::visualize_match(uint8_t y0, uint8_t x0, uint8_t y1, uint8_t x
 }
 
 void GameOperator::slide_tiles(uint8_t y0, uint8_t x0, uint8_t y1, uint8_t x1) {
-	
+	// this modifies the gameboard
+	Deque<uint16_t> q0 = slidingLogic->slide(y0, x0);
+	Deque<uint16_t> q1 = slidingLogic->slide(y1, x1);
+
+	if (q0.count() == 0 || q1.count() == 0) return;
+
+	visualize_sliding(q0, Color::Red);
+	visualize_sliding(q1, Color::Red);
+	sleep(400);
+	visualize_sliding(q0, Color::Black);
+	visualize_sliding(q1, Color::Black);
+
+	// re-render all affected cells
+	gameRdr->burn();
+	while (q0.count()) {
+		uint16_t loc = q0.pop_front();
+		gameRdr->direct_render_cell(loc>>8, loc&MSK8);
+	}
+	while (q1.count()) {
+		uint16_t loc = q1.pop_front();
+		gameRdr->direct_render_cell(loc>>8, loc&MSK8);
+	}
 }
 
-void GameOperator::visualize_sliding(Deque<uint16_t> &q) {
-
+void GameOperator::visualize_sliding(Deque<uint16_t> &queue, char color) {
+	Deque<uint16_t> q = queue.clone();
+	uint16_t pre = q.pop_front();
+	while (q.count()) {
+		uint16_t nxt = q.pop_front();
+		gameRdr->draw_path(pre>>8, pre&MSK8, nxt>>8, nxt&MSK8, color);
+		pre = nxt;
+	}
 }
 
 #endif	// __linux__ _WIN32	-----------------------------------------------------------------------
