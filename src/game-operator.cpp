@@ -67,6 +67,8 @@ bool GameOperator::start(int diff) {
 		case 'd': cur_x = cur_x + 1 >= board->w ? cur_x : cur_x + 1; break;
 		// @ handle selection
 		case 'j':
+			if (board->map[cur_y][cur_x] == Gameboard::EmptyCell)
+				continue;	// skip this iteration
 			selection = (selection<<16) | (cur_y<<8) | cur_x;
 			if (selection>>16) {
 				if (handle_matching(selection) && difficulty >= DiffHardTop) {	
@@ -75,7 +77,6 @@ bool GameOperator::start(int diff) {
 					gameRdr->burn();
 					gameRdr->draw_border(cur_y, cur_x, Color::Red);	// cursor
 					rdr->render();
-					sleep(400);
 
 					uint8_t y0 = (selection>>24) & MSK8, 
 					        x0 = (selection>>16) & MSK8, 
@@ -128,6 +129,12 @@ bool GameOperator::start(int diff) {
 		case 'd': cur_x = cur_x + 1 >= board->w ? cur_x : cur_x + 1; break;
 		// @ handle selection
 		case 'j':
+			if (board->map[cur_y][cur_x] == Gameboard::EmptyCell) {
+				// re-hover then skip this iteration
+				gameRdr->draw_border(cur_y, cur_x, Color::Red);
+				gameRdr->direct_render_cell(cur_y, cur_x);
+				continue;
+			}
 			selection = (selection<<16) | (cur_y<<8) | cur_x;
 			if (selection>>16) {
 				if (handle_matching(selection) && difficulty >= DiffHardTop) {
@@ -140,7 +147,6 @@ bool GameOperator::start(int diff) {
 					// in handle_matching() -> visualize_match()
 					gameRdr->draw_border(cur_y, cur_x, Color::Red);
 					gameRdr->direct_render_cell(cur_y, cur_x);
-					sleep(400);
 					slide_tiles(y0, x0, y1, x1);
 				}
 				selection = 0;
@@ -252,9 +258,6 @@ bool GameOperator::handle_matching(uint32_t loc) {
  * 		one for linux, another for windows
  * both block contains 2 methods:
  * 		visualize_match and slide_tiles
- * 
- * rules for all visualization methods:
- * 		animation must start immediately once the method is call
  * */
 #if __linux__	// --------------------------------------------------------------------------------
 void GameOperator::visualize_match(uint8_t y0, uint8_t x0, uint8_t y1, uint8_t x1) {
@@ -275,10 +278,11 @@ void GameOperator::slide_tiles(uint8_t y0, uint8_t x0, uint8_t y1, uint8_t x1) {
 	// this modifies the gameboard
 	Deque<uint16_t> q0 = slidingLogic->slide(y0, x0);
 	Deque<uint16_t> q1 = slidingLogic->slide(y1, x1);
-	if (q0.count() == 0 || q1.count() == 0) return;
+	if (q0.count() == 0 && q1.count() == 0) return;
 
-	visualize_sliding(q0);
-	visualize_sliding(q1);
+	sleep(400);
+	if (q0.count() != 0) visualize_sliding(q0);
+	if (q1.count() != 0) visualize_sliding(q1);
 	rdr->render();
 	sleep(400);
 
@@ -286,6 +290,7 @@ void GameOperator::slide_tiles(uint8_t y0, uint8_t x0, uint8_t y1, uint8_t x1) {
 }
 
 void GameOperator::visualize_sliding(Deque<uint16_t> &q) {
+	if (q.count() == 0) return;
 	uint16_t pre = q.pop_back();
 	while (q.count()) {
 		uint16_t nxt = q.pop_back();
@@ -337,15 +342,16 @@ void GameOperator::slide_tiles(uint8_t y0, uint8_t x0, uint8_t y1, uint8_t x1) {
 	Deque<uint16_t> q0 = slidingLogic->slide(y0, x0);
 	Deque<uint16_t> q1 = slidingLogic->slide(y1, x1);
 
-	if (q0.count() == 0 || q1.count() == 0) return;
+	if (q0.count() == 0 && q1.count() == 0) return;
 
+	sleep(400);
 	visualize_sliding(q0, Color::Red);
 	visualize_sliding(q1, Color::Red);
 	sleep(400);
-	visualize_sliding(q0, Color::Black);
-	visualize_sliding(q1, Color::Black);
 
 	// re-render all affected cells
+	visualize_sliding(q0, Color::Black);
+	visualize_sliding(q1, Color::Black);
 	gameRdr->burn();
 	while (q0.count()) {
 		uint16_t loc = q0.pop_front();
@@ -358,6 +364,7 @@ void GameOperator::slide_tiles(uint8_t y0, uint8_t x0, uint8_t y1, uint8_t x1) {
 }
 
 void GameOperator::visualize_sliding(Deque<uint16_t> &queue, char color) {
+	if (queue.count() == 0) return;
 	Deque<uint16_t> q = queue.clone();
 	uint16_t pre = q.pop_front();
 	while (q.count()) {
