@@ -17,9 +17,6 @@ BTW I use Arch
 #define GAME_OPERATOR_H
 // ------------------------------------------------------------
 
-#include <random>
-#include <ctime>
-
 #include "color.h"
 #include "deque.h"
 #include "input.h"

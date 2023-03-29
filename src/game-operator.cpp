@@ -36,7 +36,6 @@ GameOperator::~GameOperator() {
  * returns `true` if win, `false` if otherwise
  * */
 bool GameOperator::start(int diff) {
-	std::srand(time(NULL));
 	difficulty = diff;
 
 	// @ load game
@@ -57,38 +56,27 @@ bool GameOperator::start(int diff) {
 	rdr->render();
 
 	// @ iteration
+#if __linux__	// --------------------------------------------------------------------------------
 	while (true) {
 		char c = Input::wait_keypress();
-
-#if _WIN32
-		// windows' cursor must be unhovered manually
-		// but you know what? gameRdr->burn() takes a few nanoseconds
-		// while rendering only a 9x5 cell takes 25 miliseconds on windows
-		gameRdr->burn();
-		gameRdr->direct_render_cell(cur_y, cur_x);
-		// i still dont know why windows is still popular
-		// or office
-#endif
-
 		switch (c) {
 		// @ handle moves
-		case 'w':
-			cur_y = cur_y == 0 ? cur_y : cur_y - 1;
-			break;
-		case 's':
-			cur_y = cur_y + 1 >= board->h ? cur_y : cur_y + 1;
-			break;
-		case 'a':
-			cur_x = cur_x == 0 ? cur_x : cur_x - 1;
-			break;
-		case 'd':
-			cur_x = cur_x + 1 >= board->w ? cur_x : cur_x + 1;
-			break;
+		case 'w': cur_y = cur_y == 0 ? cur_y : cur_y - 1; break;
+		case 'a': cur_x = cur_x == 0 ? cur_x : cur_x - 1; break;
+		case 's': cur_y = cur_y + 1 >= board->h ? cur_y : cur_y + 1; break;
+		case 'd': cur_x = cur_x + 1 >= board->w ? cur_x : cur_x + 1; break;
 		// @ handle selection
 		case 'j':
 			selection = (selection<<16) | (cur_y<<8) | cur_x;
 			if (selection>>16) {
-				if (handle_matching(selection) && difficulty >= DiffHardTop) {
+				if (handle_matching(selection) && difficulty >= DiffHardTop) {	
+					// visualize_match() has not called gameRdr->burn()
+					// so here it goes to render the removed cells first
+					gameRdr->burn();
+					gameRdr->draw_border(cur_y, cur_x, Color::Red);	// cursor
+					rdr->render();
+					sleep(400);
+
 					uint8_t y0 = (selection>>24) & MSK8, 
 					        x0 = (selection>>16) & MSK8, 
 					        y1 = (selection>> 8) & MSK8, 
@@ -108,7 +96,6 @@ bool GameOperator::start(int diff) {
 		default:
 			continue;
 		}
-
 		// @ rendering
 		// note that this block is executed after all operations above
 		// and it'll override all changes those operations did to the screen
@@ -118,28 +105,75 @@ bool GameOperator::start(int diff) {
 			gameRdr->draw_border(selection>>8&MSK8, selection&MSK8, Color::Green);	// selection a
 		if (selection>>16)
 			gameRdr->draw_border(selection>>24&MSK8, selection>>16&MSK8, Color::Green);	// selection b
-
-#if __linux__	// ------------------------------------------------------------
-		/* 
-		linux terminal is strong enough
-		to just burn & re-render the whole screen after each frame 
-		*/
+		// linux terminal is strong enough
+		// to just burn & re-render the whole screen after each frame 
 		rdr->render();
-#elif _WIN32	// ------------------------------------------------------------
-		/*
-		windows terminal, on the other hand
-		too bad
-		*/
-		// the removed cells are already render at `visualize_match`
-		gameRdr->direct_render_cell(cur_y, cur_x);
-		gameRdr->direct_render_cell(selection>>8&MSK8, selection&MSK8);
-		gameRdr->direct_render_cell(selection>>24&MSK8, selection>>16&MSK8);
-#endif			// __linux__ _WIN32 -------------------------------------------
 
 		// @ gamestate check
 		if (board->remaining == 0) return true;
 		if (logic->suggest() == 0) return false;
 	}
+#elif _WIN32	// --------------------------------------------------------------------------------
+	while (true) {
+		char c = Input::wait_keypress();
+		// windows' cursor must be unhovered manually
+		gameRdr->burn();
+		gameRdr->direct_render_cell(cur_y, cur_x);
+
+		switch (c) {
+		// @ handle moves
+		case 'w': cur_y = cur_y == 0 ? cur_y : cur_y - 1; break;
+		case 'a': cur_x = cur_x == 0 ? cur_x : cur_x - 1; break;
+		case 's': cur_y = cur_y + 1 >= board->h ? cur_y : cur_y + 1; break;
+		case 'd': cur_x = cur_x + 1 >= board->w ? cur_x : cur_x + 1; break;
+		// @ handle selection
+		case 'j':
+			selection = (selection<<16) | (cur_y<<8) | cur_x;
+			if (selection>>16) {
+				if (handle_matching(selection) && difficulty >= DiffHardTop) {
+					uint8_t y0 = (selection>>24) & MSK8, 
+					        x0 = (selection>>16) & MSK8, 
+					        y1 = (selection>> 8) & MSK8, 
+					        x1 = (selection    ) & MSK8;
+					// restore the cursor
+					// since it was deleted along with the selected cells
+					// in handle_matching() -> visualize_match()
+					gameRdr->draw_border(cur_y, cur_x, Color::Red);
+					gameRdr->direct_render_cell(cur_y, cur_x);
+					sleep(400);
+					slide_tiles(y0, x0, y1, x1);
+				}
+				selection = 0;
+			}
+			break;
+		// suggestion
+		case 'k':
+			selection = logic->suggest();
+			handle_matching(selection);
+			selection = 0;
+			break;
+		// skip this iteration
+		default:
+			continue;
+		}
+
+		gameRdr->burn();
+		gameRdr->draw_border(cur_y, cur_x, Color::Red);	// cursor
+		if (selection)
+			gameRdr->draw_border(selection>>8&MSK8, selection&MSK8, Color::Green);	// selection a
+		if (selection>>16)
+			gameRdr->draw_border(selection>>24&MSK8, selection>>16&MSK8, Color::Green);	// selection b
+		// update modified cells
+		// removed cells & slided cells are already handled in visualization methods
+		gameRdr->direct_render_cell(cur_y, cur_x);
+		gameRdr->direct_render_cell(selection>>8&MSK8, selection&MSK8);
+		gameRdr->direct_render_cell(selection>>24&MSK8, selection>>16&MSK8);
+
+		// @ gamestate check
+		if (board->remaining == 0) return true;
+		if (logic->suggest() == 0) return false;
+	}
+#endif			// __linux__ _WIN32 ---------------------------------------------------------------
 }
 
 /**
@@ -218,6 +252,9 @@ bool GameOperator::handle_matching(uint32_t loc) {
  * 		one for linux, another for windows
  * both block contains 2 methods:
  * 		visualize_match and slide_tiles
+ * 
+ * rules for all visualization methods:
+ * 		animation must start immediately once the method is call
  * */
 #if __linux__	// --------------------------------------------------------------------------------
 void GameOperator::visualize_match(uint8_t y0, uint8_t x0, uint8_t y1, uint8_t x1) {
@@ -235,19 +272,14 @@ void GameOperator::visualize_match(uint8_t y0, uint8_t x0, uint8_t y1, uint8_t x
 }
 
 void GameOperator::slide_tiles(uint8_t y0, uint8_t x0, uint8_t y1, uint8_t x1) {
-	// visualize_match() has not called gameRdr->burn()
-	// so here it goes to render the removed cells first
-	gameRdr->burn();
-	rdr->render();
-
 	// this modifies the gameboard
 	Deque<uint16_t> q0 = slidingLogic->slide(y0, x0);
 	Deque<uint16_t> q1 = slidingLogic->slide(y1, x1);
 	if (q0.count() == 0 || q1.count() == 0) return;
-	
-	sleep(400);	// wait for a little bit before visualizing
+
 	visualize_sliding(q0);
 	visualize_sliding(q1);
+	rdr->render();
 	sleep(400);
 
 	// leave the burning & rendering to main
@@ -258,7 +290,6 @@ void GameOperator::visualize_sliding(Deque<uint16_t> &q) {
 	while (q.count()) {
 		uint16_t nxt = q.pop_back();
 		gameRdr->draw_path(pre>>8, pre&MSK8, nxt>>8, nxt&MSK8, Color::Red);
-		rdr->render();
 		pre = nxt;
 	}
 }
