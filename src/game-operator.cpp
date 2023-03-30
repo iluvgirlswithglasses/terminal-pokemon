@@ -74,7 +74,7 @@ bool GameOperator::start() {
 				continue;	// skip this iteration
 			selection = (selection<<16) | (cur_y<<8) | cur_x;
 			if (selection>>16) {
-				if (handle_matching(selection) && difficulty >= DiffHardTop) {	
+				if (handle_matching(selection) && DiffHardTop <= difficulty && difficulty <= DiffHardRgt) {	
 					// visualize_match() has not called gameRdr->burn()
 					// so here it goes to render the removed cells first
 					gameRdr->burn();
@@ -140,7 +140,7 @@ bool GameOperator::start() {
 			}
 			selection = (selection<<16) | (cur_y<<8) | cur_x;
 			if (selection>>16) {
-				if (handle_matching(selection) && difficulty >= DiffHardTop) {
+				if (handle_matching(selection) && DiffHardTop <= difficulty && difficulty <= DiffHardRgt) {
 					uint8_t y0 = (selection>>24) & MSK8, 
 					        x0 = (selection>>16) & MSK8, 
 					        y1 = (selection>> 8) & MSK8, 
@@ -284,20 +284,20 @@ void GameOperator::slide_tiles(uint8_t y0, uint8_t x0, uint8_t y1, uint8_t x1) {
 	if (q0.count() == 0 && q1.count() == 0) return;
 
 	sleep(400);
-	if (q0.count() != 0) visualize_sliding(q0);
-	if (q1.count() != 0) visualize_sliding(q1);
+	if (q0.count() != 0) visualize_sliding(q0, Color::Red);
+	if (q1.count() != 0) visualize_sliding(q1, Color::Red);
 	rdr->render();
 	sleep(400);
 
 	// leave the burning & rendering to main
 }
 
-void GameOperator::visualize_sliding(Deque<uint16_t> &q) {
+void GameOperator::visualize_sliding(Deque<uint16_t> &q, char color) {
 	if (q.count() == 0) return;
 	uint16_t pre = q.pop_back();
 	while (q.count()) {
 		uint16_t nxt = q.pop_back();
-		gameRdr->draw_path(pre>>8, pre&MSK8, nxt>>8, nxt&MSK8, Color::Red);
+		gameRdr->draw_path(pre>>8, pre&MSK8, nxt>>8, nxt&MSK8, color);
 		pre = nxt;
 	}
 }

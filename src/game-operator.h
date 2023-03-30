@@ -31,8 +31,12 @@ BTW I use Arch
 #include "gameboard-renderer.h"
 
 // access to sleep
+#if __linux__
 #include <chrono>
 #include <thread>
+#elif _WIN32
+#include <windows.h>
+#endif
 
 /*
 @ about this:
@@ -66,7 +70,6 @@ public:
 protected:
 	static constexpr uint32_t MSK8 = (1<<8) - 1;
 
-	// get the gameboard logic operator
 	Gameboard* board = nullptr;
 	GameboardLogic* logic = nullptr;
 	SlidingLogic* slidingLogic = nullptr;
@@ -80,17 +83,23 @@ protected:
 	GameboardLogic* get_logic(int diff);
 	SlidingLogic* get_sliding_logic(int diff);
 
+	// on-match
 	bool handle_matching(uint32_t loc);
 	void visualize_match(uint8_t y0, uint8_t x0, uint8_t y1, uint8_t x1);
 
+	// sliding tiles gamemode
 	void slide_tiles(uint8_t y0, uint8_t x0, uint8_t y1, uint8_t x1);
-#if __linux__
-	void visualize_sliding(Deque<uint16_t> &q);
-#elif _WIN32
 	void visualize_sliding(Deque<uint16_t> &q, char color);
-#endif
 
+	// rick ashley gamemode
+	void randomize_tiles() {}
+	void visualize_randomizing() {}
+
+#if __linux__
 	void sleep(int ms) { std::this_thread::sleep_for(std::chrono::milliseconds(ms)); }
+#elif _WIN32
+	void sleep(int ms) { Sleep(ms); }
+#endif
 };
 
 #endif	// GAME_OPERATOR_H
