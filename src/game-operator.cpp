@@ -26,15 +26,20 @@ GameOperator::GameOperator(int diff) {
 	rdr = new Renderer();
 	gameRdr = new GameboardRenderer(board->map, rdr, board->h, board->w, 2, 1);
 
-	if (difficulty >= DiffHardTop) slidingLogic = get_sliding_logic(diff);
+	if (DiffHardTop <= difficulty && difficulty <= DiffHardRgt) 
+		slidingLogic = get_sliding_logic(diff);
+	if (difficulty == DiffRand)
+		randomLogic = new RandomizeLogic(board);
 }
 
 GameOperator::~GameOperator() {
 	delete board;
 	delete logic;
-	delete slidingLogic;
 	delete rdr;
 	delete gameRdr;
+
+	if (slidingLogic != nullptr) delete slidingLogic;
+	if (randomLogic != nullptr) delete randomLogic;
 }
 
 /**

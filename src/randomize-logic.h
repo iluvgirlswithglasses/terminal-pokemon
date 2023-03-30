@@ -17,8 +17,31 @@ BTW I use Arch
 #define RANDOMIZE_LOGIC_H
 // ------------------------------------------------------------
 
+#include <cstdint>
+#include <random>
+#include <ctime>
+#include "deque.h"
+#include "gameboard.h"
+
 struct RandomizeLogic {
-	
+public:
+	RandomizeLogic(Gameboard* board);
+
+	/**
+	 * shuffle the board
+	 * this modifies the gameboard
+	 * 
+	 * return a deque of affected cells
+	 * format (from_y << 24) | (from_x << 16) | (to_y << 8) | (to_x)
+	 * */
+	Deque<uint32_t> randomize();
+
+private:
+	Gameboard* board;
+
+	bool legit(uint8_t y, uint8_t x) {
+		return 0 < y && y < board->h - 1 && 0 < x && x < board->w - 1;
+	}
 };
 
 #endif	// RANDOMIZE_LOGIC

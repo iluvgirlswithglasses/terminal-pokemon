@@ -150,3 +150,12 @@ template<typename T> T Deque<T>::remove_node(Node* n) {
 	delete n;
 	return val;
 }
+
+
+// ------------------------------------------------------------------
+// @ Explicit instantiations ----------------------------------------
+template struct Deque<uint8_t>;
+template struct Deque<uint16_t>;
+template struct Deque<uint32_t>;
+template struct Deque<int>;
+// ------------------------------------------------------------------

@@ -25,6 +25,7 @@ BTW I use Arch
 #include "gameboard-logic-easy.h"
 #include "gameboard-logic-normal.h"
 #include "sliding-logic.h"
+#include "randomize-logic.h"
 
 #include "renderer.h"
 #include "gameboard-renderer.h"
@@ -58,18 +59,20 @@ public:
 		DiffHardTop = 2,
 		DiffHardLft = 3,
 		DiffHardDwn = 4,
-		DiffHardRgt = 5;
+		DiffHardRgt = 5,
+		DiffRand    = 6;
 	int difficulty;
 
 protected:
 	static constexpr uint32_t MSK8 = (1<<8) - 1;
 
 	// get the gameboard logic operator
-	Gameboard* board;
-	GameboardLogic* logic;
-	SlidingLogic* slidingLogic;
-	Renderer* rdr;
-	GameboardRenderer* gameRdr;
+	Gameboard* board = nullptr;
+	GameboardLogic* logic = nullptr;
+	SlidingLogic* slidingLogic = nullptr;
+	RandomizeLogic* randomLogic = nullptr;
+	Renderer* rdr = nullptr;
+	GameboardRenderer* gameRdr = nullptr;
 
 	// change this to reading files later
 	Gameboard* read();
