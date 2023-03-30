@@ -40,14 +40,14 @@ BTW I use Arch
 class GameOperator {
 public:
 	// constructors & destructors
-	GameOperator();
+	GameOperator(int diff);
 	~GameOperator();
 
 	// start the game
 	// once the game is finished:
 	// return `1` --> the player won the game
 	//        `0` otherwise
-	bool start(int diff);
+	bool start();
 
 	// maybe get some stats after finishing the game here
 

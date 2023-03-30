@@ -23,8 +23,8 @@ int main() {
 #endif
 
 	// operate the game
-	GameOperator game;
-	if (game.start(GameOperator::DiffHardLft)) 
+	GameOperator game(GameOperator::DiffHardLft);
+	if (game.start()) 
 		printf("you won --tmp\n");
 	else
 		printf("bruh --tmp\n");

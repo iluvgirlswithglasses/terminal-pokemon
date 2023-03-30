@@ -18,8 +18,15 @@ BTW I use Arch
 /**
  * @ constructors & destructors
  * */
-GameOperator::GameOperator() {
+GameOperator::GameOperator(int diff) {
+	difficulty = diff;
 
+	board = read();
+	logic = get_logic(diff);
+	rdr = new Renderer();
+	gameRdr = new GameboardRenderer(board->map, rdr, board->h, board->w, 2, 1);
+
+	if (difficulty >= DiffHardTop) slidingLogic = get_sliding_logic(diff);
 }
 
 GameOperator::~GameOperator() {
@@ -35,16 +42,7 @@ GameOperator::~GameOperator() {
  * 
  * returns `true` if win, `false` if otherwise
  * */
-bool GameOperator::start(int diff) {
-	difficulty = diff;
-
-	// @ load game
-	board = read();
-	logic = get_logic(diff);
-	rdr = new Renderer();
-	gameRdr = new GameboardRenderer(board->map, rdr, board->h, board->w, 2, 1);
-
-	if (difficulty >= DiffHardTop) slidingLogic = get_sliding_logic(diff);
+bool GameOperator::start() {
 	
 	// @ cursor
 	uint8_t cur_y = 1, cur_x = 1;
