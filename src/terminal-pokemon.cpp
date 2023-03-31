@@ -23,7 +23,7 @@ int main() {
 #endif
 
 	// operate the game
-	GameOperator game(GameOperator::DiffHardLft);
+	GameOperator game(GameOperator::DiffRand);
 	if (game.start()) 
 		printf("you won --tmp\n");
 	else

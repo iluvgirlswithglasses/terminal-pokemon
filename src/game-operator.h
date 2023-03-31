@@ -92,8 +92,7 @@ protected:
 	void visualize_sliding(Deque<uint16_t> &q, char color);
 
 	// rick ashley gamemode
-	void randomize_tiles() {}
-	void visualize_randomizing() {}
+	void randomize_tiles();
 
 #if __linux__
 	void sleep(int ms) { std::this_thread::sleep_for(std::chrono::milliseconds(ms)); }

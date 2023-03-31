@@ -74,7 +74,10 @@ bool GameOperator::start() {
 				continue;	// skip this iteration
 			selection = (selection<<16) | (cur_y<<8) | cur_x;
 			if (selection>>16) {
-				if (handle_matching(selection) && DiffHardTop <= difficulty && difficulty <= DiffHardRgt) {	
+				bool status = handle_matching(selection);
+
+				// sliding tiles
+				if (status && DiffHardTop <= difficulty && difficulty <= DiffHardRgt) {	
 					// visualize_match() has not called gameRdr->burn()
 					// so here it goes to render the removed cells first
 					gameRdr->burn();
@@ -87,6 +90,16 @@ bool GameOperator::start() {
 					        x1 = (selection    ) & MSK8;
 					slide_tiles(y0, x0, y1, x1);
 				}
+
+				// randomize
+				if (status && difficulty == DiffRand && rand() % 4 == 0) {
+					gameRdr->burn();
+					gameRdr->draw_border(cur_y, cur_x, Color::Red);	// cursor
+					rdr->render();
+
+					randomize_tiles();
+				}
+
 				selection = 0;
 			}
 			break;
@@ -300,6 +313,23 @@ void GameOperator::visualize_sliding(Deque<uint16_t> &q, char color) {
 		gameRdr->draw_path(pre>>8, pre&MSK8, nxt>>8, nxt&MSK8, color);
 		pre = nxt;
 	}
+}
+
+void GameOperator::randomize_tiles() {
+	// this modifies the gameboard
+	Deque<uint32_t> q = randomLogic->randomize();
+	if (q.count() == 0) return;
+
+	while (q.count()) {
+		uint32_t loc = q.pop_front();
+		uint8_t y0 = (loc>>24) & MSK8, 
+		        x0 = (loc>>16) & MSK8, 
+		        y1 = (loc>> 8) & MSK8, 
+		        x1 = (loc    ) & MSK8;
+		gameRdr->draw_path(y0, x0, y1, x1, Color::Red);
+	}
+	rdr->render();	// the modified board is not yet burned
+	sleep(400);
 }
 
 #elif _WIN32	// --------------------------------------------------------------------------------
