@@ -20,7 +20,7 @@ RandomizeLogic::RandomizeLogic(Gameboard* _b) {
 	srand(time(0));
 }
 
-Deque<uint32_t> RandomizeLogic::randomize() {
+Array<uint32_t> RandomizeLogic::randomize() {
 	// move rules
 	static constexpr int 
 		RC = 4,
@@ -36,7 +36,7 @@ Deque<uint32_t> RandomizeLogic::randomize() {
 			uint8_t ny = y + RY[t], nx = x + RX[t];
 			if (board->map[ny][nx] != Gameboard::EmptyCell) continue;
 			if (!legit(ny, nx)) continue;
-			if (rand() % 6 < 5) continue;	// too simple, the distribution is not even
+			if (rand() % 4 > 0) continue;	// too simple, the distribution is not even
 
 			// move `(y, x)` to `(ny, nx)` (`(ny, nx)` is currently an empty cell)
 			board->map[ny][nx] = board->map[y][x];
@@ -47,5 +47,8 @@ Deque<uint32_t> RandomizeLogic::randomize() {
 		}
 	}
 
-	return history;
+	Array<uint32_t> ans(history.count());
+	for (int i = 0; i < ans.len; i++)
+		ans[i] = history.pop_front();
+	return ans;
 }

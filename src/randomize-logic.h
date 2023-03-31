@@ -21,6 +21,7 @@ BTW I use Arch
 #include <random>
 #include <ctime>
 #include "deque.h"
+#include "array.h"
 #include "gameboard.h"
 
 struct RandomizeLogic {
@@ -34,7 +35,7 @@ public:
 	 * return a deque of affected cells
 	 * format (from_y << 24) | (from_x << 16) | (to_y << 8) | (to_x)
 	 * */
-	Deque<uint32_t> randomize();
+	Array<uint32_t> randomize();
 
 private:
 	Gameboard* board;

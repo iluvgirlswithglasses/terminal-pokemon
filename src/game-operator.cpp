@@ -326,11 +326,11 @@ void GameOperator::visualize_sliding(Deque<uint16_t> &q, char color) {
 
 void GameOperator::randomize_tiles() {
 	// this modifies the gameboard
-	Deque<uint32_t> q = randomLogic->randomize();
-	if (q.count() == 0) return;
+	Array<uint32_t> a = randomLogic->randomize();
+	if (a.len == 0) return;
 
-	while (q.count()) {
-		uint32_t loc = q.pop_front();
+	for (int i = 0; i < a.len; i++) {
+		uint32_t loc = a[i];
 		uint8_t y0 = (loc>>24) & MSK8, 
 		        x0 = (loc>>16) & MSK8, 
 		        y1 = (loc>> 8) & MSK8, 
@@ -417,7 +417,21 @@ void GameOperator::visualize_sliding(Deque<uint16_t> &queue, char color) {
 }
 
 void GameOperator::randomize_tiles() {
-	
+	// this modifies the gameboard
+	Array<uint32_t> a = randomLogic->randomize();
+	if (a.len == 0) return;
+
+	for (int i = 0; i < a.len; i++)
+		gameRdr->draw_path(a[i]>>24&MSK8, a[i]>>16&MSK8, a[i]>>8&MSK8, a[i]&MSK8, Color::Red);
+	sleep(400);
+	for (int i = 0; i < a.len; i++)
+		gameRdr->draw_path(a[i]>>24&MSK8, a[i]>>16&MSK8, a[i]>>8&MSK8, a[i]&MSK8, Color::Black);
+
+	gameRdr->burn();
+	for (int i = 0; i < a.len; i++) {
+		gameRdr->direct_render_cell(a[i]>>24&MSK8, a[i]>>16&MSK8);
+		gameRdr->direct_render_cell(a[i]>> 8&MSK8, a[i]    &MSK8);
+	}
 }
 
 #endif	// __linux__ _WIN32	-----------------------------------------------------------------------
