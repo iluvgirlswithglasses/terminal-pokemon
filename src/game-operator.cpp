@@ -153,7 +153,9 @@ bool GameOperator::start() {
 			}
 			selection = (selection<<16) | (cur_y<<8) | cur_x;
 			if (selection>>16) {
-				if (handle_matching(selection) && DiffHardTop <= difficulty && difficulty <= DiffHardRgt) {
+				bool status = handle_matching(selection);
+				// sliding tiles
+				if (status && DiffHardTop <= difficulty && difficulty <= DiffHardRgt) {
 					uint8_t y0 = (selection>>24) & MSK8, 
 					        x0 = (selection>>16) & MSK8, 
 					        y1 = (selection>> 8) & MSK8, 
@@ -164,6 +166,13 @@ bool GameOperator::start() {
 					gameRdr->draw_border(cur_y, cur_x, Color::Red);
 					gameRdr->direct_render_cell(cur_y, cur_x);
 					slide_tiles(y0, x0, y1, x1);
+				}
+				// randomizers
+				if (status && rand() % 4 == 0) {
+					// restore the cursor
+					gameRdr->draw_border(cur_y, cur_x, Color::Red);
+					gameRdr->direct_render_cell(cur_y, cur_x);
+					randomize_tiles();
 				}
 				selection = 0;
 			}
@@ -405,6 +414,10 @@ void GameOperator::visualize_sliding(Deque<uint16_t> &queue, char color) {
 		gameRdr->draw_path(pre>>8, pre&MSK8, nxt>>8, nxt&MSK8, color);
 		pre = nxt;
 	}
+}
+
+void GameOperator::randomize_tiles() {
+	
 }
 
 #endif	// __linux__ _WIN32	-----------------------------------------------------------------------
