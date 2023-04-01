@@ -18,10 +18,10 @@ BTW I use Arch
 /**
  * @ constructors & destructors
  * */
-GameOperator::GameOperator(int diff) {
+GameOperator::GameOperator(int diff, int lvl) {
 	difficulty = diff;
 
-	board = read();
+	board = read(diff, lvl);
 	logic = get_logic(diff);
 	rdr = new Renderer();
 	gameRdr = new GameboardRenderer(board->map, rdr, board->h, board->w, 2, 1);
@@ -210,18 +210,17 @@ bool GameOperator::start() {
 /**
  * @ loaders
  * */
-Gameboard* GameOperator::read() {
-	int h, w;
-	scanf("%d%d", &h, &w);
-	uint8_t** data = new uint8_t*[h];
-	for (int i = 0; i < h; i++) {
-		data[i] = new uint8_t[w];
-		for (int j = 0; j < w; j++) 
-			scanf("%2hhx", &data[i][j]);
-			//     ^ this means unsigned char
-			//       normally I'd just use "%d"
-			//       but now I don't want to lie to my compiler
-	}
+Gameboard* GameOperator::read(int diff, int lvl) {
+	//                        0123456789
+	static char FileName[] = "lvl/xx.bin";
+
+	int lvlPack = diff;
+	if (DiffNorm <= diff && diff <= DiffHardRgt) lvlPack = DiffNorm;
+	FileName[4] = '0' + lvlPack;
+	FileName[5] = '0' + lvl;
+
+	uint8_t h, w, **data;
+	FileIO::read_lvl(FileName, data, h, w);
 	return new Gameboard(h, w, data);
 }
 

@@ -22,8 +22,11 @@ int main() {
 	WindowsConsole::init();
 #endif
 
+	int diff, lvl;
+	scanf("%d%d", &diff, &lvl);
+
 	// operate the game
-	GameOperator game(GameOperator::DiffRand);
+	GameOperator game(diff, lvl);
 	if (game.start()) 
 		printf("you won --tmp\n");
 	else

@@ -27,6 +27,7 @@ BTW I use Arch
 #include "sliding-logic.h"
 #include "randomize-logic.h"
 
+#include "file-io.h"
 #include "renderer.h"
 #include "gameboard-renderer.h"
 
@@ -45,7 +46,7 @@ BTW I use Arch
 class GameOperator {
 public:
 	// constructors & destructors
-	GameOperator(int diff);
+	GameOperator(int diff, int lvl);
 	~GameOperator();
 
 	// start the game
@@ -78,7 +79,7 @@ protected:
 	GameboardRenderer* gameRdr = nullptr;
 
 	// change this to reading files later
-	Gameboard* read();
+	Gameboard* read(int diff, int lvl);
 
 	GameboardLogic* get_logic(int diff);
 	SlidingLogic* get_sliding_logic(int diff);
