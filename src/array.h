@@ -28,15 +28,13 @@ BTW I use Arch
 template<typename T> struct Array {
 public:
 	int len;
+	T* arr;
 
 	Array(int len);
 	~Array();
 
 	T operator [](int i) const { return arr[i]; }
     T &operator [](int i) { return arr[i]; }
-
-private:
-	T* arr;
 };
 
 #endif	// ARRAY_H

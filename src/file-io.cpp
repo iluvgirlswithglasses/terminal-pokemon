@@ -14,16 +14,11 @@ BTW I use Arch
 */
 
 #include "file-io.h"
-#include <cstdio>
 
-bool FileIO::read_lvl(char* fname, uint8_t**& map, uint8_t& h, uint8_t& w) {
+bool FileIO::read_lvl(const char* fname, uint8_t**& map, uint8_t& h, uint8_t& w) {
 	std::ifstream in(fname, std::ios::in | std::ios::binary);
 
-	if (!in.is_open()) {
-		std::cout << "level data does not exist - gamefile is corrupted\n";
-		std::cout << "existing...\n";
-		return false;
-	}
+	if (!in.is_open()) return false;
 
 	int h32, w32, *map32;
 

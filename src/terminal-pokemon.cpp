@@ -15,9 +15,9 @@ BTW I use Arch
 
 #include <cstdio>
 #include "game-operator.h"
+#include "background-loader.h"
 
-int main() {
-
+int main(int argc, const char* argv[]) {
 #if _WIN32	// something to deal with windows' terrible performance
 	WindowsConsole::init();
 #endif

@@ -18,13 +18,11 @@ BTW I use Arch
 // ------------------------------------------------------------
 
 #include <cstdint>
-#include <iostream>
 #include <fstream>
-#include <string>
 
 struct FileIO {
 public:
-	static bool read_lvl(char* fname, uint8_t**& map, uint8_t& h, uint8_t& w);
+	static bool read_lvl(const char* fname, uint8_t**& map, uint8_t& h, uint8_t& w);
     static void convert(int* map32, int h32, int w32, uint8_t**& map, uint8_t& h, uint8_t& w);
 };
 
