@@ -17,15 +17,16 @@ BTW I use Arch
 #include "game-operator.h"
 
 int main(int argc, const char* argv[]) {
+
 #if _WIN32	// something to deal with windows' terrible performance
 	WindowsConsole::init();
 #endif
 
-	int diff, lvl;
-	scanf("%d%d", &diff, &lvl);
+	int diff, lvl, bgr;
+	scanf("%d%d%d", &diff, &lvl, &bgr);
 
 	// operate the game
-	GameOperator game(diff, lvl);
+	GameOperator game(diff, lvl, bgr);
 	if (game.start()) 
 		printf("you won --tmp\n");
 	else

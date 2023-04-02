@@ -46,7 +46,7 @@ BTW I use Arch
 class GameOperator {
 public:
 	// constructors & destructors
-	GameOperator(int diff, int lvl);
+	GameOperator(int diff, int lvl, int bgr);
 	~GameOperator();
 
 	// start the game

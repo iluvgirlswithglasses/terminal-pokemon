@@ -23,12 +23,17 @@ BTW I use Arch
 	of the size declared in param.h 
 */
 
-#include <cstring>
 #include <fstream>
+#include <string>
 #include "param.h"
+#include "file-fetcher.h"
 
 struct BackgroundLoader {
-	static void load(const char* fname, char** container);
+public:
+	static const std::string BackgroundDirectory;
+
+	static void load(std::string& fname, char** container);
+	static void load(int id, char** container);
 };
 
 #endif	// BACKGROUND_LOADER_H

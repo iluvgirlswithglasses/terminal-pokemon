@@ -15,8 +15,10 @@ BTW I use Arch
 
 #include "background-loader.h"
 
+const std::string BackgroundLoader::BackgroundDirectory = "bgr/";
+
 // assume the container has size (h * w)
-void BackgroundLoader::load(const char* fname, char** ans) {
+void BackgroundLoader::load(std::string& fname, char** ans) {
 	static constexpr int h = Param::ScreenHeight, w = Param::ScreenWidth;
 
 	// create holder
@@ -53,4 +55,11 @@ void BackgroundLoader::load(const char* fname, char** ans) {
 	// free
 	for (int y = 0; y < h; y++) delete[] map[y];
 	delete[] map;
+}
+
+
+#include <iostream>
+void BackgroundLoader::load(int id, char** ans) {
+	Array<std::string> ls = FileFetcher::ls(BackgroundDirectory);
+	load(ls[id], ans);
 }

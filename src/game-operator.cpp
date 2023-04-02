@@ -18,14 +18,13 @@ BTW I use Arch
 /**
  * @ constructors & destructors
  * */
-GameOperator::GameOperator(int diff, int lvl) {
+GameOperator::GameOperator(int diff, int lvl, int bgr) {
 	difficulty = diff;
 
 	board = read(diff, lvl);
 	logic = get_logic(diff);
 	rdr = new Renderer();
-	const char* backgroundUrl = "bgr/airstrike.txt";	// create a loader for this later
-	gameRdr = new GameboardRenderer(board->map, backgroundUrl, rdr, board->h, board->w, 2, 1);
+	gameRdr = new GameboardRenderer(board->map, bgr, rdr, board->h, board->w, 2, 1);
 
 	if (DiffHardTop <= difficulty && difficulty <= DiffHardRgt) 
 		slidingLogic = get_sliding_logic(diff);

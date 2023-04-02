@@ -15,7 +15,7 @@ BTW I use Arch
 
 #include "gameboard-renderer.h"
 
-GameboardRenderer::GameboardRenderer(uint8_t** _map, const char* _bgr, Renderer* _scr, uint8_t _row, uint8_t _col, uint8_t _top, uint8_t _lft) {
+GameboardRenderer::GameboardRenderer(uint8_t** _map, int _bgr, Renderer* _scr, uint8_t _row, uint8_t _col, uint8_t _top, uint8_t _lft) {
 	map = _map;
 	scr = _scr;
 	row = _row;
