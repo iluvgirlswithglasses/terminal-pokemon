@@ -28,6 +28,7 @@ BTW I use Arch
 #include <cstdint>
 #include <cstring>
 #include "color.h"
+#include "background-loader.h"
 #include "renderer.h"
 
 #if _WIN32
@@ -37,11 +38,12 @@ BTW I use Arch
 struct GameboardRenderer {
 public:
 	uint8_t** map;			// the gameboard
+	char**    bgr;			// the background (has the same size as the screen)
 	Renderer* scr;			// the screen renderer
 	uint8_t   row, col;		// the size of the gameboard
 	uint8_t   top, lft;		// where the gameboard is projected on the screen
 
-	GameboardRenderer(uint8_t** map, Renderer* scr, uint8_t row, uint8_t col, uint8_t top, uint8_t lft);
+	GameboardRenderer(uint8_t** map, const char* bgr, Renderer* scr, uint8_t row, uint8_t col, uint8_t top, uint8_t lft);
 	void burn();			// burns the gameboard into the screen grid
 
 	// change the color of some cells

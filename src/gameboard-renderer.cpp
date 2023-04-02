@@ -15,13 +15,24 @@ BTW I use Arch
 
 #include "gameboard-renderer.h"
 
-GameboardRenderer::GameboardRenderer(uint8_t** _map, Renderer* _scr, uint8_t _row, uint8_t _col, uint8_t _top, uint8_t _lft) {
+GameboardRenderer::GameboardRenderer(uint8_t** _map, const char* _bgr, Renderer* _scr, uint8_t _row, uint8_t _col, uint8_t _top, uint8_t _lft) {
 	map = _map;
 	scr = _scr;
 	row = _row;
 	col = _col;
 	top = _top;
 	lft = _lft;
+
+	// load background
+	bgr = new char*[Param::ScreenHeight];
+	for (int y = 0; y < Param::ScreenHeight; y++)
+		bgr[y] = new char[Param::ScreenWidth];
+	BackgroundLoader::load(_bgr, bgr);
+
+	// burn the background to the renderer
+	for (int y = 0; y < Param::ScreenHeight; y++)
+		for (int x = 0; x < Param::ScreenWidth; x++)
+			assign_border_pixel(bgr[y][x], y, x, Color::White);
 }
 
 void GameboardRenderer::burn() {
@@ -32,12 +43,11 @@ void GameboardRenderer::burn() {
 }
 
 void GameboardRenderer::reset() {
-	// insert background image here
-	// just memcpy the background instead of memset
 	uint8_t t = get_ry(0), d = get_ry(row), l = get_rx(0), r = get_rx(col);
 	for (uint8_t y = t; y <= d; y++) { 		// [t, d], not [t, d) because border
 		for (uint8_t x = l; x <= r; x++) {	// same here
-			scr->map[y][x] = ' ';
+			scr->map[y][x] = bgr[y][x];
+			scr->fgc[y][x] = Color::White;
 			scr->bgc[y][x] = Color::Black;
 			scr->thk[y][x] = Color::Regular;
 			scr->usg[y][x] = Renderer::UseBackground;
@@ -49,7 +59,11 @@ void GameboardRenderer::reset() {
  * @ cells rendering
  * */
 void GameboardRenderer::draw_cell(uint8_t y, uint8_t x) {
-	uint8_t t = get_ry(y), l = get_rx(x);
+	uint8_t t = get_ry(y), d = get_ry(y+1), l = get_rx(x), r = get_rx(x+1);
+	// clear background
+	for (uint8_t y = t; y <= d; y++)
+		for (uint8_t x = l; x <= r; x++)
+			assign_border_pixel(' ', y, x, Color::White);
 	// draw border
 	draw_border(y, x, Color::White);
 	// then assign the tile
@@ -148,18 +162,9 @@ void GameboardRenderer::assign_core_pixel(uint8_t c, uint8_t y, uint8_t x) {
 // it only calls WindowsConsole
 void GameboardRenderer::direct_render_cell(uint8_t y, uint8_t x) {
 	uint8_t t = get_ry(y), d = get_ry(y+1), l = get_rx(x), r = get_rx(x+1);
-	// horizontal lines
-	for (uint8_t x = l; x <= r; x++) {
-		WindowsConsole::plot_pixel(scr, t, x);
-		WindowsConsole::plot_pixel(scr, d, x);
-	}
-	// vertical lines
-	for (uint8_t y = t; y <= d; y++) {
-		WindowsConsole::plot_pixel(scr, y, l);
-		WindowsConsole::plot_pixel(scr, y, r);
-	}
-	// the core
-	WindowsConsole::plot_pixel(scr, t + MidY, l + MidX);
+	for (uint8_t y = t; y <= d; y++)
+		for (uint8_t x = l; x <= r; x++)
+			WindowsConsole::plot_pixel(scr, y, x);
 	WindowsConsole::reset_cursor();
 }
 #endif		// ----------------------------------------------------------------

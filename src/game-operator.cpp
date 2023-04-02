@@ -24,7 +24,8 @@ GameOperator::GameOperator(int diff, int lvl) {
 	board = read(diff, lvl);
 	logic = get_logic(diff);
 	rdr = new Renderer();
-	gameRdr = new GameboardRenderer(board->map, rdr, board->h, board->w, 2, 1);
+	const char* backgroundUrl = "bgr/airstrike.txt";	// create a loader for this later
+	gameRdr = new GameboardRenderer(board->map, backgroundUrl, rdr, board->h, board->w, 2, 1);
 
 	if (DiffHardTop <= difficulty && difficulty <= DiffHardRgt) 
 		slidingLogic = get_sliding_logic(diff);
