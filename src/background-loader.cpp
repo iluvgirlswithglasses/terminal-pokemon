@@ -16,7 +16,7 @@ BTW I use Arch
 #include "background-loader.h"
 
 // assume the container has size (h * w)
-void BackgroundLoader::load(const char* fname, char** container) {
+void BackgroundLoader::load(const char* fname, char** ans) {
 	static constexpr int h = Param::ScreenHeight, w = Param::ScreenWidth;
 
 	// create holder
@@ -29,32 +29,28 @@ void BackgroundLoader::load(const char* fname, char** container) {
 	int col = 0;
 
 	// read file
-	FILE* fin = fopen(fname, "r");
-	size_t  linesiz = 0;
-	char*   linebuf = 0; 
-	ssize_t linelen = 0;
+	std::ifstream fin(fname);
+	while (!fin.eof()) {
+		std::string line;
+		getline(fin, line, '\n');
 
-	while ((linelen = getline(&linebuf, &linesiz, fin)) > 0) {
-		linelen--;	// exclude '\n'
-		if (linelen > w) linelen = w;
-		if (linelen > col) col = linelen;
+		int len = line.length();
+		if (len > w) len = w;
+		if (len > col) col = len;
 
-		memcpy(map[row], linebuf, sizeof(linebuf[0]) * linelen);
-		free(linebuf);
-		linebuf = NULL;
-		if (++row >= h) break;
+		for (int x = 0; x < len; x++) map[row][x] = line[x];
+		if (++row > h) break;
 	}
 
 	// clone to container
 	int p = (w - col) >> 1;	// padding
 	for (int y = 0; y < h; y++) {
-		for (int x = 0; x < p; x++) container[y][x] = ' ';
-		for (int x = p; x < w - p; x++) container[y][x] = map[y][x - p];
-		for (int x = w - p; x < w; x++) container[y][x] = ' ';
+		for (int x = 0; x < p; x++) ans[y][x] = ' ';
+		for (int x = p; x < w - p; x++) ans[y][x] = map[y][x - p];
+		for (int x = w - p; x < w; x++) ans[y][x] = ' ';
 	}
 
 	// free
-	for (int y = 0; y < h; y++)
-		delete[] map[y];
+	for (int y = 0; y < h; y++) delete[] map[y];
 	delete[] map;
 }

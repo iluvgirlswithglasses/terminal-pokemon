@@ -17,8 +17,6 @@ BTW I use Arch
 #define ARRAY_H
 // ------------------------------------------------------------
 
-#include <cstdint>
-
 /*
 @ about this:
 	I thought I could complete the project using only linked list

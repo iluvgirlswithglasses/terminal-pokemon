@@ -26,8 +26,12 @@ template<typename T> Array<T>::~Array() {
 
 // ------------------------------------------------------------------
 // @ Explicit instantiations ----------------------------------------
+#include <cstdint>
+#include <string>
+
 template struct Array<uint8_t>;
 template struct Array<uint16_t>;
 template struct Array<uint32_t>;
 template struct Array<int>;
+template struct Array<std::string>;
 // ------------------------------------------------------------------

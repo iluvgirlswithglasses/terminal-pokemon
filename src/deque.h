@@ -17,8 +17,6 @@ BTW I use Arch
 #define DEQUE_H
 // ------------------------------------------------------------
 
-#include <cstdint>
-
 /*
 @ about this:
 	a very inefficient deque

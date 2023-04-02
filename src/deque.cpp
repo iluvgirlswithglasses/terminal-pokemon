@@ -154,8 +154,12 @@ template<typename T> T Deque<T>::remove_node(Node* n) {
 
 // ------------------------------------------------------------------
 // @ Explicit instantiations ----------------------------------------
+#include <cstdint>
+#include <string>
+
 template struct Deque<uint8_t>;
 template struct Deque<uint16_t>;
 template struct Deque<uint32_t>;
 template struct Deque<int>;
+template struct Deque<std::string>;
 // ------------------------------------------------------------------

@@ -24,8 +24,7 @@ BTW I use Arch
 */
 
 #include <cstring>
-#include <cstdio>
-#include <cstdlib>
+#include <fstream>
 #include "param.h"
 
 struct BackgroundLoader {
