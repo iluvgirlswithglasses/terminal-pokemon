@@ -23,6 +23,20 @@ BTW I use Arch
 @ about this:
 	the hacking template
 	as required in project statement
+
+@ note:
+	some of these structures has excessive memory allocation
+	(property `__padding[HackingParam::Padding]`)
+
+	this DOES NOT cause any memory leak, nor waste any memory
+	because these structures only work as handlers.
+
+	data which is read and written into these objects
+	will immediately be written into binary files (for exporting)
+	or be fed to other objects (for importing)
+
+	these objects then will be removed
+	as well as their memory allocation will be freed
 */
 
 struct HackingState {
@@ -30,7 +44,8 @@ struct HackingState {
 	int y, x;	// cursor
 	char board[HackingParam::GameLen];
 	char bgUrl[HackingParam::PathLen];
-	// 500 byte NULL
+
+	char __padding[HackingParam::Padding];
 };
 
 struct HackingDate {
@@ -40,7 +55,8 @@ struct HackingDate {
 struct HackingRecord {
 	HackingDate date;
 	int pts;
-	// 500 byte NULL
+	
+	char __padding[HackingParam::Padding];
 };
 
 struct HackingSavefile {
