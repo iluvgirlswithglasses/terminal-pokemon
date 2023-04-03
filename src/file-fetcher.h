@@ -19,9 +19,14 @@ BTW I use Arch
 
 #include <cstdio>
 #include <string>
-#include <filesystem>
 #include "array.h"
 #include "deque.h"
+
+#if __linux__
+#include <filesystem>
+#elif _WIN32
+#include <dirent.h>
+#endif
 
 struct FileFetcher {
 public:
