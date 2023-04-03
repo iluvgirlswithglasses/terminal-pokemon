@@ -27,12 +27,11 @@ about this:
     so I wouldn't implement this on linux regardless
 */
 
-#include <string>
-
 struct AudioPlayer {
-    static const std::string AudioDirectory;
+public:
+    static constexpr int C = 523, D = 587, E = 659, F = 698, G = 784, A = 880, B = 987;
 
-    static void play(const char* f);
+    static void play(int hz, int t);
 };
 
 #endif	// AUDIO_PLAYER_H
