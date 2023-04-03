@@ -30,6 +30,7 @@ BTW I use Arch
 #include "file-io.h"
 #include "renderer.h"
 #include "gameboard-renderer.h"
+#include "audio-player.h"
 
 // access to sleep
 #if __linux__

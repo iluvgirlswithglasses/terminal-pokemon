@@ -154,6 +154,9 @@ bool GameOperator::start() {
 			selection = (selection<<16) | (cur_y<<8) | cur_x;
 			if (selection>>16) {
 				bool status = handle_matching(selection);
+				// audio
+				if (status) AudioPlayer::play(AudioPlayer::B, 400);
+				else AudioPlayer::play(AudioPlayer::C, 400);
 				// sliding tiles
 				if (status && DiffHardTop <= difficulty && difficulty <= DiffHardRgt) {
 					uint8_t y0 = (selection>>24) & MSK8, 
@@ -385,7 +388,7 @@ void GameOperator::slide_tiles(uint8_t y0, uint8_t x0, uint8_t y1, uint8_t x1) {
 
 	if (q0.count() == 0 && q1.count() == 0) return;
 
-	sleep(400);
+	// no need to sleep here because AudioPlayer did that already
 	visualize_sliding(q0, Color::Red);
 	visualize_sliding(q1, Color::Red);
 	sleep(400);
