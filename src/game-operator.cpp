@@ -132,6 +132,7 @@ bool GameOperator::start() {
 	}
 #elif _WIN32	// --------------------------------------------------------------------------------
 	while (true) {
+		bool status = false, jpressed = false;
 		char c = Input::wait_keypress();
 		// windows' cursor must be unhovered manually
 		gameRdr->burn();
@@ -145,6 +146,7 @@ bool GameOperator::start() {
 		case 'd': cur_x = cur_x + 1 >= board->w ? cur_x : cur_x + 1; break;
 		// @ handle selection
 		case 'j':
+			jpressed = true;
 			if (board->map[cur_y][cur_x] == Gameboard::EmptyCell) {
 				// re-hover then skip this iteration
 				gameRdr->draw_border(cur_y, cur_x, Color::Red);
@@ -153,10 +155,7 @@ bool GameOperator::start() {
 			}
 			selection = (selection<<16) | (cur_y<<8) | cur_x;
 			if (selection>>16) {
-				bool status = handle_matching(selection);
-				// audio
-				if (status) AudioPlayer::play(AudioPlayer::B, 400);
-				else AudioPlayer::play(AudioPlayer::C, 400);
+				status = handle_matching(selection);
 				// sliding tiles
 				if (status && DiffHardTop <= difficulty && difficulty <= DiffHardRgt) {
 					uint8_t y0 = (selection>>24) & MSK8, 
@@ -206,6 +205,14 @@ bool GameOperator::start() {
 		// @ gamestate check
 		if (board->remaining == 0) return true;
 		if (logic->suggest() == 0) return false;
+
+		// audio plays after all rendering are done
+		if (jpressed) {
+			if (status) 				// there's a match in this iteration
+				AudioPlayer::play(AudioPlayer::B, 400);
+			else if (selection == 0) 	// invalid match
+				AudioPlayer::play(AudioPlayer::C, 400);
+		}
 	}
 #endif			// __linux__ _WIN32 ---------------------------------------------------------------
 }
