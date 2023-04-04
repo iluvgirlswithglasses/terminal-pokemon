@@ -93,4 +93,53 @@ void LvlMenuRenderer::deselect(int i) {
 		rdr->bgc[y][x] = Color::Black;
 }
 
+#elif _WIN32	// ----------------------------------------------------------------------
+
+#include "windows-console.h"
+
+void LvlMenuRenderer::start(int& dif, int& lvl) {
+	int cursor = 0;
+	rdr->render();
+	select(cursor);
+
+	while (true) {
+		char c = Input::wait_keypress();
+		switch (c) {
+		case 'w':
+			deselect(cursor);
+			cursor = cursor - 1 < 0 ? cursor : cursor - 1;
+			break;
+		case 's':
+			deselect(cursor);
+			cursor = cursor + 1 >= LvlInfo::LvlCount ? cursor : cursor + 1;
+			break;
+		case 'j':
+			dif = itemDif[cursor];
+			lvl = itemLvl[cursor];
+			return;
+		default:
+			continue;	// repeat the while loop
+		}
+		select(cursor);
+	}
+}
+
+void LvlMenuRenderer::select(int i) {
+	uint8_t y = locY[i];
+	for (uint8_t x = lft; x < lft + w; x++) {
+		rdr->bgc[y][x] = Color::Purple;
+		WindowsConsole::plot_pixel(rdr, y, x);
+	}
+	WindowsConsole::reset_cursor();
+}
+
+void LvlMenuRenderer::deselect(int i) {
+	uint8_t y = locY[i];
+	for (uint8_t x = lft; x < lft + w; x++) {
+		rdr->bgc[y][x] = Color::Black;
+		WindowsConsole::plot_pixel(rdr, y, x);
+	}
+	WindowsConsole::reset_cursor();
+}
+
 #endif			// ----------------------------------------------------------------------
