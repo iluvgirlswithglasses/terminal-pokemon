@@ -23,6 +23,7 @@ BTW I use Arch
 	of the size declared in param.h 
 */
 
+#include <random>
 #include <fstream>
 #include <string>
 #include "param.h"
@@ -34,6 +35,7 @@ public:
 
 	static void load(std::string& fname, char** container);
 	static void load(int id, char** container);
+	static void rand_load(char** container);	// randomized
 };
 
 #endif	// BACKGROUND_LOADER_H

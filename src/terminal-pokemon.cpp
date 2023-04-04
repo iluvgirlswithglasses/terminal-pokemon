@@ -14,12 +14,16 @@ BTW I use Arch
 */
 
 #include <cstdio>
+#include <ctime>
+#include <random>
 #include "scene-login.h"
 #include "scene-config.h"
 #include "lvl-menu-renderer.h"
 #include "game-operator.h"
 
 int main(int argc, const char* argv[]) {
+
+	srand(time(0));	// srand will only be called here
 
 #if _WIN32	// something to deal with windows' terrible performance
 	WindowsConsole::init();
@@ -36,12 +40,12 @@ int main(int argc, const char* argv[]) {
 	rdr->clrmap();
 	rdr->render();
 	LvlMenuRenderer menu(rdr, 6, 10, 32, 80);
-	int dif, lvl, bgr = 0;
+	int dif, lvl;
 	rdr->wrtext(3, 43, "Select a level");
 	menu.start(dif, lvl);
 
 	// operate the game
-	GameOperator game(rdr, dif, lvl, bgr);
+	GameOperator game(rdr, dif, lvl);
 	if (game.start()) 
 		printf("you won --tmp\n");
 	else

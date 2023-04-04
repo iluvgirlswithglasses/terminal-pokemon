@@ -57,9 +57,12 @@ void BackgroundLoader::load(std::string& fname, char** ans) {
 	delete[] map;
 }
 
-
-#include <iostream>
 void BackgroundLoader::load(int id, char** ans) {
 	Array<std::string> ls = FileFetcher::ls(BackgroundDirectory);
 	load(ls[id], ans);
+}
+
+void BackgroundLoader::rand_load(char** ans) {
+	Array<std::string> ls = FileFetcher::ls(BackgroundDirectory);
+	load(ls[rand() % ls.len], ans);
 }

@@ -17,7 +17,6 @@ BTW I use Arch
 
 RandomizeLogic::RandomizeLogic(Gameboard* _b) {
 	board = _b;
-	srand(time(0));
 }
 
 Array<uint32_t> RandomizeLogic::randomize() {

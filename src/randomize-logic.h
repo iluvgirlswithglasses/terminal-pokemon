@@ -19,7 +19,6 @@ BTW I use Arch
 
 #include <cstdint>
 #include <random>
-#include <ctime>
 #include "deque.h"
 #include "array.h"
 #include "gameboard.h"
