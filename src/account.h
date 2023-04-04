@@ -22,13 +22,15 @@ BTW I use Arch
 #include "hacking-param.h"
 
 struct Account {
+public:
 	char usrn[HackingParam::UsrnLen];
 	char pass[HackingParam::PassLen];
 
 	static constexpr int
 		AccountDoesNotExist = 0,
 		WrongPassword = 1,
-		ValidCredentials = 2;
+		ValidCredentials = 2,
+		ConstraintsNotMet = 3;
 
 	static bool check_constraints(Account& acc);
 	static int validate(Account& acc);	// check if the login credentials is correct

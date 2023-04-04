@@ -20,6 +20,7 @@ bool Account::check_constraints(Account& acc) {
 }
 
 int Account::validate(Account& acc) {
+	if (!check_constraints(acc)) return ConstraintsNotMet;
 	int len = 0;
 	Account* arr = list(len);
 	for (int i = 0; i < len; i++) if (strcmp(arr[i].usrn, acc.usrn) == 0) {
