@@ -14,8 +14,9 @@ BTW I use Arch
 */
 
 #include <cstdio>
+#include "scene-login.h"
+#include "scene-config.h"
 #include "game-operator.h"
-#include "account.h"
 
 int main(int argc, const char* argv[]) {
 
@@ -23,11 +24,19 @@ int main(int argc, const char* argv[]) {
 	WindowsConsole::init();
 #endif
 
+	// (tmp) select level
 	int diff, lvl, bgr;
 	scanf("%d%d%d", &diff, &lvl, &bgr);
 
+	// login
+	Account acc = SceneLogin::start();
+
+	// renderer
+	Renderer* rdr = new Renderer();
+	SceneConfig::start(rdr);
+
 	// operate the game
-	GameOperator game(diff, lvl, bgr);
+	GameOperator game(rdr, diff, lvl, bgr);
 	if (game.start()) 
 		printf("you won --tmp\n");
 	else

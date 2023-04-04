@@ -49,7 +49,6 @@ public:
 		return c;
 	}
 
-private:
 	static int _kbhit() {
 		static const int STDIN = 0;
 		static bool initialized = false;

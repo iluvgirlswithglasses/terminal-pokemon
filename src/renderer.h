@@ -23,6 +23,7 @@ BTW I use Arch
 */
 
 #include <cstdlib>
+#include <cstring>
 #include "param.h"
 #include "color.h"
 
@@ -42,6 +43,8 @@ public:
 	Renderer();
 	void render();	// render the current screen
 	void clrscr();	// clear the screen
+	void clrmap();	// clear all data
+	void wrtext(uint8_t y, uint8_t x, const char* txt);
 
 private:
 

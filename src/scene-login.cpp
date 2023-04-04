@@ -19,6 +19,10 @@ Account SceneLogin::start() {
 	Account acc;
 	int status;
 
+	printf("please login first.\n");
+	printf("if you login via an unknown username,\n");
+	printf("the game will automatically register that account for you.\n\n");
+
 	do {
 		printf("username: ");
 		scanf("%s", acc.usrn);
@@ -49,6 +53,9 @@ Account SceneLogin::start() {
 			break;
 		}
 	} while (status != Account::AccountDoesNotExist && status != Account::ValidCredentials);
+
+	// a new account is registered
+	if (status == Account::AccountDoesNotExist) Account::save(acc);
 
 	printf("press any key to continue...\n");
 	Input::wait_keypress();

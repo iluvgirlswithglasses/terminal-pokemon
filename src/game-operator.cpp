@@ -18,12 +18,12 @@ BTW I use Arch
 /**
  * @ constructors & destructors
  * */
-GameOperator::GameOperator(int diff, int lvl, int bgr) {
+GameOperator::GameOperator(Renderer* _rdr, int diff, int lvl, int bgr) {
 	difficulty = diff;
 
 	board = read(diff, lvl);
 	logic = get_logic(diff);
-	rdr = new Renderer();
+	rdr = _rdr;
 	gameRdr = new GameboardRenderer(board->map, bgr, rdr, board->h, board->w, 2, 1);
 
 	if (DiffHardTop <= difficulty && difficulty <= DiffHardRgt) 

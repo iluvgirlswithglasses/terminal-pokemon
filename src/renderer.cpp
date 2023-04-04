@@ -28,7 +28,13 @@ Renderer::Renderer() {
 		bgc[y] = new char[w];
 		thk[y] = new char[w];
 		usg[y] = new bool[w];
+	}
 
+	clrmap();
+}
+
+void Renderer::clrmap() {
+	for (int y = 0; y < h; y++) {
 		for (int x = 0; x < w; x++) {
 			map[y][x] = ' ';
 			fgc[y][x] = Color::White;
@@ -37,6 +43,12 @@ Renderer::Renderer() {
 			usg[y][x] = 1;
 		}
 	}
+}
+
+void Renderer::wrtext(uint8_t y, uint8_t x, const char* txt) {
+	uint8_t len = strlen(txt);
+	for (uint8_t i = 0; i < len; i++)
+		map[y][x + i] = txt[i];
 }
 
 #if __linux__	// ----------------------------------------------------------------
