@@ -21,7 +21,7 @@ GameboardRenderer::GameboardRenderer(uint8_t** _map, Renderer* _scr, uint8_t _ro
 	row = _row;
 	col = _col;
 	top = _top;
-	lft = _lft;
+	lft = Param::ScreenWidth/2 - CellWidth*col/2 - 2;
 
 	// load background
 	bgr = new char*[Param::ScreenHeight];
