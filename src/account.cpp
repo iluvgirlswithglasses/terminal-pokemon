@@ -31,7 +31,7 @@ void Account::save(Account& acc) {
 	Account* arr = list(len);
 	len++;
 
-	std::ofstream fo("sav/usrdata.bin", std::ios::in | std::ios::binary);
+	std::ofstream fo("sav/usrdata.bin", std::ios::out | std::ios::binary);
 	fo.write((char*) &len, sizeof(len));
 	for (int i = 0; i < len-1; i++)
 		fo.write((char*) &arr[i], sizeof(Account));
