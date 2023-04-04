@@ -41,6 +41,7 @@ void SceneConfig::start(Renderer* rdr) {
 		rdr->render();
 		std::this_thread::sleep_for(std::chrono::milliseconds(500));
 	}
+	getchar();	// flush _kbhit()
 }
 
 #elif _WIN32	// ------------------------------------------------------------------------
@@ -101,6 +102,7 @@ void SceneConfig::start(Renderer* rdr) {
 		Sleep(500);
 		rdr->clrscr();
 	}
+	_getch();	// flush _kbhit()
 }
 
 #endif			// ------------------------------------------------------------------------

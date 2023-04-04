@@ -26,20 +26,19 @@ BTW I use Arch
 struct SceneMenu {
 public:
 	static constexpr int Options = 3;
-	static constexpr std::string Label[Options];
-
 	static constexpr int 
 		PlayGame = 0,
 		Leaderboard = 1,
 		Exit = 2;
+	static const std::string Label[Options];
 
 	SceneMenu(Renderer* rdr);
 	int start();
 
 private:
 	static constexpr uint8_t 
-		CellWidth = 25, 
-		CellHeight = 5,
+		CellWidth = 23, 
+		CellHeight = 4,
 		Top = (Param::ScreenHeight - 2 - CellHeight * (Options + 1)),
 		Down = Top + CellHeight * (Options + 1), 
 		Left = (Param::ScreenWidth - CellWidth) >> 1,
@@ -51,11 +50,11 @@ private:
 
 	void select(int i);
 	void deselect(int i);
-	void set_bg(uint8_t t, uint8_t l, uint8_t d, uint8_t r, char color);
+	void set_fg(uint8_t y, uint8_t l, uint8_t r, char color);
 
 	uint8_t get_ry(int i) { return Top + CellHeight * i; }
-	uint8_t xmid_allign(int len) { return Left + ((CellWidth - len) >> 1); }
-	uint8_t ymid_allign(int i) { return get_ry(i) + CellHeight >> 1; }
+	uint8_t xmid_allign(int i) { return Left + ((CellWidth - Label[i].length()) >> 1); }
+	uint8_t ymid_allign(int i) { return get_ry(i) + (CellHeight >> 1); }
 };
 
 #endif	// SCENE_MENU_H

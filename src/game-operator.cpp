@@ -35,7 +35,6 @@ GameOperator::GameOperator(Renderer* _rdr, int diff, int lvl) {
 GameOperator::~GameOperator() {
 	delete board;
 	delete logic;
-	delete rdr;
 	delete gameRdr;
 
 	if (slidingLogic != nullptr) delete slidingLogic;

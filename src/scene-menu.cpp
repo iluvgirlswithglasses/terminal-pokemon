@@ -15,7 +15,7 @@ BTW I use Arch
 
 #include "scene-menu.h"
 
-std::string SceneMenu::Label[] = {
+const std::string SceneMenu::Label[] = {
 	"Play Game",
 	"Leaderboard",
 	"Exit"
@@ -28,8 +28,6 @@ SceneMenu::SceneMenu(Renderer* _rdr) {
 
 	// buttons
 	for (int i = 0; i < Options; i++) draw_cell(i);
-
-	rdr->render();
 }
 
 void SceneMenu::draw_cell(int i) {
@@ -45,11 +43,11 @@ void SceneMenu::draw_cell(int i) {
 }
 
 void SceneMenu::select(int i) {
-	set_bg(get_ry(i), Left, get_ry(i+1), Right, Color::Purple);
+	set_fg(ymid_allign(i), Left + 1, Right - 1, Color::Purple);
 }
 
 void SceneMenu::deselect(int i) {
-	set_bg(get_ry(i), Left, get_ry(i+1), Right, Color::Black);
+	set_fg(ymid_allign(i), Left + 1, Right - 1, Color::Black);
 }
 
 #if __linux__	// ----------------------------------------------------------------------
@@ -80,10 +78,9 @@ int SceneMenu::start() {
 	}
 }
 
-void SceneMenu::set_bg(uint8_t t, uint8_t l, uint8_t d, uint8_t r, char color) {
-	for (uint8_t y = t; y <= d; y++)
-		for (uint8_t x = l; x <= r; x++)
-			rdr->bgc[y][x] = color;
+void SceneMenu::set_fg(uint8_t y, uint8_t l, uint8_t r, char color) {
+	for (uint8_t x = l; x <= r; x++)
+		rdr->fgc[y][x] = color;
 }
 
 #elif _WIN32	// ----------------------------------------------------------------------
@@ -115,13 +112,12 @@ int SceneMenu::start() {
 	}
 }
 
-void SceneMenu::set_bg(uint8_t t, uint8_t l, uint8_t d, uint8_t r, char color) {
-	for (uint8_t y = t; y <= d; y++) {
-		for (uint8_t x = l; x <= r; x++) {
-			rdr->bgc[y][x] = color;
-			WindowsConsole::plot_pixel(rdr, y, x);
-		}
+void SceneMenu::set_fg(uint8_t y, uint8_t l, uint8_t r, char color) {	
+	for (uint8_t x = l; x <= r; x++) {
+		rdr->fgc[y][x] = color;
+		WindowsConsole::plot_pixel(rdr, y, x);
 	}
+	WindowsConsole::reset_cursor();
 }
 
 #endif			// ----------------------------------------------------------------------

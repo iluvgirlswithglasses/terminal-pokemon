@@ -18,6 +18,7 @@ BTW I use Arch
 #include <random>
 #include "scene-login.h"
 #include "scene-config.h"
+#include "scene-menu.h"
 #include "lvl-menu-renderer.h"
 #include "game-operator.h"
 
@@ -28,9 +29,9 @@ void play_game(Renderer* rdr) {
 	// select level
 	rdr->clrmap();
 	rdr->render();
-	LvlMenuRenderer menu(rdr, 6, 10, 32, 80);
+	LvlMenuRenderer menu(rdr, 6, (100 - 60) / 2, 32, 60);
 	int dif, lvl;
-	rdr->wrtext(3, 43, "Select a level");
+	rdr->wrtext(3, 20, "Select a level (\"W/S\" to move, \"J\" to select)");
 	menu.start(dif, lvl);
 
 	// operate the game
@@ -39,6 +40,10 @@ void play_game(Renderer* rdr) {
 		printf("you won --tmp\n");
 	else
 		printf("bruh --tmp\n");
+}
+
+void show_leaderboard(Renderer* rdr) {
+
 }
 
 /**
@@ -56,8 +61,22 @@ int main(int argc, const char* argv[]) {
 	// renderer
 	Renderer* rdr = new Renderer();
 	SceneConfig::start(rdr);
+	fflush(stdout);
 
-	// play game
-	play_game(rdr);
+	// game cycle
+	while (true) {
+		SceneMenu menu(rdr);
+		int code = menu.start();
+		switch (code) {
+		case SceneMenu::PlayGame:
+			play_game(rdr);
+			break;
+		case SceneMenu::Leaderboard:
+			show_leaderboard(rdr);
+			break;
+		case SceneMenu::Exit:
+			return 0;
+		}
+	}
 	return 0;
 }
