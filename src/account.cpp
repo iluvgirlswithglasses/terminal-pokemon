@@ -15,15 +15,22 @@ BTW I use Arch
 
 #include "account.h"
 
-bool Account::validate(Account& acc) {
+bool Account::check_constraints(Account& acc) {
+	return strlen(acc.usrn) >= 4 && strlen(acc.pass) >= 4;
+}
+
+int Account::validate(Account& acc) {
 	int len = 0;
 	Account* arr = list(len);
-	for (int i = 0; i < len; i++) {
-		if (strcmp(arr[i].usrn, acc.usrn) == 0)
-			return strcmp(arr[i].pass, acc.pass) == 0;
+	for (int i = 0; i < len; i++) if (strcmp(arr[i].usrn, acc.usrn) == 0) {
+		int passcmp = strcmp(arr[i].pass, acc.pass);
+		delete[] arr;
+		if (passcmp == 0)
+			return ValidCredentials;
+		return WrongPassword;
 	}
 	delete[] arr;
-	return false;
+	return AccountDoesNotExist;
 }
 
 void Account::save(Account& acc) {

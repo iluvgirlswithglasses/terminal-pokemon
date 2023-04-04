@@ -25,7 +25,13 @@ struct Account {
 	char usrn[HackingParam::UsrnLen];
 	char pass[HackingParam::PassLen];
 
-	static bool validate(Account& acc);	// check if the login credentials is correct
+	static constexpr int
+		AccountDoesNotExist = 0,
+		WrongPassword = 1,
+		ValidCredentials = 2;
+
+	static bool check_constraints(Account& acc);
+	static int validate(Account& acc);	// check if the login credentials is correct
 	static void save(Account& acc);		// save this account data to database
 	static Account* list(int& len);		// list all accounts
 };
