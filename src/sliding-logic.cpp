@@ -41,7 +41,7 @@ Deque<uint16_t> SlidingLogic::slide(uint8_t y0, uint8_t x0) {
 	uint16_t last = 0;
 
 	// add all tiles into a deque
-	for (int y = y0, x = x0; legit(y, x); y += yinc, x += xinc) {
+	for (int y = y0, x = x0; legit(y, x); y -= yinc, x -= xinc) {
 		trace.push_back(y<<8|x);
 		if (board->map[y][x] != Gameboard::EmptyCell) {
 			elements.push_back(board->map[y][x]);
@@ -52,7 +52,7 @@ Deque<uint16_t> SlidingLogic::slide(uint8_t y0, uint8_t x0) {
 	// remove redundant traces (`trace` is popped to empty if `elements.count() == 0`)
 	while (trace.count() && trace.back() != last) trace.pop_back();
 	// paste the deque onto the map
-	for (int y = y0, x = x0; elements.count(); y += yinc, x += xinc) {
+	for (int y = y0, x = x0; elements.count(); y -= yinc, x -= xinc) {
 		board->map[y][x] = elements.pop_front();
 	}
 	return trace;

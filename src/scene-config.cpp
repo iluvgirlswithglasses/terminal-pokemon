@@ -16,6 +16,8 @@ BTW I use Arch
 #include "scene-config.h"
 
 #if __linux__	// ------------------------------------------------------------------------
+#include <chrono>
+#include <thread>
 void SceneConfig::start(Renderer* rdr) {
 	static constexpr int 
 		h = Param::ScreenHeight, w = Param::ScreenWidth;
@@ -35,7 +37,10 @@ void SceneConfig::start(Renderer* rdr) {
 	rdr->wrtext(h - 3, 31+23, note2);
 
 	// render
-	while (!Input::_kbhit()) rdr->render();
+	while (!Input::_kbhit()) {
+		rdr->render();
+		std::this_thread::sleep_for(std::chrono::milliseconds(500));
+	}
 }
 
 #elif _WIN32	// ------------------------------------------------------------------------

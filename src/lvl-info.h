@@ -17,11 +17,14 @@ BTW I use Arch
 #define LVL_INFO_H
 // ------------------------------------------------------------
 
+#include <string>
 #include "account.h"
 
 struct LvlInfo {
 	static const int DiffCount = 7;
+	static const int LvlCount = 24;
 	static const int DiffLvlCount[DiffCount];
+	static const std::string DiffName[DiffCount];
 
 	static std::string get_savefile(int dif, int lvl, Account& acc);
 };
