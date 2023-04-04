@@ -19,11 +19,19 @@ HackingSavefile HackingAPI::import(std::string& path) {
 	// read
 	HackingSavefile save;
 	std::ifstream fi(path, std::ios::out | std::ios::binary);
+	if (!fi.is_open()) {
+		save.usrn[0] = '\0';	// mark this as open failed
+		return save;
+	}
 	fi.read((char*) &save, sizeof(HackingSavefile));
 
 	// decode
 	mask(save.usrn, save.mask, HackingParam::UsrnLen);
 	mask(save.pass, save.mask, HackingParam::PassLen);
+	for (int i = 0; i < HackingParam::PathLen; i++) {
+		mask(save.state[i].board, save.mask, HackingParam::GameLen);
+		mask(save.state[i].bgUrl, save.mask, HackingParam::PathLen);
+	}
 
 	return save;
 }

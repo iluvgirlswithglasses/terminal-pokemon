@@ -15,6 +15,7 @@ BTW I use Arch
 
 #include <cstdio>
 #include "game-operator.h"
+#include "account.h"
 
 int main(int argc, const char* argv[]) {
 
