@@ -40,7 +40,7 @@ void Renderer::clrmap() {
 			fgc[y][x] = Color::White;
 			bgc[y][x] = Color::Black;
 			thk[y][x] = Color::Regular;
-			usg[y][x] = 1;
+			usg[y][x] = UseBackground;
 		}
 	}
 }

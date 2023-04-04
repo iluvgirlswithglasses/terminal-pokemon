@@ -21,21 +21,10 @@ BTW I use Arch
 #include "lvl-menu-renderer.h"
 #include "game-operator.h"
 
-int main(int argc, const char* argv[]) {
-
-	srand(time(0));	// srand will only be called here
-
-#if _WIN32	// something to deal with windows' terrible performance
-	WindowsConsole::init();
-#endif
-
-	// login
-	Account acc = SceneLogin::start();
-
-	// renderer
-	Renderer* rdr = new Renderer();
-	SceneConfig::start(rdr);
-
+/**
+ * @ options
+ * */
+void play_game(Renderer* rdr) {
 	// select level
 	rdr->clrmap();
 	rdr->render();
@@ -50,5 +39,25 @@ int main(int argc, const char* argv[]) {
 		printf("you won --tmp\n");
 	else
 		printf("bruh --tmp\n");
+}
+
+/**
+ * @ drivers
+ * */
+int main(int argc, const char* argv[]) {
+#if _WIN32	// something to deal with windows' terrible performance
+	WindowsConsole::init();
+#endif
+	srand(time(0));	// srand will only be called here
+
+	// login
+	Account acc = SceneLogin::start();
+
+	// renderer
+	Renderer* rdr = new Renderer();
+	SceneConfig::start(rdr);
+
+	// play game
+	play_game(rdr);
 	return 0;
 }
