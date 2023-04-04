@@ -28,15 +28,15 @@ struct Qmath {
 	 * 
 	 * didn't think i've got to use it one day
 	 * */
-	void quick_sort(int* a, int l, int r) {
+	static void quick_sort(int* a, int l, int r) {
 		int i = l, j = r, pivot = a[l + rand() % (r - l)];
 		while (i <= j) {
 			while (a[i] < pivot) i++;
 			while (a[j] > pivot) j--;
 			if (i <= j) std::swap(a[i++], a[j--]);
 		}
-		if (l < j) quickSort(a, l, j);
-		if (i < r) quickSort(a, i, r);
+		if (l < j) quick_sort(a, l, j);
+		if (i < r) quick_sort(a, i, r);
 	}
 };
 
