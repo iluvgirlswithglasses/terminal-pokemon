@@ -64,7 +64,7 @@ void play_game(Account& acc, Renderer* rdr) {
 	rdr->wrtext(36, SceneLeaderboard::Left, res.c_str());
 	for (uint8_t x = SceneLeaderboard::Left; x < SceneLeaderboard::Right; x++) {
 		rdr->fgc[36][x] = Color::White;
-		rdr->bgc[36][x] = Color::Blue;
+		rdr->bgc[36][x] = Color::Purple;
 		rdr->usg[36][x] = Renderer::UseBackground;
 	}
 
