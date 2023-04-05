@@ -48,7 +48,7 @@ public:
 		for (uint8_t y = 1; y < h - 1; y++)
 			for (uint8_t x = 1; x < w - 1; x++)
 				if (map[y][x] != EmptyCell) ans--;
-		return ans - helpUsed;
+		return ans - helpUsed*2;
 	}
 };
 
