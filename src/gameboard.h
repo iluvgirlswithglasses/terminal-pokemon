@@ -36,6 +36,7 @@ public:
 	uint8_t h, w;
 	uint8_t** map;
 	int remaining;
+	int helpUsed = 0;
 
 	// constructors & deconstructors
 	Gameboard(uint8_t _h, uint8_t _w, uint8_t** gamedata);
@@ -47,7 +48,7 @@ public:
 		for (uint8_t y = 1; y < h - 1; y++)
 			for (uint8_t x = 1; x < w - 1; x++)
 				if (map[y][x] != EmptyCell) ans--;
-		return ans;
+		return ans - helpUsed;
 	}
 };
 

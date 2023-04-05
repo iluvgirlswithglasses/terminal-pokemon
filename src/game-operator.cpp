@@ -104,6 +104,7 @@ bool GameOperator::start() {
 			break;
 		// suggestion
 		case 'k':
+			board->helpUsed++;
 			selection = logic->suggest();
 			handle_matching(selection);
 			selection = 0;
@@ -180,6 +181,7 @@ bool GameOperator::start() {
 			break;
 		// suggestion
 		case 'k':
+			board->helpUsed++;
 			selection = logic->suggest();
 			handle_matching(selection);
 			selection = 0;

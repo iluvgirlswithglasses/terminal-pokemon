@@ -28,6 +28,14 @@ HackingSavefile HackingAPI::import(std::string& path) {
 	return save;
 }
 
+void HackingAPI::read(std::string& path, Deque<std::string>& usrn, Deque<int>& score) {
+	HackingSavefile save = import(path);
+	for (int i = 0; i < HackingParam::SaveLim && save.record[i].pts > 0; i++) {
+		usrn.push_back(save.usrn);
+		score.push_back(save.record[i].pts);
+	}
+}
+
 void HackingAPI::write(std::string& path, Account& acc, GameOperator& opr) {
 	// why this is constant is explain in the report
 	// this is to deal with the design flaw of the statement giver
@@ -37,7 +45,16 @@ void HackingAPI::write(std::string& path, Account& acc, GameOperator& opr) {
 
 	HackingSavefile save = import(path);	// decoded
 	int assigned = 0;
-	if (save.usrn[0] = '\0') {
+	if (save.usrn[0] == '\0') {
+		// i'm not reckless enough to do an initializer in hacking-template
+		memset(save.usrn, 0, sizeof(save.usrn));
+		memset(save.pass, 0, sizeof(save.pass));
+		for (int i = 0; i < HackingParam::SaveLim; i++) {
+			memset(save.state[i].board, 0, sizeof(save.state[i].board));
+			memset(save.state[i].bgUrl, 0, sizeof(save.state[i].bgUrl));
+			memset(save.state[i].__padding, 0, sizeof(save.state[i].__padding));
+			memset(save.record[i].__padding, 0, sizeof(save.record[i].__padding));
+		}
 		// new savefile
 		save.mask = Mask;
 		strcpy(save.usrn, acc.usrn);
@@ -55,7 +72,6 @@ void HackingAPI::write(std::string& path, Account& acc, GameOperator& opr) {
 	}
 
 	// save record & state
-	HackingDate date;
 	HackingRecord record;
 	HackingState state;
 
@@ -75,7 +91,11 @@ void HackingAPI::write(std::string& path, Account& acc, GameOperator& opr) {
 				state.board[y*state.w + x] = 0;
 		}
 	}
-	memset(state.bgUrl, 0, sizeof(state.bgUrl));
+
+	save.state[assigned] = state;
+	save.record[assigned] = record;
+
+	// background
 	std::string bgr = opr.bgUrl;
 	strcpy(state.bgUrl, bgr.c_str());
 
@@ -94,7 +114,7 @@ void HackingAPI::write(std::string& path, Account& acc, GameOperator& opr) {
 void HackingAPI::apply_mask(HackingSavefile& save) {
 	mask(save.usrn, save.mask, HackingParam::UsrnLen);
 	mask(save.pass, save.mask, HackingParam::PassLen);
-	for (int i = 0; i < HackingParam::PathLen; i++) {
+	for (int i = 0; i < HackingParam::SaveLim; i++) {
 		mask(save.state[i].board, save.mask, HackingParam::GameLen);
 		mask(save.state[i].bgUrl, save.mask, HackingParam::PathLen);
 	}

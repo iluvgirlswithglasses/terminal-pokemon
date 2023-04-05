@@ -19,20 +19,26 @@ BTW I use Arch
 #include "scene-login.h"
 #include "scene-config.h"
 #include "scene-menu.h"
+#include "lvl-info.h"
 #include "lvl-menu-renderer.h"
 #include "game-operator.h"
+#include "hacking-api.h"
 
 /**
  * @ options
  * */
-void play_game(Renderer* rdr) {
+void select_level(Renderer* rdr, int& dif, int& lvl) {
 	// select level
 	rdr->clrmap();
 	rdr->render();
 	LvlMenuRenderer menu(rdr, 6, (100 - 60) / 2, 32, 60);
-	int dif, lvl;
 	rdr->wrtext(3, 20, "Select a level (\"W/S\" to move, \"J\" to select)");
 	menu.start(dif, lvl);
+}
+
+void play_game(Account& acc, Renderer* rdr) {
+	int dif, lvl;
+	select_level(rdr, dif, lvl);
 
 	// operate the game
 	GameOperator game(rdr, dif, lvl);
@@ -40,10 +46,38 @@ void play_game(Renderer* rdr) {
 		printf("you won --tmp\n");
 	else
 		printf("bruh --tmp\n");
+
+	// savegame
+	std::string savedir = LvlInfo::get_savefile(dif, lvl, acc);
+	HackingAPI::write(savedir, acc, game);
 }
 
 void show_leaderboard(Renderer* rdr) {
+	// tmp
+	int dif, lvl;
+	select_level(rdr, dif, lvl);
 
+	// load saves
+	std::string dir = "sav/";
+	dir += (char) ('0' + dif); dir += (char) ('0' + lvl);
+	dir += '/';
+	Array<std::string> saves = FileFetcher::ls(dir);
+
+	// fetch
+	Deque<std::string> players;
+	Deque<int> scores;
+	for (int i = 0; i < saves.len; i++) {
+		HackingAPI::read(saves[i], players, scores);
+	}
+
+	rdr->clrmap();
+	rdr->render();
+
+	printf("leaderboard:\n");
+	while (players.count()) {
+		printf("%s %d\n", players.pop_front().c_str(), scores.pop_front());
+	}
+	Input::wait_keypress();
 }
 
 /**
@@ -69,7 +103,7 @@ int main(int argc, const char* argv[]) {
 		int code = menu.start();
 		switch (code) {
 		case SceneMenu::PlayGame:
-			play_game(rdr);
+			play_game(acc, rdr);
 			break;
 		case SceneMenu::Leaderboard:
 			show_leaderboard(rdr);
