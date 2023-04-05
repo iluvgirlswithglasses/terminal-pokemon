@@ -24,6 +24,7 @@ HackingSavefile HackingAPI::import(std::string& path) {
 		return save;
 	}
 	fi.read((char*) &save, sizeof(HackingSavefile));
+	fi.close();
 	apply_mask(save);	// decode
 	return save;
 }
@@ -70,6 +71,8 @@ void HackingAPI::write(std::string& path, Account& acc, GameOperator& opr) {
 			break;
 		}
 	}
+
+	if (assigned >= HackingParam::SaveLim) return;	// dont do anything
 
 	// save record & state
 	HackingRecord record;
