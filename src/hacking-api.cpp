@@ -18,12 +18,12 @@ BTW I use Arch
 HackingSavefile HackingAPI::import(std::string& path) {
 	// read
 	HackingSavefile save;
-	std::ifstream fi(path, std::ios::in | std::ios::binary);
+	std::ifstream fi(path, std::ios::binary);
 	if (!fi.is_open()) {
 		save.usrn[0] = '\0';	// mark this as open failed
 		return save;
 	}
-	fi.read((char*) &save, sizeof(HackingSavefile));
+	fi.read((char*) &save, sizeof(save));
 	fi.close();
 	apply_mask(save);	// decode
 	return save;
@@ -75,8 +75,8 @@ void HackingAPI::write(std::string& path, Account& acc, GameOperator& opr) {
 	if (assigned >= HackingParam::SaveLim) return;	// dont do anything
 
 	// save record & state
-	HackingRecord record;
-	HackingState state;
+	HackingRecord& record = save.record[assigned];
+	HackingState& state = save.state[assigned];
 
 	record.date = get_date();
 	record.pts = score;
@@ -95,22 +95,14 @@ void HackingAPI::write(std::string& path, Account& acc, GameOperator& opr) {
 		}
 	}
 
-	save.state[assigned] = state;
-	save.record[assigned] = record;
-
 	// background
 	std::string bgr = opr.bgUrl;
 	strcpy(state.bgUrl, bgr.c_str());
 
-	// some padding
-	memset(state.__padding, 0, sizeof(state.__padding));
-	memset(record.__padding, 0, sizeof(record.__padding));
-
 	// write to bin
 	apply_mask(save);	// encode
-	std::ofstream fo(path, std::ios::out | std::ios::binary);
-	if (!fo.is_open()) return;	// your os is broken
-	fo.write((char*) &save, sizeof(HackingSavefile));
+	std::ofstream fo(path, std::ios::binary);
+	fo.write((char*) &save, sizeof(save));
 	fo.close();
 }
 
