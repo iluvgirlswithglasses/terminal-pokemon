@@ -36,27 +36,7 @@ void select_level(Renderer* rdr, int& dif, int& lvl) {
 	menu.start(dif, lvl);
 }
 
-void play_game(Account& acc, Renderer* rdr) {
-	int dif, lvl;
-	select_level(rdr, dif, lvl);
-
-	// operate the game
-	GameOperator game(rdr, dif, lvl);
-	if (game.start()) 
-		printf("you won --tmp\n");
-	else
-		printf("bruh --tmp\n");
-
-	// savegame
-	std::string savedir = LvlInfo::get_savefile(dif, lvl, acc);
-	HackingAPI::write(savedir, acc, game);
-}
-
-void show_leaderboard(Renderer* rdr) {
-	// tmp
-	int dif, lvl;
-	select_level(rdr, dif, lvl);
-
+void show_leaderboard(Renderer* rdr, int dif, int lvl) {
 	// load saves
 	std::string dir = "sav/";
 	dir += (char) ('0' + dif); dir += (char) ('0' + lvl);
@@ -78,6 +58,32 @@ void show_leaderboard(Renderer* rdr) {
 		printf("%s %d\n", players.pop_front().c_str(), scores.pop_front());
 	}
 	Input::wait_keypress();
+}
+
+void show_leaderboard(Renderer* rdr) {
+	int dif, lvl;
+	select_level(rdr, dif, lvl);
+	show_leaderboard(rdr, dif, lvl);
+}
+
+void play_game(Account& acc, Renderer* rdr) {
+	int dif, lvl;
+	select_level(rdr, dif, lvl);
+
+	// operate the game
+	GameOperator game(rdr, dif, lvl);
+	int status = game.start();
+
+	// savegame
+	std::string savedir = LvlInfo::get_savefile(dif, lvl, acc);
+	HackingAPI::write(savedir, acc, game);
+
+	// show result
+	if (status) {
+		show_leaderboard(rdr, dif, lvl);
+	} else {
+		show_leaderboard(rdr, dif, lvl);
+	}
 }
 
 /**
