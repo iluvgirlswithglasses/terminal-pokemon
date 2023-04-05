@@ -62,7 +62,9 @@ void BackgroundLoader::load(int id, char** ans) {
 	load(ls[id], ans);
 }
 
-void BackgroundLoader::rand_load(char** ans) {
+std::string BackgroundLoader::rand_load(char** ans) {
 	Array<std::string> ls = FileFetcher::ls(BackgroundDirectory);
-	load(ls[rand() % ls.len], ans);
+	std::string chosen = ls[rand() % ls.len];
+	load(chosen, ans);
+	return chosen;
 }

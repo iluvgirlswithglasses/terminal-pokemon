@@ -24,7 +24,7 @@ GameOperator::GameOperator(Renderer* _rdr, int diff, int lvl) {
 	board = read(diff, lvl);
 	logic = get_logic(diff);
 	rdr = _rdr;
-	gameRdr = new GameboardRenderer(board->map, rdr, board->h, board->w, 2, 1);
+	gameRdr = new GameboardRenderer(board->map, bgUrl, rdr, board->h, board->w, 2, 1);
 
 	if (DiffHardTop <= difficulty && difficulty <= DiffHardRgt) 
 		slidingLogic = get_sliding_logic(diff);

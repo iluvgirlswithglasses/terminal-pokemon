@@ -35,7 +35,7 @@ public:
 
 	static void load(std::string& fname, char** container);
 	static void load(int id, char** container);
-	static void rand_load(char** container);	// randomized
+	static std::string rand_load(char** container);	// randomized
 };
 
 #endif	// BACKGROUND_LOADER_H

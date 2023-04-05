@@ -27,6 +27,7 @@ BTW I use Arch
 
 #include <cstdint>
 #include <cstring>
+#include <string>
 #include "color.h"
 #include "background-loader.h"
 #include "renderer.h"
@@ -43,7 +44,7 @@ public:
 	uint8_t   row, col;		// the size of the gameboard
 	uint8_t   top, lft;		// where the gameboard is projected on the screen
 
-	GameboardRenderer(uint8_t** map, Renderer* scr, uint8_t row, uint8_t col, uint8_t top, uint8_t lft);
+	GameboardRenderer(uint8_t** map, std::string& bgUrl, Renderer* scr, uint8_t row, uint8_t col, uint8_t top, uint8_t lft);
 	void burn();			// burns the gameboard into the screen grid
 
 	// change the color of some cells

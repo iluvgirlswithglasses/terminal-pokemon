@@ -17,6 +17,8 @@ BTW I use Arch
 #define GAME_OPERATOR_H
 // ------------------------------------------------------------
 
+#include <string>
+
 #include "color.h"
 #include "deque.h"
 #include "input.h"
@@ -56,7 +58,9 @@ public:
 	//        `0` otherwise
 	bool start();
 
-	// maybe get some stats after finishing the game here
+	// some stats after finishing the game
+	Gameboard* board = nullptr;
+	std::string bgUrl = "";
 
 	// difficulty levels
 	static constexpr int 
@@ -72,14 +76,12 @@ public:
 protected:
 	static constexpr uint32_t MSK8 = (1<<8) - 1;
 
-	Gameboard* board = nullptr;
 	GameboardLogic* logic = nullptr;
 	SlidingLogic* slidingLogic = nullptr;
 	RandomizeLogic* randomLogic = nullptr;
 	Renderer* rdr = nullptr;
 	GameboardRenderer* gameRdr = nullptr;
 
-	// change this to reading files later
 	Gameboard* read(int diff, int lvl);
 
 	GameboardLogic* get_logic(int diff);
