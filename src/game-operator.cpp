@@ -91,7 +91,7 @@ bool GameOperator::start() {
 				}
 
 				// randomize
-				if (status && difficulty == DiffRand && rand() % 4 == 0) {
+				if (status && difficulty == DiffRand && rand() % 2 == 0) {
 					gameRdr->burn();
 					gameRdr->draw_border(cur_y, cur_x, Color::Red);	// cursor
 					rdr->render();
@@ -169,7 +169,7 @@ bool GameOperator::start() {
 					slide_tiles(y0, x0, y1, x1);
 				}
 				// randomizers
-				if (status && difficulty == DiffRand && rand() % 4 == 0) {
+				if (status && difficulty == DiffRand && rand() % 2 == 0) {
 					// restore the cursor
 					gameRdr->draw_border(cur_y, cur_x, Color::Red);
 					gameRdr->direct_render_cell(cur_y, cur_x);

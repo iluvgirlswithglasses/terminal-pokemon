@@ -25,7 +25,16 @@ SceneMenu::SceneMenu(Renderer* _rdr) {
 	rdr = _rdr;
 	rdr->clrmap();
 	// backgrounds
-
+	static std::string BackgroundDirectory = "scn/title.txt";
+	BackgroundLoader::load(BackgroundDirectory, rdr->map);
+	// brute here bc im bore
+	for (uint8_t y = 5; y <= 10; y++) {
+		for (uint8_t x = 0; x < Param::ScreenWidth; x++) {
+			rdr->fgc[y][x] = Color::Yellow;
+			rdr->thk[y][x] = Color::Bold;
+			rdr->usg[y][x] = Renderer::UseThickness;
+		}	
+	}
 	// buttons
 	for (int i = 0; i < Options; i++) draw_cell(i);
 }

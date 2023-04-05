@@ -22,6 +22,7 @@ BTW I use Arch
 #include "param.h"
 #include "input.h"
 #include "renderer.h"
+#include "background-loader.h"
 
 struct SceneMenu {
 public:
