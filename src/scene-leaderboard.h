@@ -41,11 +41,15 @@ struct SceneLeaderboard {
 	static constexpr int MSK8 = (1<<8) - 1;
 
 	static void start(Renderer* rdr, int dif, int lvl, Account& acc);
-	static void fetch(int dif, int lvl, Array<std::string>& _usr, Array<int>& _pts);
 
 	static void start(Renderer* rdr, int dif, int lvl) {
 		Account acc;
 		start(rdr, dif, lvl, acc);
+	}
+
+	static void render(Renderer* rdr) {
+		rdr->render();
+		Input::wait_keypress();
 	}
 };
 

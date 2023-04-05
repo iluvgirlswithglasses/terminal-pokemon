@@ -19,6 +19,7 @@ BTW I use Arch
 #include "scene-login.h"
 #include "scene-config.h"
 #include "scene-menu.h"
+#include "scene-leaderboard.h"
 #include "lvl-info.h"
 #include "lvl-menu-renderer.h"
 #include "game-operator.h"
@@ -36,34 +37,11 @@ void select_level(Renderer* rdr, int& dif, int& lvl) {
 	menu.start(dif, lvl);
 }
 
-void show_leaderboard(Renderer* rdr, int dif, int lvl) {
-	// load saves
-	std::string dir = "sav/";
-	dir += (char) ('0' + dif); dir += (char) ('0' + lvl);
-	dir += '/';
-	Array<std::string> saves = FileFetcher::ls(dir);
-
-	// fetch
-	Deque<std::string> players;
-	Deque<int> scores;
-	for (int i = 0; i < saves.len; i++) {
-		HackingAPI::read(saves[i], players, scores);
-	}
-
-	rdr->clrmap();
-	rdr->render();
-
-	printf("leaderboard:\n");
-	while (players.count()) {
-		printf("%s %d\n", players.pop_front().c_str(), scores.pop_front());
-	}
-	Input::wait_keypress();
-}
-
 void show_leaderboard(Renderer* rdr) {
 	int dif, lvl;
 	select_level(rdr, dif, lvl);
-	show_leaderboard(rdr, dif, lvl);
+	rdr->clrmap();
+	SceneLeaderboard::start(rdr, dif, lvl);
 }
 
 void play_game(Account& acc, Renderer* rdr) {
@@ -79,11 +57,18 @@ void play_game(Account& acc, Renderer* rdr) {
 	HackingAPI::write(savedir, acc, game);
 
 	// show result
-	if (status) {
-		show_leaderboard(rdr, dif, lvl);
-	} else {
-		show_leaderboard(rdr, dif, lvl);
+	rdr->clrmap();
+
+	std::string res = "Your score: ";
+	res += std::to_string(game.board->calc_score());
+	rdr->wrtext(36, SceneLeaderboard::Left, res.c_str());
+	for (uint8_t x = SceneLeaderboard::Left; x < SceneLeaderboard::Right; x++) {
+		rdr->fgc[36][x] = Color::White;
+		rdr->bgc[36][x] = Color::Blue;
+		rdr->usg[36][x] = Renderer::UseBackground;
 	}
+
+	SceneLeaderboard::start(rdr, dif, lvl, acc);
 }
 
 /**
