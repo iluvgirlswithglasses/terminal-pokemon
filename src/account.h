@@ -26,6 +26,8 @@ public:
 	char usrn[HackingParam::UsrnLen];
 	char pass[HackingParam::PassLen];
 
+	Account();
+
 	static constexpr int
 		AccountDoesNotExist = 0,
 		WrongPassword = 1,

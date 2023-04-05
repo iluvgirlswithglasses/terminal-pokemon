@@ -40,6 +40,15 @@ public:
 	// constructors & deconstructors
 	Gameboard(uint8_t _h, uint8_t _w, uint8_t** gamedata);
 	~Gameboard();
+
+	// calculate the current score 
+	int calc_score() {
+		int ans = (h - 2) * (w - 2);
+		for (uint8_t y = 1; y < h - 1; y++)
+			for (uint8_t x = 1; x < w - 1; x++)
+				if (map[y][x] != EmptyCell) ans--;
+		return ans;
+	}
 };
 
 #endif	// GAMEBOARD_H

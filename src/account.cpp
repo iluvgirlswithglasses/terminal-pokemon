@@ -15,6 +15,11 @@ BTW I use Arch
 
 #include "account.h"
 
+Account::Account() {
+	memset(usrn, 0, sizeof(usrn));
+	memset(pass, 0, sizeof(pass));
+}
+
 bool Account::check_constraints(Account& acc) {
 	return strlen(acc.usrn) >= 4 && strlen(acc.pass) >= 4;
 }

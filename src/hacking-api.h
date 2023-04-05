@@ -18,10 +18,14 @@ BTW I use Arch
 // ------------------------------------------------------------
 
 #include <cstring>
+#include <ctime>
 #include <string>
+#include <random>
 #include <fstream>
 #include "hacking-param.h"
 #include "hacking-template.h"
+#include "account.h"
+#include "game-operator.h"
 
 /*
 @ about this:
@@ -31,7 +35,12 @@ BTW I use Arch
 struct HackingAPI {
 public:
 	static HackingSavefile import(std::string& path);
+	static void write(std::string& path, Account& acc, GameOperator& opr);
+
+	static void apply_mask(HackingSavefile& save);
 	static void mask(char* str, char msk, int len);
+
+	static HackingDate get_date();
 };
 
 #endif	// HACKING_API_H
