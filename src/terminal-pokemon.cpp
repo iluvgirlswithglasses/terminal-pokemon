@@ -44,17 +44,38 @@ void show_leaderboard(Renderer* rdr) {
 	SceneLeaderboard::start(rdr, dif, lvl);
 }
 
+void announcement(Renderer* rdr, const char* msg, char fg, char bg) {
+	static const int y = Param::ScreenHeight >> 1, x = Param::ScreenWidth >> 1;
+
+	rdr->wrtext(y+0, x - strlen(msg)/2, msg);
+	rdr->wrtext(y+1, x - 25/2, "press any key to continue");
+	for (int i = -1; i <= 2; i++) {
+		for (int j = -14; j <= 14; j++) {
+			rdr->fgc[y + i][x + j] = fg;
+			rdr->bgc[y + i][x + j] = bg;
+			rdr->usg[y + i][x + j] = Renderer::UseBackground;
+		}
+	}
+	rdr->render();
+	Input::wait_keypress();
+}
+
 void play_game(Account& acc, Renderer* rdr) {
 	int dif, lvl;
 	select_level(rdr, dif, lvl);
 
 	// operate the game
 	GameOperator game(rdr, dif, lvl);
-	int status = game.start();
+	bool status = game.start();
+
+	if (status) announcement(rdr, "you won!", Color::White, Color::Green);
+	else announcement(rdr, "you lost", Color::White, Color::Red);
 
 	// savegame
-	std::string savedir = LvlInfo::get_savefile(dif, lvl, acc);
-	HackingAPI::write(savedir, acc, game);
+	if (game.board->calc_score() > 0) {
+		std::string savedir = LvlInfo::get_savefile(dif, lvl, acc);
+		HackingAPI::write(savedir, acc, game);	
+	}
 
 	// show result
 	rdr->clrmap();

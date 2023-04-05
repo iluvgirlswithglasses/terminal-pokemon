@@ -107,6 +107,15 @@ bool GameOperator::start() {
 			board->helpUsed++;
 			selection = logic->suggest();
 			handle_matching(selection);
+
+			if (DiffHardTop <= difficulty && difficulty <= DiffHardRgt) {
+				uint8_t y0 = (selection>>24) & MSK8, 
+				        x0 = (selection>>16) & MSK8, 
+				        y1 = (selection>> 8) & MSK8, 
+				        x1 = (selection    ) & MSK8;
+				slide_tiles(y0, x0, y1, x1);
+			}
+
 			selection = 0;
 			break;
 		// skip this iteration
@@ -184,6 +193,17 @@ bool GameOperator::start() {
 			board->helpUsed++;
 			selection = logic->suggest();
 			handle_matching(selection);
+
+			if (DiffHardTop <= difficulty && difficulty <= DiffHardRgt) {
+				uint8_t y0 = (selection>>24) & MSK8, 
+				        x0 = (selection>>16) & MSK8, 
+				        y1 = (selection>> 8) & MSK8, 
+				        x1 = (selection    ) & MSK8;
+				gameRdr->draw_border(cur_y, cur_x, Color::Red);
+				gameRdr->direct_render_cell(cur_y, cur_x);
+				slide_tiles(y0, x0, y1, x1);
+			}
+
 			selection = 0;
 			break;
 		// skip this iteration
