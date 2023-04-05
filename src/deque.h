@@ -30,6 +30,8 @@ in other words, it wouldn't create any memory leak,
 but it wouldn't shrink its RAM usage either.
 */
 
+#include "array.h"
+
 template<typename T> struct Deque {
 
 public:
@@ -60,6 +62,7 @@ public:
 	void clear();			// clear the deque
 
 	Deque<T> clone();		// clone this deque
+	Array<T> to_array();	// clone to array
 
 	/**
 	 * @ linked list functions

@@ -95,6 +95,14 @@ template<typename T> Deque<T> Deque<T>::clone() {
 	return ans;
 }
 
+template<typename T> Array<T> Deque<T>::to_array() {
+	Deque<T> q = clone();
+	Array<T> a(q.count());
+	for (int i = 0; i < a.len; i++)
+		a[i] = q.pop_front();
+	return a;
+}
+
 /**
  * @ linked list functions
  * 
