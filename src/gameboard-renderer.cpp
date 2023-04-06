@@ -35,6 +35,12 @@ GameboardRenderer::GameboardRenderer(uint8_t** _map, std::string& bgUrl, Rendere
 			assign_border_pixel(bgr[y][x], y, x, Color::White);
 }
 
+GameboardRenderer::~GameboardRenderer() {
+	for (uint8_t y = 0; y < Param::ScreenHeight; y++)
+		delete[] bgr[y];
+	delete[] bgr;
+}
+
 void GameboardRenderer::burn() {
 	reset();
 	for (uint8_t y = 0; y < row; y++)

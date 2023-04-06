@@ -252,7 +252,12 @@ Gameboard* GameOperator::read(int diff, int lvl) {
 
 	uint8_t h, w, **data;
 	FileIO::read_lvl(FileName, data, h, w);
-	return new Gameboard(h, w, data);
+	Gameboard* ans = new Gameboard(h, w, data);
+
+	for (int y = 0; y < h; y++) delete[] data[y];
+	delete[] data;
+
+	return ans;
 }
 
 GameboardLogic* GameOperator::get_logic(int diff) {

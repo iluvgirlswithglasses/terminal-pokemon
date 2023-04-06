@@ -45,6 +45,7 @@ public:
 	uint8_t   top, lft;		// where the gameboard is projected on the screen
 
 	GameboardRenderer(uint8_t** map, std::string& bgUrl, Renderer* scr, uint8_t row, uint8_t col, uint8_t top, uint8_t lft);
+	~GameboardRenderer();
 	void burn();			// burns the gameboard into the screen grid
 
 	// change the color of some cells
