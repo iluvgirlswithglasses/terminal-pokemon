@@ -17,8 +17,11 @@ BTW I use Arch
 #define HACKING_CONSOLE_H
 // ------------------------------------------------------------
 
+#include <iostream>
 #include <cstdio>
 #include <cstring>
+#include <string>
+#include "input.h"
 #include "account.h"
 #include "hacking-api.h"
 
@@ -29,9 +32,8 @@ public:
 private:
 	static constexpr int OpenSucceed = 0, OpenFailed = 1, PermissionDenied = 2;
 
-	static int open_file(HackingSavefile& save, Account& acc);
-	static int read_file(HackingSavefile& save, Account& acc);
-	static int hack_file(HackingSavefile& save, Account& acc);
+	static int read_file(Account& acc, std::string& url);
+	static int hack_file(Account& acc, std::string& url);
 };
 
 #endif	// HACKING_CONSOLE_H

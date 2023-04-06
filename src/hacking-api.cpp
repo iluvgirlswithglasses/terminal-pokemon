@@ -29,6 +29,13 @@ HackingSavefile HackingAPI::import(std::string& path) {
 	return save;
 }
 
+void HackingAPI::write(HackingSavefile& save, std::string& path) {
+	apply_mask(save);	// encode
+	std::ofstream fo(path, std::ios::binary);
+	fo.write((char*) &save, sizeof(save));
+	fo.close();
+}
+
 void HackingAPI::read(std::string& path, Deque<std::string>& usrn, Deque<int>& score) {
 	HackingSavefile save = import(path);
 	for (int i = 0; i < HackingParam::SaveLim && save.record[i].pts > 0; i++) {
@@ -127,7 +134,7 @@ HackingDate HackingAPI::get_date() {
 	tm *lct = localtime(&now);
 
 	HackingDate date;
-	date.yy = lct->tm_year;
+	date.yy = lct->tm_year + 1900;
 	date.mm = lct->tm_mon;
 	date.dd = lct->tm_mday;
 

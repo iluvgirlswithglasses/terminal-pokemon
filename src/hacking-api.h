@@ -35,6 +35,8 @@ BTW I use Arch
 struct HackingAPI {
 public:
 	static HackingSavefile import(std::string& path);
+	static void write(HackingSavefile& save, std::string& path);
+	
 	static void read(std::string& path, Deque<std::string>& usrn, Deque<int>& score);
 	static void write(std::string& path, Account& acc, GameOperator& opr);
 
