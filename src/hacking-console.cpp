@@ -128,6 +128,12 @@ int HackingConsole::hack_file(Account& acc, std::string& url) {
 	printf("give a new score (currently %d): ", record.pts);
 	std::cin >> record.pts;
 
+	printf("modify date (currently %d-%d-%d) (type in `day month year` format): ", record.date.dd, record.date.mm, record.date.yy);
+	std::cin >> record.date.dd >> record.date.mm >> record.date.yy;
+
+	printf("modify background directory (currently %s): ", state.bgUrl);
+	std::cin >> state.bgUrl;
+
 	printf("modify the board\n");
 	printf("type in %d rows, %d columns,\n", state.h, state.w);
 	printf("use capitalized english character to indicate remaining tiles,\n");
