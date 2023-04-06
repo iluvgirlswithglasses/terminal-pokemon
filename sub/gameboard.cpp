@@ -79,7 +79,8 @@ char** Gameboard::to_array() {
 }
 
 void Gameboard::to_array_dfs(char** ans, Node* node, int y, int x) {
-	if (ans[y][x] != '\0') return;	// this cell is already assigned
+	// if null node / cell is already assigned --> break
+	if (node == nullptr || ans[y][x] != '\0') return;
 	ans[y][x] = node->val;
 	to_array_dfs(ans, node->adj[Node::R], y, x+1);
 	to_array_dfs(ans, node->adj[Node::D], y+1, x);

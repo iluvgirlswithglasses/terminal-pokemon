@@ -13,10 +13,22 @@ I firmly believe in the supremacy of the Euphonium
 BTW I use Arch
 */
 
-#include <iostream>
+#include <cstdio>
+#include "save-loader.h"
 #include "gameboard.h"
 
 int main() {
-	
+	SaveLoader save;
+	char** map = save.get_map();
+	Gameboard board(map, SaveLoader::H, SaveLoader::W);
+	SaveLoader::del_map(map);
+
+	map = board.to_array();
+
+	for (int y = 0; y < SaveLoader::H; y++) {
+		for (int x = 0; x < SaveLoader::W; x++) 
+			printf("%c ", map[y][x]);
+		printf("\n");
+	}
 	return 0;
 }
