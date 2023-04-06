@@ -24,6 +24,7 @@ BTW I use Arch
 #include "lvl-menu-renderer.h"
 #include "game-operator.h"
 #include "hacking-api.h"
+#include "hacking-console.h"
 
 /**
  * @ options
@@ -47,15 +48,16 @@ void show_leaderboard(Renderer* rdr) {
 void announcement(Renderer* rdr, const char* msg, char fg, char bg) {
 	static const int y = Param::ScreenHeight >> 1, x = Param::ScreenWidth >> 1;
 
-	rdr->wrtext(y+0, x - strlen(msg)/2, msg);
-	rdr->wrtext(y+1, x - 25/2, "press any key to continue");
 	for (int i = -1; i <= 2; i++) {
 		for (int j = -14; j <= 14; j++) {
+			rdr->map[y + i][x + j] = ' ';
 			rdr->fgc[y + i][x + j] = fg;
 			rdr->bgc[y + i][x + j] = bg;
 			rdr->usg[y + i][x + j] = Renderer::UseBackground;
 		}
 	}
+	rdr->wrtext(y+0, x - strlen(msg)/2, msg);
+	rdr->wrtext(y+1, x - 25/2, "press any key to continue");
 	rdr->render();
 	Input::wait_keypress();
 }
@@ -72,7 +74,8 @@ void play_game(Account& acc, Renderer* rdr) {
 	else announcement(rdr, "you lost", Color::White, Color::Red);
 
 	// savegame
-	if (game.board->calc_score() > 0) {
+	int scored = game.board->calc_score();
+	if (scored > 0) {
 		std::string savedir = LvlInfo::get_savefile(dif, lvl, acc);
 		HackingAPI::write(savedir, acc, game);	
 	}
@@ -81,7 +84,7 @@ void play_game(Account& acc, Renderer* rdr) {
 	rdr->clrmap();
 
 	std::string res = "Your score: ";
-	res += std::to_string(game.board->calc_score());
+	res += std::to_string(scored);
 	rdr->wrtext(36, SceneLeaderboard::Left, res.c_str());
 	for (uint8_t x = SceneLeaderboard::Left; x < SceneLeaderboard::Right; x++) {
 		rdr->fgc[36][x] = Color::White;
@@ -89,20 +92,18 @@ void play_game(Account& acc, Renderer* rdr) {
 		rdr->usg[36][x] = Renderer::UseBackground;
 	}
 
-	SceneLeaderboard::start(rdr, dif, lvl, acc);
+	SceneLeaderboard::start(rdr, dif, lvl, acc, scored);
 }
 
 /**
  * @ drivers
  * */
-int main(int argc, const char* argv[]) {
+void play_game_mode(Account& acc) {
+
 #if _WIN32	// something to deal with windows' terrible performance
 	WindowsConsole::init();
 #endif
 	srand(time(0));	// srand will only be called here
-
-	// login
-	Account acc = SceneLogin::start();
 
 	// renderer
 	Renderer* rdr = new Renderer();
@@ -121,8 +122,17 @@ int main(int argc, const char* argv[]) {
 			show_leaderboard(rdr);
 			break;
 		case SceneMenu::Exit:
-			return 0;
+			return;
 		}
 	}
+}
+
+int main(int argc, const char* argv[]) {
+	int logto = 0;
+	Account acc = SceneLogin::start(logto);
+	if (logto == SceneLogin::ToGame) 
+		play_game_mode(acc);
+	else 
+		HackingConsole::start(acc);
 	return 0;
 }

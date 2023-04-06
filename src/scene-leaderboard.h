@@ -40,11 +40,11 @@ struct SceneLeaderboard {
 	
 	static constexpr int MSK8 = (1<<8) - 1;
 
-	static void start(Renderer* rdr, int dif, int lvl, Account& acc);
+	static void start(Renderer* rdr, int dif, int lvl, Account& acc, int scored);
 
 	static void start(Renderer* rdr, int dif, int lvl) {
 		Account acc;
-		start(rdr, dif, lvl, acc);
+		start(rdr, dif, lvl, acc, -1);
 	}
 
 	static void render(Renderer* rdr) {

@@ -73,6 +73,12 @@ public:
 		DiffRand    = 6;
 	int difficulty;
 
+#if __linux__
+	static void sleep(int ms) { std::this_thread::sleep_for(std::chrono::milliseconds(ms)); }
+#elif _WIN32
+	static void sleep(int ms) { Sleep(ms); }
+#endif
+
 protected:
 	static constexpr uint32_t MSK8 = (1<<8) - 1;
 
@@ -97,12 +103,6 @@ protected:
 
 	// rick ashley gamemode
 	void randomize_tiles();
-
-#if __linux__
-	void sleep(int ms) { std::this_thread::sleep_for(std::chrono::milliseconds(ms)); }
-#elif _WIN32
-	void sleep(int ms) { Sleep(ms); }
-#endif
 };
 
 #endif	// GAME_OPERATOR_H

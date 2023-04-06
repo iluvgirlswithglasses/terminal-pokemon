@@ -15,7 +15,7 @@ BTW I use Arch
 
 #include "scene-login.h"
 
-Account SceneLogin::start() {
+Account SceneLogin::start(int& logto) {
 	Account acc;
 	int status;
 
@@ -57,8 +57,10 @@ Account SceneLogin::start() {
 	// a new account is registered
 	if (status == Account::AccountDoesNotExist) Account::save(acc);
 
-	printf("press any key to continue...\n");
-	Input::wait_keypress();
+	printf("press \"k\" to go to hacking console, press any other key to play game...\n");
+	char c = Input::wait_keypress();
+	if (c == 'k') logto = ToHacking;
+	else logto = ToGame;
 
 	return acc;
 }

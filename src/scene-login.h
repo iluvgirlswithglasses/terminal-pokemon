@@ -24,11 +24,13 @@ BTW I use Arch
 
 struct SceneLogin {
 public:
+    static constexpr int ToGame = 0, ToHacking = 1;
+
     // consumes a while() thread
     // creates a login scene
     // thread stops after login/register successfully
     // credentials is then stored at account.h static session
-	static Account start();
+	static Account start(int& logto);
 
 private:
     static void getpwd(Account& acc);

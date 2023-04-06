@@ -15,7 +15,7 @@ BTW I use Arch
 
 #include "scene-leaderboard.h"
 
-void SceneLeaderboard::start(Renderer* rdr, int dif, int lvl, Account& acc) {
+void SceneLeaderboard::start(Renderer* rdr, int dif, int lvl, Account& acc, int scored) {
 	// headers
 	rdr->wrtext(Top, Left, "Leaderboard for this level");
 	rdr->wrtext(Top + 2, Left, "#");
@@ -82,7 +82,7 @@ void SceneLeaderboard::start(Renderer* rdr, int dif, int lvl, Account& acc) {
 			rdr->usg[y][x] = Renderer::UseBackground;
 		}
 
-		if (!highlighted && usrn == usr[arr[i]&MSK8]) {
+		if (!highlighted && usrn == usr[arr[i]&MSK8] && (arr[i]>>8) == scored) {
 			highlighted = true;
 			for (uint8_t x = Left; x < Right; x++) rdr->bgc[y][x] = Color::Purple;
 		}

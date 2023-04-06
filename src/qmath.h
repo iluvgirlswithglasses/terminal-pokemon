@@ -20,23 +20,11 @@ BTW I use Arch
 #include "random"
 
 struct Qmath {
-	/**
-	 * a quick sort implementation
-	 * 
-	 * my senpai used to implement this in his pascal codes
-	 * in competitive programming contests
-	 * 
-	 * didn't think i've got to use it one day
-	 * */
+	// actually its bubble sort
 	static void quick_sort(int* a, int l, int r) {
-		int i = l, j = r, pivot = a[l + rand() % (r - l)];
-		while (i <= j) {
-			while (a[i] < pivot) i++;
-			while (a[j] > pivot) j--;
-			if (i <= j) std::swap(a[i++], a[j--]);
-		}
-		if (l < j) quick_sort(a, l, j);
-		if (i < r) quick_sort(a, i, r);
+		for (int i = l; i < r; i++)
+			for (int j = l; j < r-1; j++)
+				if (a[j] > a[j+1]) std::swap(a[j], a[j+1]);
 	}
 };
 
