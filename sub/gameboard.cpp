@@ -75,6 +75,10 @@ char** Gameboard::to_array() {
 		for (int x = 0; x < w; x++) ans[y][x] = '\0';
 	}
 	to_array_dfs(ans, first, 0, 0);
+	for (int y = 0; y < h; y++)
+		for (int x = 0; x < w; x++)
+			// some slided tiles results in nullptr
+			if (ans[y][x] == '\0') ans[y][x] = EmptyCell;
 	return ans;
 }
 
