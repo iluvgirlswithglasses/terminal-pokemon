@@ -16,22 +16,22 @@ BTW I use Arch
 #include "renderer.h"
 
 Renderer::Renderer() {
-	map = new char*[h];
-	fgc = new char*[h];
-	bgc = new char*[h];
+	map = new char*[H];
+	fgc = new char*[H];
+	bgc = new char*[H];
 
-	for (int y = 0; y < h; y++) {
-		map[y] = new char[w];
-		fgc[y] = new char[w];
-		bgc[y] = new char[w];
+	for (int y = 0; y < H; y++) {
+		map[y] = new char[W];
+		fgc[y] = new char[W];
+		bgc[y] = new char[W];
 	}
 
 	clrmap();
 }
 
 void Renderer::clrmap() {
-	for (int y = 0; y < h; y++) {
-		for (int x = 0; x < w; x++) {
+	for (int y = 0; y < H; y++) {
+		for (int x = 0; x < W; x++) {
 			map[y][x] = ' ';
 			fgc[y][x] = White;
 			bgc[y][x] = Black;
@@ -41,8 +41,8 @@ void Renderer::clrmap() {
 
 void Renderer::render() {
 	clrscr();
-	for (int y = 0; y < h; y++) {
-		for (int x = 0; x < w; x++) {
+	for (int y = 0; y < H; y++) {
+		for (int x = 0; x < W; x++) {
 			printf("\033[4%c;3%cm%c", bgc[y][x], fgc[y][x], map[y][x]);
 		}
 		printf("\n");
