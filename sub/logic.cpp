@@ -61,6 +61,7 @@ bool Logic::suggest() {
 			return true;
 		}
 	}
+	SaveLoader::del_map(map);
 	return false;
 }
 
