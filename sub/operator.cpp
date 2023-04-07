@@ -38,14 +38,14 @@ Operator::~Operator() {
 	delete gameRdr;
 }
 
-void Operator::slide(int y, int x) {
+void Operator::slide(int y0, int x0, int y1, int x1) {
 	switch (orientation) {
-	case 't': board->slide_top(y, x); break;
-	case 'l': board->slide_lft(y, x); break;
-	case 'd': board->slide_dwn(y, x); break;
-	case 'r': board->slide_rgt(y, x); break;
+	case 't': board->slide_top(y0, x0, y1, x1); break;
+	case 'l': board->slide_lft(y0, x0, y1, x1); break;
+	case 'd': board->slide_dwn(y0, x0, y1, x1); break;
+	case 'r': board->slide_rgt(y0, x0, y1, x1); break;
 
-	default:  board->slide_dwn(y, x); break;
+	default:  board->slide_dwn(y0, x0, y1, x1); break;
 	}
 }
 
@@ -55,8 +55,7 @@ bool Operator::handle_matching(int loc) {
 	    y1 = (loc>> 8) & MSK8, 
 	    x1 = (loc    ) & MSK8;
 	if (logic->validate(y0, x0, y1, x1)) {
-		slide(y0, x0);
-		slide(y1, x1);
+		slide(y0, x0, y1, x1);
 		board->remaining -= 2;
 		return true;
 	}

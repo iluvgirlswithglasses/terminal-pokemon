@@ -110,8 +110,7 @@ void Gameboard::slide_dfs(Node* n, const int ori, const int top, const int dwn, 
 	n->adj[dwn] = ndwn;
 }
 
-void Gameboard::slide_dfs(const int y, const int x, const int ori, const int top, const int dwn) {
-	Node* erased = get_node(y, x);
+void Gameboard::slide_dfs(Node* erased, const int ori, const int top, const int dwn) {
 	Node* pre = erased->adj[REV[ori]];
 	Node* nxt = erased->adj[ori];
 	slide_dfs(nxt, ori, top, dwn, erased->adj[top], erased->adj[dwn]);
@@ -121,10 +120,17 @@ void Gameboard::slide_dfs(const int y, const int x, const int ori, const int top
 	erased = nullptr;
 }
 
-void Gameboard::slide_lft(int y, int x) { slide_dfs(y, x, R, T, D); }
-void Gameboard::slide_rgt(int y, int x) { slide_dfs(y, x, L, T, D); }
-void Gameboard::slide_top(int y, int x) { slide_dfs(y, x, D, L, R); }
-void Gameboard::slide_dwn(int y, int x) { slide_dfs(y, x, T, L, R); }
+void Gameboard::slide_dfs(int y0, int x0, int y1, int x1, int ori, int top, int dwn) {
+	Node* a = get_node(y0, x0);
+	Node* b = get_node(y1, x1);	// location might be change, but the node doesnt
+	slide_dfs(a, ori, top, dwn);
+	slide_dfs(b, ori, top, dwn);
+}
+
+void Gameboard::slide_lft(int y0, int x0, int y1, int x1) { slide_dfs(y0, x0, y1, x1, R, T, D); }
+void Gameboard::slide_rgt(int y0, int x0, int y1, int x1) { slide_dfs(y0, x0, y1, x1, L, T, D); }
+void Gameboard::slide_top(int y0, int x0, int y1, int x1) { slide_dfs(y0, x0, y1, x1, D, L, R); }
+void Gameboard::slide_dwn(int y0, int x0, int y1, int x1) { slide_dfs(y0, x0, y1, x1, T, L, R); }
 
 /**
  * @ 2d linkedlist utils

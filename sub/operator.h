@@ -39,7 +39,7 @@ struct Operator {
 	~Operator();
 
 	bool start();	// true if player wins
-	void slide(int y, int x);
+	void slide(int y0, int x0, int y1, int x1);
 	bool handle_matching(int selection);
 };
 

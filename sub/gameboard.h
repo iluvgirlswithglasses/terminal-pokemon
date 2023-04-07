@@ -50,12 +50,13 @@ struct Gameboard {
 	void to_array_dfs(char** ans, Node* node, int y, int x);
 
 	/** @ tile slidings */
-	void slide_lft(int y, int x);
-	void slide_rgt(int y, int x);
-	void slide_top(int y, int x);
-	void slide_dwn(int y, int x);
+	void slide_lft(int y0, int x0, int y1, int x1);
+	void slide_rgt(int y0, int x0, int y1, int x1);
+	void slide_top(int y0, int x0, int y1, int x1);
+	void slide_dwn(int y0, int x0, int y1, int x1);
 	
-	void slide_dfs(const int y, const int x, const int ori, const int top, const int dwn);
+	void slide_dfs(int y0, int x0, int y1, int x1, int ori, int top, int dwn);
+	void slide_dfs(Node* n, const int ori, const int top, const int dwn);
 	void slide_dfs(Node* n, const int ori, const int top, const int dwn, Node* ntop, Node* ndwn);
 
 	/** @ 2d-linkedlist utils */
