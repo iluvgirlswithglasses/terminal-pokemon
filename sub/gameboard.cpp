@@ -51,6 +51,7 @@ Gameboard::Gameboard(char** map, int _h, int _w) {
 	// the mat is not needed anymore, return h & w to normal
 	h -= 2;
 	w -= 2;
+	remaining = (h - 2) * (w - 2);	// the input data has 1 cell padding
 }
 
 Gameboard::~Gameboard() {

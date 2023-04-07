@@ -30,10 +30,10 @@ public:
 		if (map == nullptr) {
 			map = new char*[H] {
 				new char[W] { ' ', ' ', ' ', ' ', ' ', ' ', },
-				new char[W] { ' ', 'B', 'Y', 'K', 'G', ' ', },
-				new char[W] { ' ', 'K', 'O', 'H', 'B', ' ', },
-				new char[W] { ' ', 'M', 'H', 'N', 'Y', ' ', },
-				new char[W] { ' ', 'G', 'O', 'N', 'M', ' ', },
+				new char[W] { ' ', 'A', 'N', 'K', 'K', ' ', },
+				new char[W] { ' ', 'A', 'O', 'H', 'A', ' ', },
+				new char[W] { ' ', 'M', 'H', 'N', 'A', ' ', },
+				new char[W] { ' ', 'G', 'O', 'G', 'M', ' ', },
 				new char[W] { ' ', ' ', ' ', ' ', ' ', ' ', },
 			};
 		}

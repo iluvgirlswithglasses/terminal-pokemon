@@ -14,23 +14,44 @@ BTW I use Arch
 */
 
 #include <cstdio>
-#include "save-loader.h"
-#include "gameboard.h"
+#include "operator.h"
+#include "renderer.h"
+
+#if _WIN32		// ----------------------------------
+#include <windows.h>
+void hide_cursor() {
+	HANDLE out = GetStdHandle(STD_OUTPUT_HANDLE);
+	CONSOLE_CURSOR_INFO cursor;
+	GetConsoleCursorInfo(out, &cursor);
+	cursor.bVisible = false;
+	SetConsoleCursorInfo(out, &cursor);
+}
+#elif __linux__	// ----------------------------------
+void hide_cursor() {}
+#endif			// ----------------------------------
+
+char ask_gamemode() {
+	printf("choose sliding mode:\n");
+	printf("(type 't' for top, 'l' for left, 'd' for down, or 'r' for right)\n");
+	printf("(invalid input will be considered as 'd')\n");
+	printf(">>> ");
+
+	char ans;
+	scanf("%c", &ans);
+	return ans;
+}
 
 int main() {
-	SaveLoader save;
-	char** map = save.get_map();
-	Gameboard board(map, SaveLoader::H, SaveLoader::W);
-	SaveLoader::del_map(map);
+	hide_cursor();
+	Renderer* rdr = new Renderer();
+	while (true) {
+		char ori = ask_gamemode();
+		Operator game(rdr, ori);
+		bool status = game.start();
 
-	board.slide_lft(2, 2);
-
-	map = board.to_array();
-
-	for (int y = 0; y < SaveLoader::H; y++) {
-		for (int x = 0; x < SaveLoader::W; x++) 
-			printf("%c ", map[y][x]);
-		printf("\n");
+		rdr->clrscr();
+		if (status) printf("you won! you may play again\n\n");
+		else printf("you lost! you may play again\n\n");
 	}
 	return 0;
 }

@@ -43,9 +43,10 @@ void Renderer::render() {
 	clrscr();
 	for (int y = 0; y < H; y++) {
 		for (int x = 0; x < W; x++) {
-			printf("\033[4%c;3%cm%c", bgc[y][x], fgc[y][x], map[y][x]);
+			printf("\033[4%c;3%cm", bgc[y][x], fgc[y][x]);
+			putchar(map[y][x]);
 		}
-		printf("\n");
+		putchar('\n');
 	}
 }
 

@@ -31,7 +31,7 @@ struct Renderer {
 		Cyan   = '6',
 		White  = '7';
 
-	static constexpr int H = 32, W = 42;
+	static constexpr int H = 12 + 1, W = 24 + 1;
 
 	char** map;	// screen grid
 	char** fgc;	// foreground color for each cell in grid

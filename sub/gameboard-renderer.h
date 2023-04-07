@@ -42,7 +42,7 @@ struct GameboardRenderer {
 	void draw_border(int y, int x, char fg);
 
 	/** @ cell configures */
-	static constexpr int CellHeight = 4, CellWidth = 8;	// must be even
+	static constexpr int CellHeight = 2, CellWidth = 4;	// must be even
 	static constexpr int MidY = CellHeight>>1, MidX = CellWidth>>1;
 
 	void draw_cell(int y, int x);	// draws tile map[y, x]

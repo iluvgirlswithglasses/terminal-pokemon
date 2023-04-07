@@ -24,6 +24,8 @@ BTW I use Arch
 #include "gameboard-renderer.h"
 
 struct Operator {
+	static constexpr int MSK8 = (1<<8) - 1;	// 1111 1111
+
 	/** @ properties */
 	Gameboard* board;
 	Logic* logic;
@@ -38,6 +40,7 @@ struct Operator {
 
 	bool start();	// true if player wins
 	void slide(int y, int x);
+	bool handle_matching(int selection);
 };
 
 #endif	// OPERATOR_H

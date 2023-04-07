@@ -21,8 +21,8 @@ GameboardRenderer::GameboardRenderer(Gameboard* _board, Renderer* _rdr) {
 
 	row = SaveLoader::H;
 	col = SaveLoader::W;
-	top = 2;
-	lft = 2;
+	top = 0;
+	lft = 0;
 }
 
 GameboardRenderer::~GameboardRenderer() {
@@ -102,16 +102,8 @@ void GameboardRenderer::assign_border_pixel(char c, int y, int x, char fg) {
 
 void GameboardRenderer::assign_core_pixel(int c, int y, int x) {
 	static constexpr int ViableColors = 6;
-	c--;
-
-	char color = '1' + (c % ViableColors);	// [1:6]
-	char letter = 'A' + c;
-	if (letter > 'Z') {
-		letter = letter - 'Z' - 1 + 'a';
-		// avoid 'a' and 'A' having a same color
-		color = '1' + ((c + 2) % ViableColors);
-	}
 	
-	rdr->map[y][x] = letter;
+	char color = '1' + (c % ViableColors);	// [1:6]
+	rdr->map[y][x] = c;
 	rdr->fgc[y][x] = color;
 }

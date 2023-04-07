@@ -61,6 +61,7 @@ struct Gameboard {
 	/** @ 2d-linkedlist utils */
 	void push(Node* node, int ori, int val);	// push a new node
 	Node* get_node(int y, int x);				// get (y, x) node
+	char get_value(int y, int x) { return get_node(y, x)->val; }
 };
 
 #endif	// GAMEBOARD_H
