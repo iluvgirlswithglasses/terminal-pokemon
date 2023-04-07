@@ -15,7 +15,7 @@ BTW I use Arch
 
 #include "gameboard.h"
 
-const int Node::REV[4] = { Node::D, Node::R, Node::T, Node::L };
+const int Gameboard::REV[4] = { Gameboard::D, Gameboard::R, Gameboard::T, Gameboard::L };
 
 /**
  * @ constructors & deconstructors
@@ -41,10 +41,10 @@ Gameboard::Gameboard(char** map, int _h, int _w) {
 	for (int y = 1; y < h-1; y++) {
 		for (int x = 1; x < w-1; x++) {
 			Node* n = mat[y][x];
-			n->adj[Node::T] = mat[y-1][x];
-			n->adj[Node::L] = mat[y][x-1];
-			n->adj[Node::D] = mat[y+1][x];
-			n->adj[Node::R] = mat[y][x+1];
+			n->adj[T] = mat[y-1][x];
+			n->adj[L] = mat[y][x-1];
+			n->adj[D] = mat[y+1][x];
+			n->adj[R] = mat[y][x+1];
 		}
 	}
 	first = mat[1][1];
@@ -59,8 +59,8 @@ Gameboard::~Gameboard() {
 
 void Gameboard::dfs_remove(Node* node) {
 	if (node == nullptr) return;
-	dfs_remove(node->adj[Node::R]);
-	dfs_remove(node->adj[Node::D]);
+	dfs_remove(node->adj[R]);
+	dfs_remove(node->adj[D]);
 	delete node;
 	node = nullptr;
 }
@@ -82,9 +82,44 @@ void Gameboard::to_array_dfs(char** ans, Node* node, int y, int x) {
 	// if null node / cell is already assigned --> break
 	if (node == nullptr || ans[y][x] != '\0') return;
 	ans[y][x] = node->val;
-	to_array_dfs(ans, node->adj[Node::R], y, x+1);
-	to_array_dfs(ans, node->adj[Node::D], y+1, x);
+	to_array_dfs(ans, node->adj[R], y, x+1);
+	to_array_dfs(ans, node->adj[D], y+1, x);
 }
+
+/**
+ * @ tiles sliding
+ * 
+ * The DFS flow is REVERSED compared to optical vision.
+ * 
+ * Therefore, to make tiles to appear sliding right,
+ * DFS to the left.
+ * 
+ * The same goes to all other orientations.
+ * */
+void Gameboard::slide_dfs(Node* n, const int ori, const int top, const int dwn, Node* ntop, Node* ndwn) {
+	ntop->adj[dwn] = n;
+	ndwn->adj[top] = n;
+	if (n == nullptr) return;
+	slide_dfs(n->adj[ori], ori, top, dwn, n->adj[top], n->adj[dwn]);
+	n->adj[top] = ntop;
+	n->adj[dwn] = ndwn;
+}
+
+void Gameboard::slide_dfs(const int y, const int x, const int ori, const int top, const int dwn) {
+	Node* erased = get_node(y, x);
+	Node* pre = erased->adj[REV[ori]];
+	Node* nxt = erased->adj[ori];
+	slide_dfs(nxt, ori, top, dwn, erased->adj[top], erased->adj[dwn]);
+	pre->adj[ori] = nxt;
+	nxt->adj[REV[ori]] = pre;
+	delete erased;
+	erased = nullptr;
+}
+
+void Gameboard::slide_lft(int y, int x) { slide_dfs(y, x, R, T, D); }
+void Gameboard::slide_rgt(int y, int x) { slide_dfs(y, x, L, T, D); }
+void Gameboard::slide_top(int y, int x) { slide_dfs(y, x, D, L, R); }
+void Gameboard::slide_dwn(int y, int x) { slide_dfs(y, x, T, L, R); }
 
 /**
  * @ 2d linkedlist utils
@@ -92,5 +127,12 @@ void Gameboard::to_array_dfs(char** ans, Node* node, int y, int x) {
 void Gameboard::push(Node* node, int ori, int val) {
 	Node* next = new Node(val);
 	node->adj[ori] = next;
-	next->adj[Node::REV[ori]] = node;
+	next->adj[REV[ori]] = node;
+}
+
+Node* Gameboard::get_node(int y, int x) {
+	Node* ans = first;
+	while (y--) ans = ans->adj[D];
+	while (x--) ans = ans->adj[R];
+	return ans;
 }

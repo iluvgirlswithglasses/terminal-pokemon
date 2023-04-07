@@ -23,6 +23,8 @@ int main() {
 	Gameboard board(map, SaveLoader::H, SaveLoader::W);
 	SaveLoader::del_map(map);
 
+	board.slide_lft(2, 2);
+
 	map = board.to_array();
 
 	for (int y = 0; y < SaveLoader::H; y++) {

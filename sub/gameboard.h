@@ -18,9 +18,6 @@ BTW I use Arch
 // ------------------------------------------------------------
 
 struct Node {
-	static const int T = 0, L = 1, D = 2, R = 3;
-	static const int REV[4];	// REV[ T/L/D/R ] = D/R/T/L
-
 	char val;
 	Node* adj[4];	// adj[ T/L/D/R ] = top/left/down/right adjacent node
 
@@ -34,6 +31,9 @@ struct Node {
 
 struct Gameboard {
 	static constexpr char EmptyCell = ' ';		// empty cell is marked as '\32'
+
+	static const int T = 0, L = 1, D = 2, R = 3;
+	static const int REV[4];	// REV[ T/L/D/R ] = D/R/T/L
 
 	/** @ properties */
 	Node* first = nullptr;
@@ -49,8 +49,18 @@ struct Gameboard {
 	char** to_array();
 	void to_array_dfs(char** ans, Node* node, int y, int x);
 
+	/** @ tile slidings */
+	void slide_lft(int y, int x);
+	void slide_rgt(int y, int x);
+	void slide_top(int y, int x);
+	void slide_dwn(int y, int x);
+	
+	void slide_dfs(const int y, const int x, const int ori, const int top, const int dwn);
+	void slide_dfs(Node* n, const int ori, const int top, const int dwn, Node* ntop, Node* ndwn);
+
 	/** @ 2d-linkedlist utils */
 	void push(Node* node, int ori, int val);	// push a new node
+	Node* get_node(int y, int x);				// get (y, x) node
 };
 
 #endif	// GAMEBOARD_H
