@@ -97,8 +97,8 @@ void Gameboard::to_array_dfs(char** ans, Node* node, int y, int x) {
  * The same goes to all other orientations.
  * */
 void Gameboard::slide_dfs(Node* n, const int ori, const int top, const int dwn, Node* ntop, Node* ndwn) {
-	ntop->adj[dwn] = n;
-	ndwn->adj[top] = n;
+	if (ntop != nullptr) ntop->adj[dwn] = n;
+	if (ndwn != nullptr) ndwn->adj[top] = n;
 	if (n == nullptr) return;
 	slide_dfs(n->adj[ori], ori, top, dwn, n->adj[top], n->adj[dwn]);
 	n->adj[top] = ntop;
@@ -110,8 +110,8 @@ void Gameboard::slide_dfs(const int y, const int x, const int ori, const int top
 	Node* pre = erased->adj[REV[ori]];
 	Node* nxt = erased->adj[ori];
 	slide_dfs(nxt, ori, top, dwn, erased->adj[top], erased->adj[dwn]);
-	pre->adj[ori] = nxt;
-	nxt->adj[REV[ori]] = pre;
+	if (pre != nullptr) pre->adj[ori] = nxt;
+	if (nxt != nullptr) nxt->adj[REV[ori]] = pre;
 	delete erased;
 	erased = nullptr;
 }
