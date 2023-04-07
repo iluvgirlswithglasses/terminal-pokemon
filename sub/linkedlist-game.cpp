@@ -34,25 +34,28 @@ void hide_cursor() {}
 char ask_gamemode() {
 	printf("choose sliding mode:\n");
 	printf("(type 't' for top, 'l' for left, 'd' for down, or 'r' for right)\n");
-	printf("(invalid input will be considered as 'd')\n");
+	printf("(invalid input will be considered as 'l')\n");
 	printf(">>> ");
 
 	char ans;
 	std::cin >> ans;
+	if (ans != 't' && ans != 'd' && ans != 'r') ans = 'l';
 	return ans;
 }
 
 int main() {
 	hide_cursor();
 	Renderer* rdr = new Renderer();
-	while (true) {
-		char ori = ask_gamemode();
-		Operator game(rdr, ori);
-		bool status = game.start();
 
-		rdr->clrscr();
-		if (status) printf("you won! you may play again\n\n");
-		else printf("you lost! you may play again\n\n");
-	}
+	char ori = ask_gamemode();
+	Operator game(rdr, ori);
+	bool status = game.start();
+
+	if (status) 
+		printf("you won! press any key to exist\n");
+	else 
+		printf("you lost! press any key to exist\n");
+
+	Input::wait_keypress();
 	return 0;
 }

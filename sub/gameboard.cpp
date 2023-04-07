@@ -20,9 +20,10 @@ const int Gameboard::REV[4] = { Gameboard::D, Gameboard::R, Gameboard::T, Gamebo
 /**
  * @ constructors & deconstructors
  * */
-Gameboard::Gameboard(char** map, int _h, int _w) {
+Gameboard::Gameboard(char** map, int _h, int _w, char _ori) {
 	h = _h + 2;	// padding for tldr
 	w = _w + 2;
+	ori = _ori;
 
 	/** @ build a 2d array first, then the linked list later */
 	Node*** mat = new Node**[h];
@@ -47,23 +48,16 @@ Gameboard::Gameboard(char** map, int _h, int _w) {
 			n->adj[R] = mat[y][x+1];
 		}
 	}
-	first = mat[1][1];
+	switch (ori) {
+	case 't': case 'l':
+		first = mat[1][1]; break;
+	case 'd': case 'r':
+		first = mat[h-2][w-2]; break;
+	}
 	// the mat is not needed anymore, return h & w to normal
 	h -= 2;
 	w -= 2;
 	remaining = (h - 2) * (w - 2);	// the input data has 1 cell padding
-}
-
-Gameboard::~Gameboard() {
-	dfs_remove(first);
-}
-
-void Gameboard::dfs_remove(Node* node) {
-	if (node == nullptr) return;
-	dfs_remove(node->adj[R]);
-	dfs_remove(node->adj[D]);
-	delete node;
-	node = nullptr;
 }
 
 /**
@@ -75,7 +69,12 @@ char** Gameboard::to_array() {
 		ans[y] = new char[w];
 		for (int x = 0; x < w; x++) ans[y][x] = '\0';
 	}
-	to_array_dfs(ans, first, 0, 0);
+	switch (ori) {
+	case 't': case 'l':
+		to_array_dfs(ans, first, 0, 0, D, R, 1, 1); break;
+	case 'd': case 'r':
+		to_array_dfs(ans, first, h-1, w-1, T, L, -1, -1); break;
+	}
 	for (int y = 0; y < h; y++)
 		for (int x = 0; x < w; x++)
 			// some slided tiles results in nullptr
@@ -83,12 +82,12 @@ char** Gameboard::to_array() {
 	return ans;
 }
 
-void Gameboard::to_array_dfs(char** ans, Node* node, int y, int x) {
+void Gameboard::to_array_dfs(char** ans, Node* node, int y, int x, int yori, int xori, int yinc, int xinc) {
 	// if null node / cell is already assigned --> break
 	if (node == nullptr || ans[y][x] != '\0') return;
 	ans[y][x] = node->val;
-	to_array_dfs(ans, node->adj[R], y, x+1);
-	to_array_dfs(ans, node->adj[D], y+1, x);
+	to_array_dfs(ans, node->adj[yori], y + yinc, x, yori, xori, yinc, xinc);
+	to_array_dfs(ans, node->adj[xori], y, x + xinc, yori, xori, yinc, xinc);
 }
 
 /**
@@ -135,15 +134,36 @@ void Gameboard::slide_dwn(int y0, int x0, int y1, int x1) { slide_dfs(y0, x0, y1
 /**
  * @ 2d linkedlist utils
  * */
-void Gameboard::push(Node* node, int ori, int val) {
-	Node* next = new Node(val);
-	node->adj[ori] = next;
-	next->adj[REV[ori]] = node;
-}
 
 Node* Gameboard::get_node(int y, int x) {
 	Node* ans = first;
-	while (y--) ans = ans->adj[D];
-	while (x--) ans = ans->adj[R];
-	return ans;
+	switch (ori) {
+	case 't':
+		while (ans != nullptr && x--) ans = ans->adj[R];	// Ox first
+		while (ans != nullptr && y--) ans = ans->adj[D];	// Oy second
+		return ans;
+	case 'l':
+		while (ans != nullptr && y--) ans = ans->adj[D];	// Oy first
+		while (ans != nullptr && x--) ans = ans->adj[R];	// Ox second
+		return ans;
+	case 'd':
+		y = h - y - 1;
+		x = w - x - 1;
+		while (ans != nullptr && x--) ans = ans->adj[L];	// Ox first
+		while (ans != nullptr && y--) ans = ans->adj[T];	// Oy second
+		return ans;
+	case 'r':
+		y = h - y - 1;
+		x = w - x - 1;
+		while (ans != nullptr && y--) ans = ans->adj[T];	// Oy first
+		while (ans != nullptr && x--) ans = ans->adj[L];	// Ox second
+		return ans;
+	}
+	return nullptr;
+}
+
+char Gameboard::get_value(int y, int x) {
+	Node* n = get_node(y, x);
+	if (n == nullptr) return EmptyCell;
+	return n->val;
 }

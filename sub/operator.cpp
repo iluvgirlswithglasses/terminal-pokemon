@@ -21,7 +21,7 @@ Operator::Operator(Renderer* _rdr, char ori) {
 	// load data
 	SaveLoader save;
 	char** map = save.get_map();
-	board = new Gameboard(map, SaveLoader::H, SaveLoader::W);
+	board = new Gameboard(map, SaveLoader::H, SaveLoader::W, ori);
 	SaveLoader::del_map(map);
 
 	// load logic
@@ -44,8 +44,6 @@ void Operator::slide(int y0, int x0, int y1, int x1) {
 	case 'l': board->slide_lft(y0, x0, y1, x1); break;
 	case 'd': board->slide_dwn(y0, x0, y1, x1); break;
 	case 'r': board->slide_rgt(y0, x0, y1, x1); break;
-
-	default:  board->slide_dwn(y0, x0, y1, x1); break;
 	}
 }
 

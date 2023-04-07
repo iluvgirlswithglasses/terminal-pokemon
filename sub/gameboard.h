@@ -37,17 +37,16 @@ struct Gameboard {
 
 	/** @ properties */
 	Node* first = nullptr;
+	char ori;
 	int h, w;		// size of the map
 	int remaining;	// remaining tiles
 
 	/** @ constructors & deconstructors */
-	Gameboard(char** map, int h, int w);		// load game from a 2d game map
-	~Gameboard();
-	void dfs_remove(Node* n);
+	Gameboard(char** map, int h, int w, char ori);
 
 	/** @ linkedlist to 2d-array */
 	char** to_array();
-	void to_array_dfs(char** ans, Node* node, int y, int x);
+	void to_array_dfs(char** ans, Node* node, int y, int x, int yori, int xori, int yinc, int xinc);
 
 	/** @ tile slidings */
 	void slide_lft(int y0, int x0, int y1, int x1);
@@ -60,9 +59,8 @@ struct Gameboard {
 	void slide_dfs(Node* n, const int ori, const int top, const int dwn, Node* ntop, Node* ndwn);
 
 	/** @ 2d-linkedlist utils */
-	void push(Node* node, int ori, int val);	// push a new node
-	Node* get_node(int y, int x);				// get (y, x) node
-	char get_value(int y, int x) { return get_node(y, x)->val; }
+	Node* get_node(int y, int x);
+	char get_value(int y, int x);
 };
 
 #endif	// GAMEBOARD_H
