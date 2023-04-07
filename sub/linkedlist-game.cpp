@@ -13,6 +13,7 @@ I firmly believe in the supremacy of the Euphonium
 BTW I use Arch
 */
 
+#include <iostream>
 #include <cstdio>
 #include "operator.h"
 #include "renderer.h"
@@ -37,7 +38,7 @@ char ask_gamemode() {
 	printf(">>> ");
 
 	char ans;
-	scanf("%c", &ans);
+	std::cin >> ans;
 	return ans;
 }
 
