@@ -24,3 +24,9 @@ The hierarchy of this project is visualized via a diagram in section *2.2*. The 
 In *figure 1*, arrows that are connected to the bottom or the top of a box (like green and yellow arrows) indicates the relation of any item to a **module**. While arrows that are connected to the side of a box (like blue or yellow arrows) indicates the relation of any item to a **script**.
 
 Additionally, a thin arrow from *A* to *B* shows that *A* exports parameters and methods (functions) to *B*. On the other hand, a thick arrow from *C* to *D* shows that *C* exports data to *D*.
+
+## 2.2. Project Hierarchy
+
+![Hierarchy Diagram](img/hierarchy.png)
+
+This project consists of 55 source code scripts; 31 of them are ".h" files and 24 others, ".cpp" files. Each of them serves a specific role, and scripts with similar roles are grouped into a module. This section briefly explains the usage of each module, then the detailed implementation shall be addressed in further sections.
