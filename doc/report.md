@@ -168,7 +168,7 @@ Beyond this chapter, all line of codes belongs to Luu Nam Dat and Nguyen Huynh H
 | |
 | Morgan McGuire "\_kbhit() for Linux" <br> https://www.flipcode.com/archives/ <br> \_kbhit\_for\_Linux.shtml                                                                  | Detect user keypress on POSIX operating systems                      |
 | |
-| "How can I get the list of files in a directory using C or C++" <br> https://stackoverflow.com/questions/612097/how-can-i-get-the-list-of-files-in-a-directory-using-c-or-c  | List files in a directory on different OS                            |
+| "How can I get the list of files in a directory using C or C++" <br> https://stackoverflow.com/questions/612097/how-can-i-get-the-list-of-files-in-a-directory-using-c-or-c  | List files in a directory on different operating systems             |
 
 ```
 
@@ -194,11 +194,33 @@ This chapter explains how each module was implemented and what algorithms and te
 
 ## 6.1. Algorithms & Data Structures
 
-(tmp) This module provides 2 simple data structures that are used thorough the project: Array and Deque; and a simple sorting algorithm used for ranking players: Bubble Sort.
+This module consists of 3 header files: "qmath.h", "deque.h", and "array.h"
+
+"qmath.h" *(abbreviation of "quick math")* is designed to provide handy mathematic functions and simple algorithms such as a sorting algorithm. Currently, it only has a simple Bubble Sort function, but that alone is already enough for this project.
+
+"deque.h" implements a double-ended queue via a linked list. It is a data structure that can dynamically be expanded or contracted on both ends (either front or back) in $O(1)$. It is possible to access/add/modify/remove arbitrary elements in this data structure as well, and "deque.h" also provides all necessary methods to do that. But these methods are never used in this project since accessing an arbitrary element in a linked list has $O(N)$ time complexity, where $N$ is the number of elements in the list.
+
+"array.h" provides a wrapper for C++ dynamic array. In C++, creating an dynamic array via a pointer (for example: `type* arr = new type[length]`) can be quite inconvenient. The created object does not keep track of its length on its own, and it needs to be deallocated manually via a `delete` keyword. Using built-in structures like `std::vector` and `std::array` are encouraged thereof; but to reduce the project's dependency, "array.h" is introduced to replicate the usage of `std::array`.
+
+While "qmath.h" is only used in the leaderboard feature, "deque.h" and "array.h" are robust containers which are used thorough the project as a substitute for static array, pointer array, `std::array`, `std::vector`, `std::queue` and many more built-in containers.
 
 ### 6.2. STDIO Control
 
-(tmp) Offers functions to detect and extract keypresses. On Windows, this module provides additional controls to the terminal so as to optimize the poor performance of Windows' console.
+This module consists of 2 header files: "input.h" and "windows-console.h"
+
+"input.h" is simple. It offers a function to wait for the user's keypress then return which key is pressed. Works on Windows, UNIX-like and POSIX operating systems.
+
+"windows-console.h" provides exclusive functions for Windows so as to optimize the poor performance of the Windows' Terminal. It allows a program to re-render arbitrary cell on the console, which reserves computing resources from being wasted into re-rendering cells that have not been update after a frame. "windows-console.h" is possible thanks to the Windows' API header file `<windows.h>`
+
+Regarding of how poor the Windows' Terminal performs without "windows-console.h", a small benchmark is proposed in order to measure the fps (frames per second) of this game with "windows-console.h" removed. The game has the resolution of $120\times40$ (measured in characters). The benchmark runs on only one computer with a *11th Gen Intel i5-11320H (8) @ 3.187GHz CPU*, but on different operating systems and terminal emulators. The result is shown in the table below:
+
+| Platform                                            | FPS   |
+| --------------------------------------------------- | ----- |
+| Native Arch Linux x86_64 (Kernel: 6.1.11-arch1-1)   | 144.7 |
+| Debian GNU/Linux 11 (bullseye) on Windows 10 x86_64 | 91.4  |
+| Alacritty terminal emulator on Windows 11           | 91.2  |
+| Windows Terminal (cmd.exe/powershell.exe)           | 0.3   |
+
 
 ### 6.3. File IO
 
