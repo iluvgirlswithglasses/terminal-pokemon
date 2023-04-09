@@ -141,6 +141,101 @@ Exclusive libraries for Windows:
 This project was built successfully on the following compilers:
 
 - g++ (GCC) 12.2.1 20230201
+- g++ (Debian 10.2.1-6) 10.2.1 20210110
 - g++ (MinGW.org GCC-6.3.0-1) 6.3.0
 
-The build scripts for this project are also provided. To build the game, execute `build.sh` on Linux, or `build.bat` on Windows. To build the sub-version of the game which implemented the gameboard as a 2 dimensional linked list, execute `build-linkedlist-game.sh` on Linux, or `build-linkedlist-game.bat` on Windows.
+The build scripts for this project are also provided. To build the game, execute `build.sh` on Linux or `build.bat` on Windows. To build the sub-version of the game which implemented the gameboard as a 2 dimensional linked list, execute `build-linkedlist-game.sh` on Linux or `build-linkedlist-game.bat` on Windows.
+
+\pagebreak
+
+# Chapter 5. References
+
+Before going to the detailed implementation, all references are firstly cited, as well as why they are necessary to this project is also addressed.
+
+Beyond this chapter, all line of codes belongs to Luu Nam Dat and Nguyen Huynh Hai Dang.
+
+```
+
+
+
+```
+
+\begin{center} Code References \end{center}
+
+| Source                                                                                                                                                                       | Application                                                          |
+| -----------------------------------------------------------------------------------------------------------------------------------------------------------------------      | -------------------------------------------------------------------- |
+| "Bash - adding color" http://www.andrewnoske.com/wiki/Bash_-_adding_color                                                                                                    | Add colored text to the console output                               |
+| |
+| Morgan McGuire "\_kbhit() for Linux" <br> https://www.flipcode.com/archives/ <br> \_kbhit\_for\_Linux.shtml                                                                  | Detect user keypress on POSIX operating systems                      |
+| |
+| "How can I get the list of files in a directory using C or C++" <br> https://stackoverflow.com/questions/612097/how-can-i-get-the-list-of-files-in-a-directory-using-c-or-c  | List files in a directory on different OS                            |
+
+```
+
+
+
+```
+
+\begin{center} Documents \end{center}
+
+| Source                                                                                                                | Application                                                          |
+| --------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
+| "Standard C++ Library reference" <br> https://cplusplus.com/reference/                                                | Documentation of the C++ standard library                            |
+| |
+| "Windows API Reference" <br> https://learn.microsoft.com/en-us/previous-versions//aa383749(v=vs.85)                   | Documentation of the `<windows.h>` header file                       |
+| |
+| neilharan "OpenAFIS - A high performance C++ fingerprint matching library" <br> https://github.com/neilharan/openafis | This repository's source code organization is applied in our project |
+
+\pagebreak
+
+# Chapter 6. Implementation
+
+This chapter explains how each module was implemented and what algorithms and techniques were used in the process. 
+
+## 6.1. Algorithms & Data Structures
+
+(tmp) This module provides 2 simple data structures that are used thorough the project: Array and Deque; and a simple sorting algorithm used for ranking players: Bubble Sort.
+
+### 6.2. STDIO Control
+
+(tmp) Offers functions to detect and extract keypresses. On Windows, this module provides additional controls to the terminal so as to optimize the poor performance of Windows' console.
+
+### 6.3. File IO
+
+(tmp) Contains functions to list files in any directory (folder) and load some files into game objects.
+
+### 6.4. Gameboard & Behaviors
+
+(tmp) Defines the gameboard structure & its operating logics. Matching rules, tiles sliding rules, and extra rules are defined here.
+
+(tmp) This module only implements the gameboard as a 2 dimensional array. In order to satisfy the additional requirement, a small game which implements the gameboard as a 2 dimensional linked list has also been developed and included in this project under directory `"sub/"`.
+
+### 6.5. Audio
+
+(tmp) Emits sounds in fixed frequencies and durations.
+
+### 6.6. Settings
+
+(tmp) Determines console resolution, quantity of difficulty levels and stages, as well as other constant values.
+
+### 6.7. Renderer
+
+(tmp) This module provides a grid for other modules to draw on, and then it prints that grid onto the console.
+
+(tmp) Also supports printing with background color and foreground color.
+
+### 6.8. Rendering Modules
+
+(tmp) Delivers functions to draw some data into the Renderer's grid. Such data are the gameboard, the leaderboard, the title menu, the level selector, etc...
+
+### 6.9. Game Operating Module
+
+(tmp) Operates the game. This module wraps the gameboard, the input control, the renderer, and the audio player altogether to make the game playable.
+
+### 6.10. Account
+
+(tmp) Account object definition & logging in interface.
+
+### 2.2.11. Hacking Module
+
+(tmp) The module to fulfill the "savefile hacking" requirement.
