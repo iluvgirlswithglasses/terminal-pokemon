@@ -9,7 +9,7 @@ urlcolor: blue
 
 # Chapter 1. Project Overview
 
-This project is a simplified version of the Pikachu Matching Game, runs on *amd64/x86_64 Linux Bash Terminal* and *x32/x64 Windows Terminal*. All of the source codes are contributed by Luu Nam Dat (Student ID 22127062) and Nguyen Huynh Hai Dang (Student ID 22127052). All of the source codes are integrated and maintained in the codebase by Luu Nam Dat. Any referenced code is cited in the beginning of its corresponding file, and is cited in section x.x.x.
+This project is a simplified version of the Pikachu Matching Game, runs on *amd64/x86_64 Linux Bash Terminal* and *x32/x64 Windows Terminal*. All of the source codes are contributed by Luu Nam Dat (Student ID 22127062) and Nguyen Huynh Hai Dang (Student ID 22127052). All of the source codes are integrated and maintained in the codebase by Luu Nam Dat. Any referenced code is cited in the beginning of its corresponding file, and is cited in *Chapter 5 - References*.
 
 The gameplay demonstration of this project can be found on youtube [here](https://www.youtube.com).
 
@@ -106,6 +106,16 @@ This chapter shows which of the required features are implemented and where they
 | Binary save file          | Yes       | src/hacking-api.h            |
 
 Asides from **Source code aesthetics, Source code comments, Game performance,** and **Game aesthetics**—whose completion can not be marked as "Yes" or "No"—all other programming and technical requirements are all met.
+
+Additionally, this project is also delivered with extra features, which are:
+
+| Feature                                                                                                                   | Implemented in             |
+| ------------------------------------------------------------------------------------------------------------------------- | -------------------------- |
+| Free Match Mode: A new difficulty level, where the player can match tiles in any pattern and not just in `I L U Z` shapes | src/gameboard-logic-easy.h |
+| |
+| Randomizer Mode: A new difficulty level, where tiles sometimes move <br> themselves towards arbitrary directions          | src/randomize-logic.h      |
+| |
+| Background Customization: Allows the user to add/edit/remove background images                                            | src/background-loader.h    |
 
 \pagebreak
 
@@ -204,7 +214,7 @@ This module consists of 3 header files: "qmath.h", "deque.h", and "array.h"
 
 While "qmath.h" is only used in the leaderboard feature, "deque.h" and "array.h" are robust containers which are used thorough the project as a substitute for static array, pointer array, `std::array`, `std::vector`, `std::queue` and many more built-in containers.
 
-### 6.2. STDIO Control
+## 6.2. STDIO Control
 
 This module consists of 2 header files: "input.h" and "windows-console.h"
 
@@ -218,46 +228,190 @@ Regarding of how poor the Windows' Terminal performs without "windows-console.h"
 | --------------------------------------------------- | ----- |
 | Native Arch Linux x86_64 (Kernel: 6.1.11-arch1-1)   | 144.7 |
 | Debian GNU/Linux 11 (bullseye) on Windows 10 x86_64 | 91.4  |
-| Alacritty terminal emulator on Windows 11           | 91.2  |
-| Windows Terminal (cmd.exe/powershell.exe)           | 0.3   |
+| Alacritty terminal emulator on Windows 10           | 91.2  |
+| Windows 10 Terminal (cmd.exe/powershell.exe)        | 0.3   |
 
+## 6.3. File IO
 
-### 6.3. File IO
+This module consists of 3 header files: "file-fetcher.h", "file-io.h", and "background-loader.h". It provides all necessary tools for the game (excluding the hacking module) to read or write any file in the file system. 
 
-(tmp) Contains functions to list files in any directory (folder) and load some files into game objects.
+"file-fetcher.h" offers a function to list all files in a directory. This help the program to recognize multiple save files, multiple background image files,... with ease.
 
-### 6.4. Gameboard & Behaviors
+"file-io.h" reads a pre-designed gameboard binary file and then feeds it to the program. A gameboard object is built upon this.
 
-(tmp) Defines the gameboard structure & its operating logics. Matching rules, tiles sliding rules, and extra rules are defined here.
+"background-loader.h" reads a background image text file and then represents it as a 2 dimensional array.
 
-(tmp) This module only implements the gameboard as a 2 dimensional array. In order to satisfy the additional requirement, a small game which implements the gameboard as a 2 dimensional linked list has also been developed and included in this project under directory `"sub/"`.
+## 6.4. Gameboard & Behaviors
 
-### 6.5. Audio
+The Gameboard & Behaviors Module consists of 6 header files: "gameboard.h", "gameboard-logic.h", "gameboard-logic-easy.h", "gameboard-logic-normal.h", "sliding-logic.h", and "randomize-logic.h". This is the most complicated module in the project as it covers a lot of contents:
+
+- 5 standard features: I/L/U/Z Matching and Game finish verification
+- An advanced feature: Move suggestion
+- An extra advance feature: Stage difficulty increase
+- 2 extra features: Free Match Mode and Randomizer Mode (as mentioned in *Chapter 3 - Features*)
+- A vital component which gives data to generate visual effects.
+- Gameboard definition
+- The performance differences between array and linked list
+
+By explaining the usage and the implementation of each script in this module, this section shall then clarify how each of those contents were achieved.
+
+### 6.4.1. About "gameboard.h"
+
+It is a technical requirement to declare a gameboard structure using both a 2 dimensional array and a 2 dimensional linked list. This project offers 2 seperated games, where the main game (under directory `src/`) implements the game board via array and the substitute game (under directory `sub/`) doing so via a linked list. This section covers the array version of the gameboard, while the other version is covered in section *6.5*.
+
+The array version of the gameboard is straight-forward. The structure implemented in `src/gameboard.h` consists of these properties to simulate the geometric attributes of the board:
+
+```C++
+uint8_t h, w;   // the height and width of the board, measured in cells
+uint8_t** map;  // map[i][j] stores the id of the cell at row `i` column `j`
+```
+
+The `gameboard.h` structure also comes with extra properties and methods to calculate the current score of the player, and to keep track of number of helps used. A constructor and a deconstructor are also writen for convenient development reasons.
+
+### 6.4.2. About "gameboard-logic.h"
+
+Contains a class `GameboardLogic` which acts as a interface, offering functions to check the legitimacy of a match, to trace the path between 2 cells, and to suggest a move.
+
+```C++
+class GameboardLogic {
+    // check if cell (y0, x0) can be matched with cell (y1, x1)
+    virtual bool validate(uint8_t y0, uint8_t x0, uint8_t y1, uint8_t x1);
+
+    // suggest a move
+    // return format: (y1<<24) | (x1<<16) | (y0<<8) | x0
+    virtual uint32_t suggest();
+
+    // get the path from (y0, x0) to (y1, x1)
+    // the i-th element in the deque is the coordinate of the i-th cell in the path
+    // encoded in format: (y<<8)|x
+    virtual Deque<uint16_t> get_path(uint8_t y0, uint8_t x0, uint8_t y1, uint8_t x1);
+};
+```
+
+Such interface exists to allow derivation. The game which this project delivers has multiple difficulty levels, some of which have different matching rules than others. Thereof, multiple logic classes are written so as to operate the game in different game modes. While having distinctive behaviors, all of these classes inherit the `GameboardLogic` interface, and they all can be treated as `GameboardLogic` objects by the program. This fact greatly reduces the complexity of the source code.
+
+### 6.4.3. About "gameboard-logic-easy.h"
+
+Contains a class `GameboardLogicEasy` which derives from the `GameboardLogic` interface. The `validate` method of this class checks whether two cells can be matched in any pattern (not just in patterns I/L/U/Z).
+
+The `validate` method is implemented via **BFS** (breath-first search). In summary, **BFS** is a simple and fundamental algorithm that access all nodes in a graph (in this case: All cells in matrix). The procedure of the algorithm is described as follow:
+
+Step 1 - Initialization:
+
+- All nodes are marked as *"unvisited"* except the starting node.
+
+- Prepare a queue $Q$ that only has the starting node as its only element.
+
+Step 2 - Repeat until $Q$ is empty:
+
+- Pop node $u$—the first element in $Q$—out of $Q$
+
+- For every *unvisited* node $v$ that is adjacent to $u$:
+
+    - mark $v$ as $visited$
+
+    - insert $v$ to the back of $Q$
+
+    - Let $P_{v} \leftarrow u$, where $P_{y} = x$ means node $y$ was visited from $x$
+
+By using **BFS** to check whether a cell can be accessed from another cell in the matrix, matching validation, game finish verification, and move suggestion can be done at ease. The next task is to retrieve the path between these two cell in order to generate the matching visual effect. This project performs the task via a simple **DFS** (depth-first search) function, whose procedure is described as follow:
+
+Step 1 - Initialization:
+
+- Take two parameters: $s$ and $e$. Where $s$ is the node from which the previous $BFS$ started, and $e$ is a node that can be accessed from $s$.
+
+- Prepare a queue $Q$
+
+- Let $u \leftarrow e$
+
+Step 2 - Repeat until $u$ equals $s$:
+
+- Add $u$ to the front of $Q$
+
+- $u \leftarrow P_{u}$
+
+Once the procedure is done, the $i$-th element in $Q$ is the $i$-th cell in the path from $s$ to $e$.
+
+### 6.4.4. About "gameboard-logic-normal.h"
+
+Contains a class `GameboardLogicNormal` which derives from the `GameboardLogic` interface. The `validate` method of this class checks whether two cells can be matched in patterns I/L/U/Z.
+
+`GameboardLogicNormal` is implemented with the same algorithms as `GameboardLogicEasy`. Nevertheless, since there are only a limited number of patterns allowed, a simple dynamic programming technique is integrated in order to prevent undesired patterns. The **BFS** procedure is re-written as follow:
+
+Step 1 - Initialization:
+
+- Let $T_{id}$ be the minumum number of turns taken in order to reach node $i$ from direction $d$. In this game, there are 4 directions (top/left/down/right) and 2 turns in maximum (shape I has 0 turn, shape L has 1 turn, shapes U and Z has 2 turns).
+
+- Prepare a queue $Q$ with only one element $q_{1} = \{u_{1}, t_{1}, d_{1}\}$, where $u_{1}$ is the starting node, $t_{1} = 0$ is the numbers of turns taken, $d_{1} = NULL$ is the direction which this node was traveled from (here $d_{1}$ is set to $NULL$ because $u_{1}$ is the first node)
+
+Step 2 - Repeat until $Q$ is empty:
+
+- Pop $q=\{u, t, d\}$—the first element in $Q$—out of $Q$
+
+- For every node $v$ that is adjacent to $u$:
+
+    - Let $d'$ be the direction from $u$ to $v$. 
+
+    - If $d' \neq d$ then $t' \leftarrow t+1$, if $d' = d$ then $t' \leftarrow t$
+
+    - If $t' > 2$ then break.
+
+    - Otherwise, if $t' < T_{vd'}$ or $v$ has not been visited via direction $d'$, then insert $q' = \{ v, t', d' \}$ to the back of $Q$
+
+    - If $q'$ is inserted to $Q$, $P_{vd'} \leftarrow \{ u, d \}$
+
+With this small improvement, a `GameboardLogicNormal` object can check whether it is possible to match a pair of cells via a I/L/U/Z shaped path. If the **BFS** starts from cell $(y_{1}, x_{1})$ and it meets $(y_{2}, x_{2})$ while **BFS** is running, it implies that these two cells can be matched together. The algorithm can also suggest moves and verify game state by pointing out a matchable pair.
+
+To retrieve the path from $s$ to $e$, where $e$ is accessible from $s$, another **DFS** algorithm is implemented. This is just as simple as the previous one, and it has virtually no improvement:
+
+Step 1 - Initialization:
+
+- Prepare a queue $Q$
+
+- Choose $d$ such that $P_{ed}$ contains a node. Let $u \leftarrow e$.
+
+Step 2 - Repeat until $u$ equals $s$:
+
+- Add $u$ to the front of $Q$
+
+- Let $p \leftarrow P_{ud} = \{ p_{u}, p_{d} \}$. $u \leftarrow p_{u}$, $d \leftarrow p_{d}$
+
+Once the **DFS** function finishes, the $i$-th element in $Q$ is the $i$-th cell in the path from $s$ to $e$.
+
+### 6.4.5. About "sliding-logic.h"
+
+### 6.4.6. About "randomize-logic.h"
+
+## 6.5. Linked List Gameboard & Behaviors
+
+(tmp)
+
+## 6.6. Audio
 
 (tmp) Emits sounds in fixed frequencies and durations.
 
-### 6.6. Settings
+## 6.7. Settings
 
 (tmp) Determines console resolution, quantity of difficulty levels and stages, as well as other constant values.
 
-### 6.7. Renderer
+## 6.8. Renderer
 
 (tmp) This module provides a grid for other modules to draw on, and then it prints that grid onto the console.
 
 (tmp) Also supports printing with background color and foreground color.
 
-### 6.8. Rendering Modules
+## 6.9. Rendering Modules
 
 (tmp) Delivers functions to draw some data into the Renderer's grid. Such data are the gameboard, the leaderboard, the title menu, the level selector, etc...
 
-### 6.9. Game Operating Module
+## 6.10. Game Operating Module
 
 (tmp) Operates the game. This module wraps the gameboard, the input control, the renderer, and the audio player altogether to make the game playable.
 
-### 6.10. Account
+## 6.11. Account
 
 (tmp) Account object definition & logging in interface.
 
-### 2.2.11. Hacking Module
+## 6.12. Hacking Module
 
 (tmp) The module to fulfill the "savefile hacking" requirement.
