@@ -85,37 +85,53 @@ The module to fulfill the "savefile hacking" requirement.
 
 This chapter shows which of the required features are implemented and where they are. How they are implemented is later explained in **Chapter 6 - Implementation**.
 
-| Feature                   | Completed | Implemented in               |
-| ------------------------- | --------- | ---------------------------- |
-| Game Starting             | Yes       | src/terminal-pokemon.cpp     |
-| Matching I                | Yes       | src/gameboard-logic-*.h      |
-| Matching L                | Yes       | src/gameboard-logic-*.h      |
-| Matching U                | Yes       | src/gameboard-logic-*.h      |
-| Matching Z                | Yes       | src/gameboard-logic-*.h      |
-| Game Finish Verification  | Yes       | src/gameboard-logic-*.h      |
-| Color Effect              | Yes       | src/color.h                  |
-| Visual Effect             | Yes       | Rendering Modules            |
-| Sound Effect              | Yes       | src/audio-player.h           |
-| Background                | Yes       | src/gameboard-renderer.h     |
-| Leaderboard               | Yes       | src/scene-leaderboard.h      |
-| Stage Difficulty Increase | Yes       | src/sliding-logic.h          |
-| Save file Hacking         | Yes       | Hacking Module               |
-| Board definition          | Yes       | src/gameboard.h              |
-| 2d-Linkedlist Board       | Yes       | sub/gameboard.h              |
-| Account definition        | Yes       | src/account.h                |
-| Binary save file          | Yes       | src/hacking-api.h            |
+| Feature                   | Completed | Implemented in               | Documented in |
+| ------------------------- | --------- | ---------------------------- | ------------- |
+| Game Starting             | Yes       | src/terminal-pokemon.cpp     | 6.9           |
+| Matching I                | Yes       | src/gameboard-logic-*.h      | 6.4.4         |
+| Matching L                | Yes       | src/gameboard-logic-*.h      | 6.4.4         |
+| Matching U                | Yes       | src/gameboard-logic-*.h      | 6.4.4         |
+| Matching Z                | Yes       | src/gameboard-logic-*.h      | 6.4.4         |
+| Game Finish Verification  | Yes       | src/gameboard-logic-*.h      | 6.4.4         |
+| Color Effect              | Yes       | src/color.h                  | 6.8           |
+| Visual Effect             | Yes       | Rendering Modules            | 6.9           |
+| Sound Effect              | Yes       | src/audio-player.h           | 6.6           |
+| Background                | Yes       | src/gameboard-renderer.h     | 6.9           |
+| Leaderboard               | Yes       | src/scene-leaderboard.h      | 6.9           |
+| Move Suggestion           | Yes       | src/gameboard-logic-*.h      | 6.4.4         |
+| Stage Difficulty Increase | Yes       | src/sliding-logic.h          | 6.4.4         |
+| Save file Hacking         | Yes       | Hacking Module               | 6.12          |
+| Board definition          | Yes       | src/gameboard.h              | 6.4.1         |
+| 2d-Linkedlist Board       | Yes       | sub/gameboard.h              | 6.5           |
+| Account definition        | Yes       | src/account.h                | 6.11          |
+| Binary save file          | Yes       | src/hacking-api.h            | 6.12          |
+
+: List of completed requirements
 
 Asides from **Source code aesthetics, Source code comments, Game performance,** and **Game aesthetics**—whose completion can not be marked as "Yes" or "No"—all other programming and technical requirements are all met.
 
 Additionally, this project is also delivered with extra features, which are:
 
-| Feature                                                                                                                   | Implemented in             |
-| ------------------------------------------------------------------------------------------------------------------------- | -------------------------- |
-| Free Match Mode: A new difficulty level, where the player can match tiles in any pattern and not just in `I L U Z` shapes | src/gameboard-logic-easy.h |
-| |
-| Randomizer Mode: A new difficulty level, where tiles sometimes move <br> themselves towards arbitrary directions          | src/randomize-logic.h      |
-| |
-| Background Customization: Allows the user to add/edit/remove background images                                            | src/background-loader.h    |
++---------------------------------------------------------------+------------------------------+-----------------------+
+| Feature                                                       | Implemented in               | Documented in         |
++===============================================================+==============================+=======================+
+| Free Match Mode: A new difficulty level,\                     | src/gameboard-logic-easy.h   | 6.4.3                 |
+| where the player can match tiles in any pattern\              |                              |                       |
+| and not just in `I L U Z` shapes                              |                              |                       |
++---------------------------------------------------------------+------------------------------+-----------------------+
+|                                                               |                              |                       |
++---------------------------------------------------------------+------------------------------+-----------------------+
+| Randomizer Mode: A new difficulty level,\                     | src/randomize-logic.h        | 6.4.5                 |
+| where tiles sometimes move themselves towards\                |                              |                       |
+| arbitrary directions                                          |                              |                       |
++---------------------------------------------------------------+------------------------------+-----------------------+
+|                                                               |                              |                       |
++---------------------------------------------------------------+------------------------------+-----------------------+
+| Background Customization: Allows the user\                    | src/background-loader.h      | 6.9                   |
+| to add/edit/remove background images                          |                              |                       |
++---------------------------------------------------------------+------------------------------+-----------------------+
+
+: List of extra features
 
 \pagebreak
 
@@ -170,8 +186,6 @@ Beyond this chapter, all line of codes belongs to Luu Nam Dat and Nguyen Huynh H
 
 ```
 
-\begin{center} Code References \end{center}
-
 | Source                                                                                                                                                                       | Application                                                          |
 | -----------------------------------------------------------------------------------------------------------------------------------------------------------------------      | -------------------------------------------------------------------- |
 | "Bash - adding color" http://www.andrewnoske.com/wiki/Bash_-_adding_color                                                                                                    | Add colored text to the console output                               |
@@ -180,13 +194,13 @@ Beyond this chapter, all line of codes belongs to Luu Nam Dat and Nguyen Huynh H
 | |
 | "How can I get the list of files in a directory using C or C++" <br> https://stackoverflow.com/questions/612097/how-can-i-get-the-list-of-files-in-a-directory-using-c-or-c  | List files in a directory on different operating systems             |
 
-```
-
-
+: Code References
 
 ```
 
-\begin{center} Documents \end{center}
+
+
+```
 
 | Source                                                                                                                | Application                                                          |
 | --------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
@@ -195,6 +209,8 @@ Beyond this chapter, all line of codes belongs to Luu Nam Dat and Nguyen Huynh H
 | "Windows API Reference" <br> https://learn.microsoft.com/en-us/previous-versions//aa383749(v=vs.85)                   | Documentation of the `<windows.h>` header file                       |
 | |
 | neilharan "OpenAFIS - A high performance C++ fingerprint matching library" <br> https://github.com/neilharan/openafis | This repository's source code organization is applied in our project |
+
+: Documents
 
 \pagebreak
 
@@ -231,6 +247,8 @@ Regarding of how poor the Windows' Terminal performs without "windows-console.h"
 | Alacritty terminal emulator on Windows 10           | 91.2  |
 | Windows 10 Terminal (cmd.exe/powershell.exe)        | 0.3   |
 
+: Performance Benchmark on various platforms
+
 ## 6.3. File IO
 
 This module consists of 3 header files: "file-fetcher.h", "file-io.h", and "background-loader.h". It provides all necessary tools for the game (excluding the hacking module) to read or write any file in the file system. 
@@ -250,10 +268,9 @@ The Gameboard & Behaviors Module consists of 6 header files: "gameboard.h", "gam
 - An extra advance feature: Stage difficulty increase
 - 2 extra features: Free Match Mode and Randomizer Mode (as mentioned in *Chapter 3 - Features*)
 - A vital component which gives data to generate visual effects.
-- Gameboard definition
-- The performance differences between array and linked list
+- Complete a technical requirement: Gameboard definition
 
-By explaining the usage and the implementation of each script in this module, this section shall then clarify how each of those contents were achieved.
+By explaining the usage and the implementation of each script in this module, this section shall then clarify how each of those features were accomplished.
 
 ### 6.4.1. About "gameboard.h"
 
@@ -362,13 +379,13 @@ Step 2 - Repeat until $Q$ is empty:
 
 With this small improvement, a `GameboardLogicNormal` object can check whether it is possible to match a pair of cells via a I/L/U/Z shaped path. If the **BFS** starts from cell $(y_{1}, x_{1})$ and it meets $(y_{2}, x_{2})$ while **BFS** is running, it implies that these two cells can be matched together. The algorithm can also suggest moves and verify game state by pointing out a matchable pair.
 
-To retrieve the path from $s$ to $e$, where $e$ is accessible from $s$, another **DFS** algorithm is implemented. This is just as simple as the previous one, and it has virtually no improvement:
+To retrieve the path from $s$ to $e$ where $e$ is accessible from $s$, another **DFS** algorithm is implemented. This is just as simple as the previous one, and it has virtually no improvement:
 
 Step 1 - Initialization:
 
 - Prepare a queue $Q$
 
-- Choose $d$ such that $P_{ed}$ contains a node. Let $u \leftarrow e$.
+- Choose $d$ such that $P_{ed}$ exists. Let $u \leftarrow e$.
 
 Step 2 - Repeat until $u$ equals $s$:
 
@@ -378,13 +395,75 @@ Step 2 - Repeat until $u$ equals $s$:
 
 Once the **DFS** function finishes, the $i$-th element in $Q$ is the $i$-th cell in the path from $s$ to $e$.
 
-### 6.4.5. About "sliding-logic.h"
+### 6.4.5. About "randomize-logic.h"
 
-### 6.4.6. About "randomize-logic.h"
+Simply moves cells in the gameboard towards random directions. This act grants the game an extra feature "Randomizer Mode".
+
+The moving cells also generate visual effects to show the path they have taken.
+
+### 6.4.6. About "sliding-logic.h"
+
+Offers a function to removes the gaps between cells along a direction. This simulates tiles sliding, and thus this partially accomplishes the "Stage Difficulty Increase" extra-advanced feature.
+
+However, in "Stage Difficulty Increase" feature description, there is a requirement to implement the gameboard as both a 2 dimensional array and a 2 dimensional linked list. This module's `Gameboard` structure uses an array. And to fully complete the extra-advanced feature, a substitute game (under directory `sub/`) which implements the gameboard via linked list was developed.
 
 ## 6.5. Linked List Gameboard & Behaviors
 
-(tmp)
+As mentioned in section *6.4.6.*, this project contains a substitute game which implements the gameboard via a 2 dimensional linked list. This section explains how the `Gameboard` structure was defined in that game.
+
+The linked list in the `Gameboard` structure is a chain consists of `Nodes`. Each `Node` has two properties:
+
+```C++
+struct Node {
+    Node* adj[4]; // adj[ T/L/D/R ] = pointer to top/left/down/right adjacent node
+    char val;     // the value which this node holds
+}
+```
+
+We then propose various procedures to make this linked list functional.
+
+### 6.5.1. Build the linked list
+
+Assume the level data is first read from a file and is represented via a 2 dimensional array $M$, where $M_{yx}$ is the id of the cell at row $y$ column $x$. Then, $N_{xy}$ is a node that has its properties as follow: 
+
+```C++
+    //         top node    left node   down node   right node
+    adj[4] = { &N[y-1][x], &N[y][x-1], &N[y+1][x], &N[y][x+1] };
+    val = M[y][x];
+```
+
+### 6.5.2. Access and Remove an arbitrary node
+
+Without the sliding cells rule, accessing and removing any node is easy. When the player makes a successful match between two cells $(y_{1}, x_{1})$ and $(y_{2}, x_{2})$, simply travel to these two cells in the linked list and mark their values as *"Empty"*.
+
+Let $I$ be the top-left node of the linked list. The function to access cell $(y, x)$ is:
+
+```C++
+    Node* get_node(unsigned int y, unsigned int x) {
+        Node* ans = I;
+        while (y--) ans = ans->adj[DOWN];   // go down `y` times
+        while (x--) ans = ans->adj[RIGHT];  // go right `x` times
+        return ans; // `ans` is now cell (y, x)
+    }
+```
+
+### 6.5.3. Access and Remove an arbitrary node in sliding game
+
+Assume erasing a node $i$ and then slide neibouring nodes into the newly emptied space in direction from $p$ to $q$. When the sliding rule is applied, it is guaranteed to be no gap between cells along the slide direction, so there is no need to mark a node as *"Empty"* while erasing cells. Instead, modify the `adj` propery of $i$'s adjacent nodes:
+
+\pagebreak
+
+```C++
+    Node* node_at_p = i->adj[p];
+    Node* node_at_q = i->adj[q];
+    node_at_p->adj[q] = node_at_q;
+    node_at_q->adj[p] = node_at_p;
+    delete i;   // this node is no longer needed
+```
+
+![Remove node $i$ if $p$ is Right and $q$ is Left](img/linkedlist-remove-node.png){width=80%}
+
+Let $r$ and $s$ be the directions that are orthogonal to $\vec{pq}$. As it can be observed in the figure above, cells that are affected by erasing node $i$ have their adjacent nodes to the $r$ and $s$ directions changed. These cells are updated in the program via an $O(N)$ time complexity function, where $N$ is the count of affected cells.
 
 ## 6.6. Audio
 
