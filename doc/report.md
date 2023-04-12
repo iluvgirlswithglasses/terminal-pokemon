@@ -467,17 +467,25 @@ Let $r$ and $s$ be the directions that are orthogonal to $\vec{pq}$. As it can b
 
 ## 6.6. Audio
 
-(tmp) Emits sounds in fixed frequencies and durations.
+This module consists of only one file: "audio-player.h", which uses the Windows API header `<windows.h>` to emit sounds in fixed frequencies and durations.
 
 ## 6.7. Settings
 
-(tmp) Determines console resolution, quantity of difficulty levels and stages, as well as other constant values.
+This module consists of 2 files: "param.h" and "lvl-info.h"
+
+"param.h" defines the console resolution and might have been defined more constants if the project needed expansion.
+
+"lvl-info.h" defines constants that declare available difficulty levels and game stages.
 
 ## 6.8. Renderer
 
-(tmp) This module provides a grid for other modules to draw on, and then it prints that grid onto the console.
+This module consists of 2 header files: "color.h" and "renderer.h"
 
-(tmp) Also supports printing with background color and foreground color.
+"color.h" defines available colors and functions to control the foreground/background color of the program's output. These functions achieve this by printing specific formatting commands to the console. The source for the formatting commands is cited at *Chapter 5 - References*.
+
+"renderer.h" provides a grid called a **"map"** for other modules to draw on, and then it prints **the map** onto the console. This header file also provides other grids, where each cell of these grids defines an attribute of its corresponding cell in **the map**. Such attributes are foreground color, background color, and font thickness.
+
+By design, while the game is running, only the *Renderer Module* and the *STDIO Control Module* have the privilege to print characters on the console. For a console game that use no game development library, this design makes the project fundamentally easy to be controlled as it clearly seperates the frontend from the backend.
 
 ## 6.9. Rendering Modules
 
@@ -485,11 +493,19 @@ Let $r$ and $s$ be the directions that are orthogonal to $\vec{pq}$. As it can b
 
 ## 6.10. Game Operating Module
 
-(tmp) Operates the game. This module wraps the gameboard, the input control, the renderer, and the audio player altogether to make the game playable.
+This module consists of 1 header file: "game-operator.h"
+
+"game-operator.h" wraps many modules together in order to make the game playable. It controls the sequence of events that happen when the game is being played, such as when to read the user's keypress, when to draw an animation onto the console, when to play sound, when to check whether the game has no more possible move, etc...
+
+There is one script that functions similarly to the Game Operating Module - "terminal-pokemon.cpp". This script contains the `main` function and it wraps all module altogether to control the life cycle of the game, which starts when the user launches the ".exe" file, and ends when the user presses "exit". It can be said that while "game-operator.h" controls the flow of events in gameplay, "terminal-pokemon.cpp" controls the flow of the whole application.
 
 ## 6.11. Account
 
-(tmp) Account object definition & logging in interface.
+This module consists of 2 header files: "account.h" and "scene-logic.h"
+
+"account.h" defines the `Account` structure. It also offers a function to register a new account, and a function to validate login credentials. Registered account information is stored under directory `sav/usrdata.bin`.
+
+"scene-login.h" provides a simple command line interface for the user to log in, or to register a new account. It comes with a feature that hides user's input as they type their password.
 
 ## 6.12. Hacking Module
 
