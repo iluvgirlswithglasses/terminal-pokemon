@@ -403,9 +403,9 @@ Step 2 - Repeat until $Q$ is empty:
 
     - Let $d'$ be the direction from $u$ to $v$. 
 
-    - If $d' \neq d$ then $t' \leftarrow t+1$, if $d' = d$ then $t' \leftarrow t$
+    - If $d' \neq d$ then $t' \leftarrow t+1$, else if $d' = d$ then $t' \leftarrow t$
 
-    - If $t' > 2$ then break.
+    - If $t' > 2$ then break and go to the next iteration.
 
     - Otherwise, if $t' < T_{vd'}$ or $v$ has not been visited via direction $d'$, then insert $q' = \{ v, t', d' \}$ to the back of $Q$
 
@@ -593,4 +593,50 @@ This module consists of 2 header files: "account.h" and "scene-logic.h"
 
 ## 6.12. Hacking Module
 
-(tmp) The module to fulfill the "savefile hacking" requirement.
+This module consists of 4 header files: "hacking-param.h", "hacking-template.h", "hacking-api.h", and "hacking-console.h"
+
+This module exists to fulfill the "save file hacking" extra-advanced feature. It is designed to be able to read the `sample.bin` template save file, as well as to save data into binary files with the same structure as `sample.bin`.
+
+Before going to the implementation, however, the flaws and errors of the `sample.bin` file is firstly addressed. An error is defined as something in `sample.bin` that does not match the project statement. And a flaw is defined as a mistake made by the statement giver which can result in save file corruption.
+
+### 6.12.1. The Flaws of the Statement
+
+By the design of the statement giver, all `char` type data is encoded by performing a $XOR$ operator with an arbitrary mask. However, the `sample.bin` file did not fully encoded all `char` type data in string fields (such as `username` and `password` fields), but only encoded them until the first character with value $0$ ($NULL$). Due to this flaw, all characters that have their value equals to the mask will become unrecoverable after encoding ($x \oplus x = 0$), as they are now being treated as $NULL$.
+
+To handle the flaw, this project makes the mask **a constant** so that it can not encode common characters into $0$.
+
+### 6.12.2. The Errors of the Materials
+
+By the design of the statement giver, the first 101 bytes in the binary file would belong to the mask (1 byte), the username field (50 bytes), and the password field (50 bytes). The next 500 bytes should be $NULL$ bytes that act as a padding. However, starting from the 102-nd byte there continue to be data:
+
+```
+0000 0001 0000 0001 0000 00e7 0700 000a
+```
+
+The data above stores the references to the `record[5]` property and its first element, which suggests there is no padding at all.
+
+To adjust to this error, this project skips this padding, and this only.
+
+### 6.12.3. Implementation
+
+"hacking-param.h" defines constants like username maximum length, password maximum length, etc... Using macros to define constants is considered bad practice in this project, so this kind of header files exists to wrap those constants instead.
+
+"hacking-template.h" defines all hacking-related structures that are required in the statement. All of them have their name changed so as to fit in with the project. The changes can be referenced in the following table:
+
+| Name in Statement      | Name in Implementation |
+| ---------------------- | ---------------------- |
+| State                  | HackingState           |
+| Date                   | HackingDate            |
+| Record                 | HackingRecord          |
+| Savefile               | HackingSavefile        |
+
+: The names of hacking-related structures in the Statement and in Implementation
+
+Next, "hacking-api.h" provides tools to load a `HackingSavefile` object from binary file, as well as tools to write a `HackingSavefile` object into binary. This can easily be done by coordinating the fields in `HackingSavefile` accurately to their respective bytes in `sample.bin` template file.
+
+Lastly, "hacking-console.h" offers an interface for the user to read or edit their save file. Some fields the players are allowed to edit are:
+
+- The background URL of any stage they have played
+- The final score of any of their records
+- The complete date of any of their records
+- The remaining cells of any of their records
