@@ -9,81 +9,15 @@ urlcolor: blue
 
 # Chapter 1. Project Overview
 
-This project is a simplified version of the Pikachu Matching Game, runs on *amd64/x86_64 Linux Bash Terminal* and *x32/x64 Windows Terminal*. All of the source codes are contributed by Luu Nam Dat (Student ID 22127062) and Nguyen Huynh Hai Dang (Student ID 22127052). All of the source codes are integrated and maintained in the codebase by Luu Nam Dat. Any referenced code is cited in the beginning of its corresponding file, and is cited in *Chapter 5 - References*.
+This project is a simplified version of the Pikachu Matching Game, runs on *amd64/x86_64 Linux Bash Terminal* and *x32/x64 Windows Terminal*. All of the source codes are contributed by Luu Nam Dat (Student ID 22127062) and Nguyen Huynh Hai Dang (Student ID 22127052). All of the source codes are integrated and maintained in the codebase by Luu Nam Dat. Any referenced code is cited in the beginning of its corresponding file, and is cited in **Chapter 5 - References**.
 
 The gameplay demonstration of this project can be found on youtube [here](https://www.youtube.com).
 
-# Chapter 2. Project Hierarchy
-
-## 2.1. Diagram explanation
-
-The hierarchy of this project is visualized via a diagram in section *2.2*. The diagram divides the source code into modules, each module has its relations to other modules indicated by arrows. A sample diagram is shown in *figure 1*.
-
-![Sample Diagram](img/sample-diagram.png)
-
-In *figure 1*, arrows that are connected to the bottom or the top of a box (like green and yellow arrows) indicates the relation of any item to a **module**. While arrows that are connected to the side of a box (like blue or yellow arrows) indicates the relation of any item to a **script**.
-
-Additionally, a thin arrow from *A* to *B* shows that *A* exports parameters and methods (functions) to *B*. On the other hand, a thick arrow from *C* to *D* shows that *C* exports data to *D*.
-
-## 2.2. Project Hierarchy
-
-![Hierarchy Diagram](img/hierarchy.png)
-
-This project consists of 55 source code scripts; 31 of them are ".h" files and 24 others, ".cpp" files. Each of them serves a specific role and is grouped into a module. This section briefly explains the usage of each module, then the detailed implementation shall be addressed in **Chapter 6 - Implementation**.
-
-### 2.2.1. Algorithms & Data Structures
-
-This module provides 2 simple data structures that are used thorough the project: Array and Deque; and a simple sorting algorithm used for ranking players: Bubble Sort.
-
-### 2.2.2. STDIO Control
-
-Offers functions to detect and extract keypresses. On Windows, this module provides additional controls to the terminal so as to optimize the poor performance of Windows' console.
-
-### 2.2.3. File IO
-
-Contains functions to list files in any directory (folder) and load some files into game objects.
-
-### 2.2.4. Gameboard & Behaviors
-
-Defines the gameboard structure & its operating logics. Matching rules, tiles sliding rules, and extra rules are defined here.
-
-This module only implements the gameboard as a 2 dimensional array. In order to satisfy the additional requirement, a small game which implements the gameboard as a 2 dimensional linked list has also been developed and included in this project under directory `"sub/"`.
-
-### 2.2.5. Audio
-
-Emits sounds in fixed frequencies and durations.
-
-### 2.2.6. Settings
-
-Determines console resolution, quantity of difficulty levels and stages, as well as other constant values.
-
-### 2.2.7. Renderer
-
-This module provides a grid for other modules to draw on, and then it prints that grid onto the console.
-
-Also supports printing with background color and foreground color.
-
-### 2.2.8. Rendering Modules
-
-Delivers functions to draw some data into the Renderer's grid. Such data are the gameboard, the leaderboard, the title menu, the level selector, etc...
-
-### 2.2.9. Game Operating Module
-
-Operates the game. This module wraps the gameboard, the input control, the renderer, and the audio player altogether to make the game playable.
-
-### 2.2.10. Account
-
-Account object definition & logging in interface.
-
-### 2.2.11. Hacking Module
-
-The module to fulfill the "savefile hacking" requirement.
-
 \pagebreak
 
-# Chapter 3. Features
+# Chapter 2. Project Completion
 
-This chapter shows which of the required features are implemented and where they are. How they are implemented is later explained in **Chapter 6 - Implementation**.
+The following table shows which of the required features are implemented and where they are. How they are implemented is later explained in **Chapter 6 - Implementation**.
 
 | Feature                   | Completed | Implemented in               | Documented in |
 | ------------------------- | --------- | ---------------------------- | ------------- |
@@ -106,9 +40,25 @@ This chapter shows which of the required features are implemented and where they
 | Account definition        | Yes       | src/account.h                | 6.11          |
 | Binary save file          | Yes       | src/hacking-api.h            | 6.12          |
 
-: List of completed requirements
+: List of completed programming and technical requirements
 
 Asides from **Source code aesthetics, Source code comments, Game performance,** and **Game aesthetics**—whose completion can not be marked as "Yes" or "No"—all other programming and technical requirements are all met.
+
+Next, a table is provided to show which of the documentation requirements are done:
+
+| Requirement                    | Completed | Documented in |
+| ------------------------------ | --------- | ------------- |
+| Members info                   | Yes       |               |
+| Game Tutorial                  | Yes       |               |
+| Project hierarchy explanation  | Yes       | Chapter 3     |
+| Program executing instruction  | Yes       | Chapter 4     |
+| Pointer/Linkedlist Comparision | Yes       | 6.5.5         |
+| References                     | Yes       | Chapter 5     |
+| Demonstration Video            | Yes       | [youtube](https://www.youtube.com) |
+| English                        | Yes       |               |
+| Latex                          | Yes       |               |
+
+: List of completed documentation requirements
 
 Additionally, this project is also delivered with extra features, which are:
 
@@ -132,6 +82,76 @@ Additionally, this project is also delivered with extra features, which are:
 +---------------------------------------------------------------+------------------------------+-----------------------+
 
 : List of extra features
+
+\pagebreak
+
+# Chapter 3. Project Hierarchy
+
+## 3.1. Diagram explanation
+
+The hierarchy of this project is visualized via a diagram in section *3.2*. The diagram divides the source code into modules, each module has its relations to other modules indicated by arrows. A sample diagram is shown in the figure below:
+
+![Sample Diagram](img/sample-diagram.png)
+
+In the figure, arrows that are connected to the bottom or the top of a box (like green and yellow arrows) indicates the relation of any item to a **module**. While arrows that are connected to the side of a box (like blue or yellow arrows) indicates the relation of any item to a **script**.
+
+Additionally, a thin arrow from *A* to *B* shows that *A* exports parameters and methods (functions) to *B*. On the other hand, a thick arrow from *C* to *D* shows that *C* exports data to *D*.
+
+\pagebreak
+
+## 3.2. Project Hierarchy
+
+![Hierarchy Diagram](img/hierarchy.png)
+
+This project consists of 55 source code scripts; 31 of them are ".h" files and 24 others, ".cpp" files. Each of them serves a specific role and is grouped into a module. This section briefly explains the usage of each module, then the detailed implementation shall be addressed in **Chapter 6 - Implementation**.
+
+### 3.2.1. Algorithms & Data Structures
+
+This module provides 2 simple data structures that are used thorough the project: Array and Deque; and a simple sorting algorithm used for ranking players: Bubble Sort.
+
+### 3.2.2. STDIO Control
+
+Offers functions to detect and extract keypresses. On Windows, this module provides additional controls to the terminal so as to optimize the poor performance of Windows' console.
+
+### 3.2.3. File IO
+
+Contains functions to list files in any directory (folder) and load some files into game objects.
+
+### 3.2.4. Gameboard & Behaviors
+
+Defines the gameboard structure & its operating logics. Matching rules, tiles sliding rules, and extra rules are defined here.
+
+This module only implements the gameboard as a 2 dimensional array. In order to satisfy the additional requirement, a small game which implements the gameboard as a 2 dimensional linked list has also been developed and included in this project under directory `"sub/"`.
+
+### 3.2.5. Audio
+
+Emits sounds in fixed frequencies and durations.
+
+### 3.2.6. Settings
+
+Determines console resolution, quantity of difficulty levels and stages, as well as other constant values.
+
+### 3.2.7. Renderer
+
+This module provides a grid for other modules to draw on, and then it prints that grid onto the console.
+
+Also supports printing with background color and foreground color.
+
+### 3.2.8. Rendering Modules
+
+Delivers functions to draw some data into the Renderer's grid. Such data are the gameboard, the leaderboard, the title menu, the level selector, etc...
+
+### 3.2.9. Game Operating Module
+
+Operates the game. This module wraps the gameboard, the input control, the renderer, and the audio player altogether to make the game playable.
+
+### 3.2.10. Account
+
+Account object definition & logging in interface.
+
+### 3.2.11. Hacking Module
+
+The module to fulfill the "savefile hacking" requirement.
 
 \pagebreak
 
@@ -163,7 +183,6 @@ Exclusive libraries for Windows:
 - `dirent.h` *(to list files in a directory)*
 - `windows.h`
 
-
 This project was built successfully on the following compilers:
 
 - g++ (GCC) 12.2.1 20230201
@@ -171,6 +190,15 @@ This project was built successfully on the following compilers:
 - g++ (MinGW.org GCC-6.3.0-1) 6.3.0
 
 The build scripts for this project are also provided. To build the game, execute `build.sh` on Linux or `build.bat` on Windows. To build the sub-version of the game which implemented the gameboard as a 2 dimensional linked list, execute `build-linkedlist-game.sh` on Linux or `build-linkedlist-game.bat` on Windows.
+
+The executable files after build would be:
+
+| Operating System | Main Game | Substitute game    |
+| ---------------- | --------- | ------------------ |
+| Linux            | o.exe     | linkedlist.exe     |
+| Windows          | o-win.exe | linkedlist-win.exe |
+
+: List of Executable files
 
 \pagebreak
 
@@ -266,7 +294,7 @@ The Gameboard & Behaviors Module consists of 6 header files: "gameboard.h", "gam
 - 5 standard features: I/L/U/Z Matching and Game finish verification
 - An advanced feature: Move suggestion
 - An extra advance feature: Stage difficulty increase
-- 2 extra features: Free Match Mode and Randomizer Mode (as mentioned in *Chapter 3 - Features*)
+- 2 extra features: Free Match Mode and Randomizer Mode (as mentioned in **Chapter 3 - Features**)
 - A vital component which gives data to generate visual effects.
 - Complete a technical requirement: Gameboard definition
 
@@ -451,8 +479,6 @@ Let $I$ be the top-left node of the linked list. The function to access cell $(y
 
 Assume erasing a node $i$ and then slide neibouring nodes into the newly emptied space in direction from $p$ to $q$. When the sliding rule is applied, it is guaranteed to be no gap between cells along the slide direction, so there is no need to mark a node as *"Empty"* while erasing cells. Instead, modify the `adj` propery of $i$'s adjacent nodes:
 
-\pagebreak
-
 ```C++
     Node* node_at_p = i->adj[p];
     Node* node_at_q = i->adj[q];
@@ -464,6 +490,32 @@ Assume erasing a node $i$ and then slide neibouring nodes into the newly emptied
 ![Remove node $i$ if $p$ is Right and $q$ is Left](img/linkedlist-remove-node.png){width=80%}
 
 Let $r$ and $s$ be the directions that are orthogonal to $\vec{pq}$. As it can be observed in the figure above, cells that are affected by erasing node $i$ have their adjacent nodes to the $r$ and $s$ directions changed. These cells are updated in the program via an $O(N)$ time complexity function, where $N$ is the count of affected cells.
+
+The `Gameboard` structure also has extra tools to control unexpected null pointers that appear when the cells are slided. It is guaranteed to be no segmentation fault while running the game.
+
+### 6.5.4. An alternative linked list
+
+Before going into the performance comparison between Linked List and Array, we propose an alternative approach to create a two dimensional linked list: Array of Linked Lists. In this approach, cell $(y, x)$ can be accessed in the $x$-th element of the $y$-th linked list in the array.
+
+![An array that store pointers to the first nodes of linked lists](img/array-of-linkedlist.png){width=80%}
+
+An array of 1d linked lists is less complex than a 2d linked list, since every node in a 1d linked list only has two adjacent nodes at maximum. This fact makes the sliding function work in $O(1)$, because if node $i$ is deleted, we only need to update the `adj` property of the nodes to the $p$ and $q$ direction of $i$. Accessing and removing a node is also done more efficiently, because this structure can access any row in $O(1)$.
+
+However, the `Gameboard` structure implemented in `sub/gameboard.h` is a 2d linked list. This choice was made in order to clearly portray the discrepancy between linked lists and arrays.
+
+### 6.5.5. Performance Comparision - Linked List and Array
+
+Let $N$ and $M$ be the number of rows and columns in the gameboard. The following table shows the time complexity of different implementations of the gameboard.
+
+|                         | 2D Array         | Array of 1D Linked List | 2D Linked List   |
+| ----------------------- | :--------------: | :---------------------: | :--------------: |
+| Access arbitrary cell   | $O(1)$           | $O(N)$ or $O(M)$        | $O(N+M)$         |
+| Remove arbitrary cell   | $O(1)$           | $O(1)$                  | $O(1)$           |
+| Slide cells             | $O(N)$ or $O(M)$ | $O(1)$                  | $O(N)$ or $O(M)$ |
+
+: Time Complexity Comparison between 2D Array, Array of 1D Linked List, and 2D Linked List
+
+Note that in order to remove a cell or slide some cells, which cell to be removed/to be slided to must first be specified. This requires a node access, whose complexity is $O(1)$ for 2D array, $O(N)$ or $O(M)$ for Array of 1D Linked List, and $O(N+M)$ for 2D Linked List. Consequently, every utility is done more efficent via a 2D Array than any Linked List implementation.
 
 ## 6.6. Audio
 
@@ -481,7 +533,7 @@ This module consists of 2 files: "param.h" and "lvl-info.h"
 
 This module consists of 2 header files: "color.h" and "renderer.h"
 
-"color.h" defines available colors and functions to control the foreground/background color of the program's output. These functions achieve this by printing specific formatting commands to the console. The source for the formatting commands is cited at *Chapter 5 - References*.
+"color.h" defines available colors and functions to control the foreground/background color of the program's output. These functions achieve this by printing specific formatting commands to the console. The source for the formatting commands is cited at **Chapter 5 - References**.
 
 "renderer.h" provides a grid called a **"map"** for other modules to draw on, and then it prints **the map** onto the console. This header file also provides other grids, where each cell of these grids defines an attribute of its corresponding cell in **the map**. Such attributes are foreground color, background color, and font thickness.
 
