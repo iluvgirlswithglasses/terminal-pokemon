@@ -30,8 +30,8 @@ The following table shows which of the required features are implemented and whe
 | Color Effect              | Yes       | src/color.h                  | 6.8           |
 | Visual Effect             | Yes       | Rendering Modules            | 6.9           |
 | Sound Effect              | Yes       | src/audio-player.h           | 6.6           |
-| Background                | Yes       | src/gameboard-renderer.h     | 6.9           |
-| Leaderboard               | Yes       | src/scene-leaderboard.h      | 6.9           |
+| Background                | Yes       | src/gameboard-renderer.h     | 6.9.5         |
+| Leaderboard               | Yes       | src/scene-leaderboard.h      | 6.9.4         |
 | Move Suggestion           | Yes       | src/gameboard-logic-*.h      | 6.4.4         |
 | Stage Difficulty Increase | Yes       | src/sliding-logic.h          | 6.4.4         |
 | Save file Hacking         | Yes       | Hacking Module               | 6.12          |
@@ -77,7 +77,7 @@ Additionally, this project is also delivered with extra features, which are:
 +---------------------------------------------------------------+------------------------------+-----------------------+
 |                                                               |                              |                       |
 +---------------------------------------------------------------+------------------------------+-----------------------+
-| Background Customization: Allows the user\                    | src/background-loader.h      | 6.9                   |
+| Background Customization: Allows the user\                    | src/background-loader.h      | 6.3                   |
 | to add/edit/remove background images                          |                              |                       |
 +---------------------------------------------------------------+------------------------------+-----------------------+
 
@@ -285,7 +285,7 @@ This module consists of 3 header files: "file-fetcher.h", "file-io.h", and "back
 
 "file-io.h" reads a pre-designed gameboard binary file and then feeds it to the program. A gameboard object is built upon this.
 
-"background-loader.h" reads a background image text file and then represents it as a 2 dimensional array.
+"background-loader.h" reads a background image text file and then represents it as a 2 dimensional array, which is fed to "gameboard-renderer.h" (documented in *6.9.5*). By using "file-fetcher.h", it can detect and load any image under directory `bgr/`. Therefore, the player can add/edit/remove any image in `bgr/` as they want. If there are multiple images provided, "background-loader.h" will randomly choose one of them.
 
 ## 6.4. Gameboard & Behaviors
 
@@ -299,6 +299,8 @@ The Gameboard & Behaviors Module consists of 6 header files: "gameboard.h", "gam
 - Complete a technical requirement: Gameboard definition
 
 By explaining the usage and the implementation of each script in this module, this section shall then clarify how each of those features were accomplished.
+
+\pagebreak
 
 ### 6.4.1. About "gameboard.h"
 
@@ -334,6 +336,8 @@ class GameboardLogic {
 ```
 
 Such interface exists to allow derivation. The game which this project delivers has multiple difficulty levels, some of which have different matching rules than others. Thereof, multiple logic classes are written so as to operate the game in different game modes. While having distinctive behaviors, all of these classes inherit the `GameboardLogic` interface, and they all can be treated as `GameboardLogic` objects by the program. This fact greatly reduces the complexity of the source code.
+
+\pagebreak
 
 ### 6.4.3. About "gameboard-logic-easy.h"
 
@@ -376,6 +380,8 @@ Step 2 - Repeat until $u$ equals $s$:
 - $u \leftarrow P_{u}$
 
 Once the procedure is done, the $i$-th element in $Q$ is the $i$-th cell in the path from $s$ to $e$.
+
+\pagebreak
 
 ### 6.4.4. About "gameboard-logic-normal.h"
 
@@ -517,6 +523,8 @@ Let $N$ and $M$ be the number of rows and columns in the gameboard. The followin
 
 Note that in order to remove a cell or slide some cells, which cell to be removed/to be slided to must first be specified. This requires a node access, whose complexity is $O(1)$ for 2D array, $O(N)$ or $O(M)$ for Array of 1D Linked List, and $O(N+M)$ for 2D Linked List. Consequently, every utility is done more efficent via a 2D Array than any Linked List implementation.
 
+\pagebreak
+
 ## 6.6. Audio
 
 This module consists of only one file: "audio-player.h", which uses the Windows API header `<windows.h>` to emit sounds in fixed frequencies and durations.
@@ -541,7 +549,31 @@ By design, while the game is running, only the *Renderer Module* and the *STDIO 
 
 ## 6.9. Rendering Modules
 
-(tmp) Delivers functions to draw some data into the Renderer's grid. Such data are the gameboard, the leaderboard, the title menu, the level selector, etc...
+This module consists of 5 header files: "gameboard-renderer.h", "lvl-menu-renderer.h", "scene-config.h", "scene-menu.h", and "scene-leaderboard.h". These files take backend data, then they write it onto the Renderer's grid, which is then printed onto the console.
+
+### 6.9.1. About "scene-config.h"
+
+Different Windows versions use different terminal emulators. The early versions of Windows 10 use "cmd.exe", while the default of Windows 11 is "Windows Terminal". This "Windows Terminal", however, does not support many functions in the Windows API header file. And some of those functions are the ones that allow the program to control the console's layout, buffer size, etc...
+
+This leads to the lack of automatic screen size configuration of the game. And thus, "scene-config.h" is written in order to help the player configure their console manually. It repeatedly prints out a grid that only forms into a shape once the console has reasonable size, then the player can turn this scene off and come back to playing the game.
+
+### 6.9.2. About "scene-menu.h"
+
+This is the title scene of the game, which consists of many buttons that lead to another scenes upon being pressed. It also offers an "exit" button.
+
+### 6.9.3. About "lvl-menu-renderer.h"
+
+Renders a stage selector using the Renderer Module, then tells the program which stage was selected by the user.
+
+### 6.9.4. About "scene-leaderboard.h"
+
+Loads the leaderboard of the selected stage. 
+
+"scene-leaderboard.h" fetches all the save files of multiple players who have played the stage, stores their records' information into an array, sorts it, and finally, renders the score table using the Renderer Module.
+
+### 6.9.5. About "gameboard-renderer.h"
+
+Takes a gameboard, then fancily draws the gameboard onto the Renderer's grid. Each cell in a gameboard is drawn as a rectangular box in the grid, and empty spaces are replaced by their corresponding pixels in the selected background image.
 
 ## 6.10. Game Operating Module
 
