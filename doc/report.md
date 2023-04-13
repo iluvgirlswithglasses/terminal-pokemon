@@ -53,7 +53,7 @@ The following table shows which of the required features are implemented and whe
 | Background                | Yes       | src/gameboard-renderer.h     | 7.9.5         |
 | Leaderboard               | Yes       | src/scene-leaderboard.h      | 7.9.4         |
 | Move Suggestion           | Yes       | src/gameboard-logic-*.h      | 7.4.4         |
-| Stage Difficulty Increase | Yes       | src/sliding-logic.h          | 7.4.4         |
+| Stage Difficulty Increase | Yes       | src/sliding-logic.h          | 7.4.6         |
 | Save file Hacking         | Yes       | Hacking Module               | 7.12          |
 | Board definition          | Yes       | src/gameboard.h              | 7.4.1         |
 | 2d-Linkedlist Board       | Yes       | sub/gameboard.h              | 7.5           |
