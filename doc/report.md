@@ -7,38 +7,58 @@ fontsize: 12pt
 urlcolor: blue
 ---
 
-# Chapter 1. Project Overview
+\hypersetup{linkcolor=black}
 
-This project is a simplified version of the Pikachu Matching Game, runs on *amd64/x86_64 Linux Bash Terminal* and *x32/x64 Windows Terminal*. All of the source codes are contributed by Luu Nam Dat (Student ID 22127062) and Nguyen Huynh Hai Dang (Student ID 22127052). All of the source codes are integrated and maintained in the codebase by Luu Nam Dat. Any referenced code is cited in the beginning of its corresponding file, and is cited in **Chapter 5 - References**.
+\setcounter{tocdepth}{3}
+\tableofcontents
+\pagebreak
 
-The gameplay demonstration of this project can be found on youtube [here](https://www.youtube.com).
+\listoffigures
+\pagebreak
+
+\listoftables
+\pagebreak
+
+# Chapter 1. Members Introduction and Game Tutorials
+
+We are pleased to introduce our project to our teachers. Our group consists of two members: Nguyễn Huỳnh Hải Đăng and Lưu Nam Đạt. Our student ID numbers are 22127052 and 22127062, respectively. We would like to present our project, a game called Pikachu, in which we have completed all the necessary functions and have exchanged ideas about new features that will be added to the game
+
+Pikachu is a puzzle game in which players select squares to connect them according to the game's predetermined rules. The game is very simple, just connect the same squares together to score points. Our game has many levels, ranging from easy to difficult, with varying degrees of difficulty, and they are all solvable. There are stages with different matching rules, different game events,... making it more challenging for players to solve.
+
+Our team has worked hard to ensure that the game is enjoyable and challenging, and we have incorporated various features to enhance the gameplay experience. We hope you enjoy playing our game as much as we enjoyed creating it. Thank you for your time and consideration.
+
+# Chapter 2. Project Overview
+
+This project is a simplified version of the Pikachu Matching Game, runs on *amd64/x86_64 Linux Bash Terminal* and *x32/x64 Windows Terminal*. All of the source codes are contributed by Luu Nam Dat (Student ID 22127062) and Nguyen Huynh Hai Dang (Student ID 22127052). All of the source codes are integrated and maintained in the codebase by Luu Nam Dat. Any referenced code is cited in the beginning of its corresponding file, and is cited in **Chapter 6 - References**.
+
+The gameplay demonstration of this project can be found on youtube [here](https://youtu.be/A77CPY_1mvU).
 
 \pagebreak
 
-# Chapter 2. Project Completion
+# Chapter 3. Project Completion
 
-The following table shows which of the required features are implemented and where they are. How they are implemented is later explained in **Chapter 6 - Implementation**.
+The following table shows which of the required features are implemented and where they are. How they are implemented is later explained in **Chapter 7 - Implementation**.
 
 | Feature                   | Completed | Implemented in               | Documented in |
 | ------------------------- | --------- | ---------------------------- | ------------- |
-| Game Starting             | Yes       | src/terminal-pokemon.cpp     | 6.9           |
-| Matching I                | Yes       | src/gameboard-logic-*.h      | 6.4.4         |
-| Matching L                | Yes       | src/gameboard-logic-*.h      | 6.4.4         |
-| Matching U                | Yes       | src/gameboard-logic-*.h      | 6.4.4         |
-| Matching Z                | Yes       | src/gameboard-logic-*.h      | 6.4.4         |
-| Game Finish Verification  | Yes       | src/gameboard-logic-*.h      | 6.4.4         |
-| Color Effect              | Yes       | src/color.h                  | 6.8           |
-| Visual Effect             | Yes       | Rendering Modules            | 6.9           |
-| Sound Effect              | Yes       | src/audio-player.h           | 6.6           |
-| Background                | Yes       | src/gameboard-renderer.h     | 6.9.5         |
-| Leaderboard               | Yes       | src/scene-leaderboard.h      | 6.9.4         |
-| Move Suggestion           | Yes       | src/gameboard-logic-*.h      | 6.4.4         |
-| Stage Difficulty Increase | Yes       | src/sliding-logic.h          | 6.4.4         |
-| Save file Hacking         | Yes       | Hacking Module               | 6.12          |
-| Board definition          | Yes       | src/gameboard.h              | 6.4.1         |
-| 2d-Linkedlist Board       | Yes       | sub/gameboard.h              | 6.5           |
-| Account definition        | Yes       | src/account.h                | 6.11          |
-| Binary save file          | Yes       | src/hacking-api.h            | 6.12          |
+| Game Starting             | Yes       | src/terminal-pokemon.cpp     | 7.9           |
+| Matching I                | Yes       | src/gameboard-logic-*.h      | 7.4.4         |
+| Matching L                | Yes       | src/gameboard-logic-*.h      | 7.4.4         |
+| Matching U                | Yes       | src/gameboard-logic-*.h      | 7.4.4         |
+| Matching Z                | Yes       | src/gameboard-logic-*.h      | 7.4.4         |
+| Game Finish Verification  | Yes       | src/gameboard-logic-*.h      | 7.4.4         |
+| Color Effect              | Yes       | src/color.h                  | 7.8           |
+| Visual Effect             | Yes       | Rendering Modules            | 7.9           |
+| Sound Effect              | Yes       | src/audio-player.h           | 7.6           |
+| Background                | Yes       | src/gameboard-renderer.h     | 7.9.5         |
+| Leaderboard               | Yes       | src/scene-leaderboard.h      | 7.9.4         |
+| Move Suggestion           | Yes       | src/gameboard-logic-*.h      | 7.4.4         |
+| Stage Difficulty Increase | Yes       | src/sliding-logic.h          | 7.4.4         |
+| Save file Hacking         | Yes       | Hacking Module               | 7.12          |
+| Board definition          | Yes       | src/gameboard.h              | 7.4.1         |
+| 2d-Linkedlist Board       | Yes       | sub/gameboard.h              | 7.5           |
+| Account definition        | Yes       | src/account.h                | 7.11          |
+| Binary save file          | Yes       | src/hacking-api.h            | 7.12          |
 
 : List of completed programming and technical requirements
 
@@ -50,11 +70,11 @@ Next, a table is provided to show which of the documentation requirements are do
 | ------------------------------ | --------- | ------------- |
 | Members info                   | Yes       |               |
 | Game Tutorial                  | Yes       |               |
-| Project hierarchy explanation  | Yes       | Chapter 3     |
-| Program executing instruction  | Yes       | Chapter 4     |
-| Pointer/Linkedlist Comparision | Yes       | 6.5.5         |
-| References                     | Yes       | Chapter 5     |
-| Demonstration Video            | Yes       | [youtube](https://www.youtube.com) |
+| Project hierarchy explanation  | Yes       | Chapter 4     |
+| Program executing instruction  | Yes       | Chapter 5     |
+| Pointer/Linkedlist Comparision | Yes       | 7.5.5         |
+| References                     | Yes       | Chapter 6     |
+| Demonstration Video            | Yes       | [youtube](https://youtu.be/A77CPY_1mvU) |
 | English                        | Yes       |               |
 | Latex                          | Yes       |               |
 
@@ -65,19 +85,19 @@ Additionally, this project is also delivered with extra features, which are:
 +---------------------------------------------------------------+------------------------------+-----------------------+
 | Feature                                                       | Implemented in               | Documented in         |
 +===============================================================+==============================+=======================+
-| Free Match Mode: A new difficulty level,\                     | src/gameboard-logic-easy.h   | 6.4.3                 |
+| Free Match Mode: A new difficulty level,\                     | src/gameboard-logic-easy.h   | 7.4.3                 |
 | where the player can match tiles in any pattern\              |                              |                       |
 | and not just in `I L U Z` shapes                              |                              |                       |
 +---------------------------------------------------------------+------------------------------+-----------------------+
 |                                                               |                              |                       |
 +---------------------------------------------------------------+------------------------------+-----------------------+
-| Randomizer Mode: A new difficulty level,\                     | src/randomize-logic.h        | 6.4.5                 |
+| Randomizer Mode: A new difficulty level,\                     | src/randomize-logic.h        | 7.4.5                 |
 | where tiles sometimes move themselves towards\                |                              |                       |
 | arbitrary directions                                          |                              |                       |
 +---------------------------------------------------------------+------------------------------+-----------------------+
 |                                                               |                              |                       |
 +---------------------------------------------------------------+------------------------------+-----------------------+
-| Background Customization: Allows the user\                    | src/background-loader.h      | 6.3                   |
+| Background Customization: Allows the user\                    | src/background-loader.h      | 7.3                   |
 | to add/edit/remove background images                          |                              |                       |
 +---------------------------------------------------------------+------------------------------+-----------------------+
 
@@ -85,77 +105,77 @@ Additionally, this project is also delivered with extra features, which are:
 
 \pagebreak
 
-# Chapter 3. Project Hierarchy
+# Chapter 4. Project Hierarchy
 
-## 3.1. Diagram explanation
+## 4.1. Diagram explanation
 
-The hierarchy of this project is visualized via a diagram in section *3.2*. The diagram divides the source code into modules, each module has its relations to other modules indicated by arrows. A sample diagram is shown in the figure below:
+The hierarchy of this project is visualized via a diagram in section **4.2**. The diagram divides the source code into modules, each module has its relations to other modules indicated by arrows. A sample diagram is shown in the figure below:
 
 ![Sample Diagram](img/sample-diagram.png)
 
-In the figure, arrows that are connected to the bottom or the top of a box (like green and yellow arrows) indicates the relation of any item to a **module**. While arrows that are connected to the side of a box (like blue or yellow arrows) indicates the relation of any item to a **script**.
+In the figure, arrows that are connected to the bottom or the top of a box (like green and yellow arrows) indicates the relation of any item to a *module*. While arrows that are connected to the side of a box (like blue or yellow arrows) indicates the relation of any item to a *script*.
 
 Additionally, a thin arrow from *A* to *B* shows that *A* exports parameters and methods (functions) to *B*. On the other hand, a thick arrow from *C* to *D* shows that *C* exports data to *D*.
 
 \pagebreak
 
-## 3.2. Project Hierarchy
+## 4.2. Project Hierarchy
 
 ![Hierarchy Diagram](img/hierarchy.png)
 
-This project consists of 55 source code scripts; 31 of them are ".h" files and 24 others, ".cpp" files. Each of them serves a specific role and is grouped into a module. This section briefly explains the usage of each module, then the detailed implementation shall be addressed in **Chapter 6 - Implementation**.
+This project consists of 55 source code scripts; 31 of them are ".h" files and 24 others, ".cpp" files. Each of them serves a specific role and is grouped into a module. This section briefly explains the usage of each module, then the detailed implementation shall be addressed in **Chapter 7 - Implementation**.
 
-### 3.2.1. Algorithms & Data Structures
+### 4.2.1. Algorithms & Data Structures
 
 This module provides 2 simple data structures that are used thorough the project: Array and Deque; and a simple sorting algorithm used for ranking players: Bubble Sort.
 
-### 3.2.2. STDIO Control
+### 4.2.2. STDIO Control
 
 Offers functions to detect and extract keypresses. On Windows, this module provides additional controls to the terminal so as to optimize the poor performance of Windows' console.
 
-### 3.2.3. File IO
+### 4.2.3. File IO
 
 Contains functions to list files in any directory (folder) and load some files into game objects.
 
-### 3.2.4. Gameboard & Behaviors
+### 4.2.4. Gameboard & Behaviors
 
 Defines the gameboard structure & its operating logics. Matching rules, tiles sliding rules, and extra rules are defined here.
 
 This module only implements the gameboard as a 2 dimensional array. In order to satisfy the additional requirement, a small game which implements the gameboard as a 2 dimensional linked list has also been developed and included in this project under directory `"sub/"`.
 
-### 3.2.5. Audio
+### 4.2.5. Audio
 
 Emits sounds in fixed frequencies and durations.
 
-### 3.2.6. Settings
+### 4.2.6. Settings
 
 Determines console resolution, quantity of difficulty levels and stages, as well as other constant values.
 
-### 3.2.7. Renderer
+### 4.2.7. Renderer
 
 This module provides a grid for other modules to draw on, and then it prints that grid onto the console.
 
 Also supports printing with background color and foreground color.
 
-### 3.2.8. Rendering Modules
+### 4.2.8. Rendering Modules
 
 Delivers functions to draw some data into the Renderer's grid. Such data are the gameboard, the leaderboard, the title menu, the level selector, etc...
 
-### 3.2.9. Game Operating Module
+### 4.2.9. Game Operating Module
 
 Operates the game. This module wraps the gameboard, the input control, the renderer, and the audio player altogether to make the game playable.
 
-### 3.2.10. Account
+### 4.2.10. Account
 
 Account object definition & logging in interface.
 
-### 3.2.11. Hacking Module
+### 4.2.11. Hacking Module
 
 The module to fulfill the "savefile hacking" requirement.
 
 \pagebreak
 
-# Chapter 4. Dependencies
+# Chapter 5. Dependencies
 
 On Linux, this project has no dependencies other than the C++ standard library. On Windows, this project additionally requires the Windows API header file `"windows.h"`, which should already be available after MinGW installation.
 
@@ -202,7 +222,7 @@ The executable files after build would be:
 
 \pagebreak
 
-# Chapter 5. References
+# Chapter 6. References
 
 Before going to the detailed implementation, all references are firstly cited, as well as why they are necessary to this project is also addressed.
 
@@ -242,11 +262,11 @@ Beyond this chapter, all line of codes belongs to Luu Nam Dat and Nguyen Huynh H
 
 \pagebreak
 
-# Chapter 6. Implementation
+# Chapter 7. Implementation
 
 This chapter explains how each module was implemented and what algorithms and techniques were used in the process. 
 
-## 6.1. Algorithms & Data Structures
+## 7.1. Algorithms & Data Structures
 
 This module consists of 3 header files: "qmath.h", "deque.h", and "array.h"
 
@@ -258,7 +278,7 @@ This module consists of 3 header files: "qmath.h", "deque.h", and "array.h"
 
 While "qmath.h" is only used in the leaderboard feature, "deque.h" and "array.h" are robust containers which are used thorough the project as a substitute for static array, pointer array, `std::array`, `std::vector`, `std::queue` and many more built-in containers.
 
-## 6.2. STDIO Control
+## 7.2. STDIO Control
 
 This module consists of 2 header files: "input.h" and "windows-console.h"
 
@@ -277,7 +297,7 @@ Regarding of how poor the Windows' Terminal performs without "windows-console.h"
 
 : Performance Benchmark on various platforms
 
-## 6.3. File IO
+## 7.3. File IO
 
 This module consists of 3 header files: "file-fetcher.h", "file-io.h", and "background-loader.h". It provides all necessary tools for the game (excluding the hacking module) to read or write any file in the file system. 
 
@@ -285,16 +305,16 @@ This module consists of 3 header files: "file-fetcher.h", "file-io.h", and "back
 
 "file-io.h" reads a pre-designed gameboard binary file and then feeds it to the program. A gameboard object is built upon this.
 
-"background-loader.h" reads a background image text file and then represents it as a 2 dimensional array, which is fed to "gameboard-renderer.h" (documented in *6.9.5*). By using "file-fetcher.h", it can detect and load any image under directory `bgr/`. Therefore, the player can add/edit/remove any image in `bgr/` as they want. If there are multiple images provided, "background-loader.h" will randomly choose one of them.
+"background-loader.h" reads a background image text file and then represents it as a 2 dimensional array, which is fed to "gameboard-renderer.h" (documented in **7.9.5**). By using "file-fetcher.h", it can detect and load any image under directory `bgr/`. Therefore, the player can add/edit/remove any image in `bgr/` as they want. If there are multiple images provided, "background-loader.h" will randomly choose one of them.
 
-## 6.4. Gameboard & Behaviors
+## 7.4. Gameboard & Behaviors
 
 The Gameboard & Behaviors Module consists of 6 header files: "gameboard.h", "gameboard-logic.h", "gameboard-logic-easy.h", "gameboard-logic-normal.h", "sliding-logic.h", and "randomize-logic.h". This is the most complicated module in the project as it covers a lot of contents:
 
 - 5 standard features: I/L/U/Z Matching and Game finish verification
 - An advanced feature: Move suggestion
 - An extra advance feature: Stage difficulty increase
-- 2 extra features: Free Match Mode and Randomizer Mode (as mentioned in **Chapter 3 - Features**)
+- 2 extra features: Free Match Mode and Randomizer Mode (as mentioned in **Chapter 3 - Project Completion**)
 - A vital component which gives data to generate visual effects.
 - Complete a technical requirement: Gameboard definition
 
@@ -302,9 +322,9 @@ By explaining the usage and the implementation of each script in this module, th
 
 \pagebreak
 
-### 6.4.1. About "gameboard.h"
+### 7.4.1. About "gameboard.h"
 
-It is a technical requirement to declare a gameboard structure using both a 2 dimensional array and a 2 dimensional linked list. This project offers 2 seperated games, where the main game (under directory `src/`) implements the game board via array and the substitute game (under directory `sub/`) doing so via a linked list. This section covers the array version of the gameboard, while the other version is covered in section *6.5*.
+It is a technical requirement to declare a gameboard structure using both a 2 dimensional array and a 2 dimensional linked list. This project offers 2 seperated games, where the main game (under directory `src/`) implements the game board via array and the substitute game (under directory `sub/`) doing so via a linked list. This section covers the array version of the gameboard, while the other version is covered in section **7.5**.
 
 The array version of the gameboard is straight-forward. The structure implemented in `src/gameboard.h` consists of these properties to simulate the geometric attributes of the board:
 
@@ -315,7 +335,7 @@ uint8_t** map;  // map[i][j] stores the id of the cell at row `i` column `j`
 
 The `gameboard.h` structure also comes with extra properties and methods to calculate the current score of the player, and to keep track of number of helps used. A constructor and a deconstructor are also writen for convenient development reasons.
 
-### 6.4.2. About "gameboard-logic.h"
+### 7.4.2. About "gameboard-logic.h"
 
 Contains a class `GameboardLogic` which acts as a interface, offering functions to check the legitimacy of a match, to trace the path between 2 cells, and to suggest a move.
 
@@ -339,7 +359,7 @@ Such interface exists to allow derivation. The game which this project delivers 
 
 \pagebreak
 
-### 6.4.3. About "gameboard-logic-easy.h"
+### 7.4.3. About "gameboard-logic-easy.h"
 
 Contains a class `GameboardLogicEasy` which derives from the `GameboardLogic` interface. The `validate` method of this class checks whether two cells can be matched in any pattern (not just in patterns I/L/U/Z).
 
@@ -383,7 +403,7 @@ Once the procedure is done, the $i$-th element in $Q$ is the $i$-th cell in the 
 
 \pagebreak
 
-### 6.4.4. About "gameboard-logic-normal.h"
+### 7.4.4. About "gameboard-logic-normal.h"
 
 Contains a class `GameboardLogicNormal` which derives from the `GameboardLogic` interface. The `validate` method of this class checks whether two cells can be matched in patterns I/L/U/Z.
 
@@ -429,21 +449,21 @@ Step 2 - Repeat until $u$ equals $s$:
 
 Once the **DFS** function finishes, the $i$-th element in $Q$ is the $i$-th cell in the path from $s$ to $e$.
 
-### 6.4.5. About "randomize-logic.h"
+### 7.4.5. About "randomize-logic.h"
 
 Simply moves cells in the gameboard towards random directions. This act grants the game an extra feature "Randomizer Mode".
 
 The moving cells also generate visual effects to show the path they have taken.
 
-### 6.4.6. About "sliding-logic.h"
+### 7.4.6. About "sliding-logic.h"
 
 Offers a function to removes the gaps between cells along a direction. This simulates tiles sliding, and thus this partially accomplishes the "Stage Difficulty Increase" extra-advanced feature.
 
 However, in "Stage Difficulty Increase" feature description, there is a requirement to implement the gameboard as both a 2 dimensional array and a 2 dimensional linked list. This module's `Gameboard` structure uses an array. And to fully complete the extra-advanced feature, a substitute game (under directory `sub/`) which implements the gameboard via linked list was developed.
 
-## 6.5. Linked List Gameboard & Behaviors
+## 7.5. Linked List Gameboard & Behaviors
 
-As mentioned in section *6.4.6.*, this project contains a substitute game which implements the gameboard via a 2 dimensional linked list. This section explains how the `Gameboard` structure was defined in that game.
+As mentioned in section **7.4.6.**, this project contains a substitute game which implements the gameboard via a 2 dimensional linked list. This section explains how the `Gameboard` structure was defined in that game.
 
 The linked list in the `Gameboard` structure is a chain consists of `Nodes`. Each `Node` has two properties:
 
@@ -456,7 +476,7 @@ struct Node {
 
 We then propose various procedures to make this linked list functional.
 
-### 6.5.1. Build the linked list
+### 7.5.1. Build the linked list
 
 Assume the level data is first read from a file and is represented via a 2 dimensional array $M$, where $M_{yx}$ is the id of the cell at row $y$ column $x$. Then, $N_{xy}$ is a node that has its properties as follow: 
 
@@ -466,7 +486,7 @@ Assume the level data is first read from a file and is represented via a 2 dimen
     val = M[y][x];
 ```
 
-### 6.5.2. Access and Remove an arbitrary node
+### 7.5.2. Access and Remove an arbitrary node
 
 Without the sliding cells rule, accessing and removing any node is easy. When the player makes a successful match between two cells $(y_{1}, x_{1})$ and $(y_{2}, x_{2})$, simply travel to these two cells in the linked list and mark their values as *"Empty"*.
 
@@ -481,7 +501,7 @@ Let $I$ be the top-left node of the linked list. The function to access cell $(y
     }
 ```
 
-### 6.5.3. Access and Remove an arbitrary node in sliding game
+### 7.5.3. Access and Remove an arbitrary node in sliding game
 
 Assume erasing a node $i$ and then slide neibouring nodes into the newly emptied space in direction from $p$ to $q$. When the sliding rule is applied, it is guaranteed to be no gap between cells along the slide direction, so there is no need to mark a node as *"Empty"* while erasing cells. Instead, modify the `adj` propery of $i$'s adjacent nodes:
 
@@ -499,7 +519,7 @@ Let $r$ and $s$ be the directions that are orthogonal to $\vec{pq}$. As it can b
 
 The `Gameboard` structure also has extra tools to control unexpected null pointers that appear when the cells are slided. It is guaranteed to be no segmentation fault while running the game.
 
-### 6.5.4. An alternative linked list
+### 7.5.4. An alternative linked list
 
 Before going into the performance comparison between Linked List and Array, we propose an alternative approach to create a two dimensional linked list: Array of Linked Lists. In this approach, cell $(y, x)$ can be accessed in the $x$-th element of the $y$-th linked list in the array.
 
@@ -509,7 +529,7 @@ An array of 1d linked lists is less complex than a 2d linked list, since every n
 
 However, the `Gameboard` structure implemented in `sub/gameboard.h` is a 2d linked list. This choice was made in order to clearly portray the discrepancy between linked lists and arrays.
 
-### 6.5.5. Performance Comparision - Linked List and Array
+### 7.5.5. Performance Comparision - Linked List and Array
 
 Let $N$ and $M$ be the number of rows and columns in the gameboard. The following table shows the time complexity of different implementations of the gameboard.
 
@@ -525,11 +545,11 @@ Note that in order to remove a cell or slide some cells, which cell to be remove
 
 \pagebreak
 
-## 6.6. Audio
+## 7.6. Audio
 
 This module consists of only one file: "audio-player.h", which uses the Windows API header `<windows.h>` to emit sounds in fixed frequencies and durations.
 
-## 6.7. Settings
+## 7.7. Settings
 
 This module consists of 2 files: "param.h" and "lvl-info.h"
 
@@ -537,45 +557,45 @@ This module consists of 2 files: "param.h" and "lvl-info.h"
 
 "lvl-info.h" defines constants that declare available difficulty levels and game stages.
 
-## 6.8. Renderer
+## 7.8. Renderer
 
 This module consists of 2 header files: "color.h" and "renderer.h"
 
-"color.h" defines available colors and functions to control the foreground/background color of the program's output. These functions achieve this by printing specific formatting commands to the console. The source for the formatting commands is cited at **Chapter 5 - References**.
+"color.h" defines available colors and functions to control the foreground/background color of the program's output. These functions achieve this by printing specific formatting commands to the console. The source for the formatting commands is cited at **Chapter 6 - References**.
 
-"renderer.h" provides a grid called a **"map"** for other modules to draw on, and then it prints **the map** onto the console. This header file also provides other grids, where each cell of these grids defines an attribute of its corresponding cell in **the map**. Such attributes are foreground color, background color, and font thickness.
+"renderer.h" provides a grid called a *"map"* for other modules to draw on, and then it prints *the map* onto the console. This header file also provides other grids, where each cell of these grids defines an attribute of its corresponding cell in *the map*. Such attributes are foreground color, background color, and font thickness.
 
 By design, while the game is running, only the *Renderer Module* and the *STDIO Control Module* have the privilege to print characters on the console. For a console game that use no game development library, this design makes the project fundamentally easy to be controlled as it clearly seperates the frontend from the backend.
 
-## 6.9. Rendering Modules
+## 7.9. Rendering Modules
 
 This module consists of 5 header files: "gameboard-renderer.h", "lvl-menu-renderer.h", "scene-config.h", "scene-menu.h", and "scene-leaderboard.h". These files take backend data, then they write it onto the Renderer's grid, which is then printed onto the console.
 
-### 6.9.1. About "scene-config.h"
+### 7.9.1. About "scene-config.h"
 
 Different Windows versions use different terminal emulators. The early versions of Windows 10 use "cmd.exe", while the default of Windows 11 is "Windows Terminal". This "Windows Terminal", however, does not support many functions in the Windows API header file. And some of those functions are the ones that allow the program to control the console's layout, buffer size, etc...
 
 This leads to the lack of automatic screen size configuration of the game. And thus, "scene-config.h" is written in order to help the player configure their console manually. It repeatedly prints out a grid that only forms into a shape once the console has reasonable size, then the player can turn this scene off and come back to playing the game.
 
-### 6.9.2. About "scene-menu.h"
+### 7.9.2. About "scene-menu.h"
 
 This is the title scene of the game, which consists of many buttons that lead to another scenes upon being pressed. It also offers an "exit" button.
 
-### 6.9.3. About "lvl-menu-renderer.h"
+### 7.9.3. About "lvl-menu-renderer.h"
 
 Renders a stage selector using the Renderer Module, then tells the program which stage was selected by the user.
 
-### 6.9.4. About "scene-leaderboard.h"
+### 7.9.4. About "scene-leaderboard.h"
 
 Loads the leaderboard of the selected stage. 
 
 "scene-leaderboard.h" fetches all the save files of multiple players who have played the stage, stores their records' information into an array, sorts it, and finally, renders the score table using the Renderer Module.
 
-### 6.9.5. About "gameboard-renderer.h"
+### 7.9.5. About "gameboard-renderer.h"
 
 Takes a gameboard, then fancily draws the gameboard onto the Renderer's grid. Each cell in a gameboard is drawn as a rectangular box in the grid, and empty spaces are replaced by their corresponding pixels in the selected background image.
 
-## 6.10. Game Operating Module
+## 7.10. Game Operating Module
 
 This module consists of 1 header file: "game-operator.h"
 
@@ -583,7 +603,7 @@ This module consists of 1 header file: "game-operator.h"
 
 There is one script that functions similarly to the Game Operating Module - "terminal-pokemon.cpp". This script contains the `main` function and it wraps all module altogether to control the life cycle of the game, which starts when the user launches the ".exe" file, and ends when the user presses "exit". It can be said that while "game-operator.h" controls the flow of events in gameplay, "terminal-pokemon.cpp" controls the flow of the whole application.
 
-## 6.11. Account
+## 7.11. Account
 
 This module consists of 2 header files: "account.h" and "scene-logic.h"
 
@@ -591,7 +611,7 @@ This module consists of 2 header files: "account.h" and "scene-logic.h"
 
 "scene-login.h" provides a simple command line interface for the user to log in, or to register a new account. It comes with a feature that hides user's input as they type their password.
 
-## 6.12. Hacking Module
+## 7.12. Hacking Module
 
 This module consists of 4 header files: "hacking-param.h", "hacking-template.h", "hacking-api.h", and "hacking-console.h"
 
@@ -599,13 +619,13 @@ This module exists to fulfill the "save file hacking" extra-advanced feature. It
 
 Before going to the implementation, however, the flaws and errors of the `sample.bin` file is firstly addressed. An error is defined as something in `sample.bin` that does not match the project statement. And a flaw is defined as a mistake made by the statement giver which can result in save file corruption.
 
-### 6.12.1. The Flaws of the Statement
+### 7.12.1. The Flaws of the Statement
 
 By the design of the statement giver, all `char` type data is encoded by performing a $XOR$ operator with an arbitrary mask. However, the `sample.bin` file did not fully encoded all `char` type data in string fields (such as `username` and `password` fields), but only encoded them until the first character with value $0$ ($NULL$). Due to this flaw, all characters that have their value equals to the mask will become unrecoverable after encoding ($x \oplus x = 0$), as they are now being treated as $NULL$.
 
-To handle the flaw, this project makes the mask **a constant** so that it can not encode common characters into $0$.
+To handle the flaw, this project makes the mask *a constant* so that it can not encode common characters into $0$.
 
-### 6.12.2. The Errors of the Materials
+### 7.12.2. The Errors of the Materials
 
 By the design of the statement giver, the first 101 bytes in the binary file would belong to the mask (1 byte), the username field (50 bytes), and the password field (50 bytes). The next 500 bytes should be $NULL$ bytes that act as a padding. However, starting from the 102-nd byte there continue to be data:
 
@@ -617,7 +637,7 @@ The data above stores the references to the `record[5]` property and its first e
 
 To adjust to this error, this project skips this padding, and this only.
 
-### 6.12.3. Implementation
+### 7.12.3. Implementation
 
 "hacking-param.h" defines constants like username maximum length, password maximum length, etc... Using macros to define constants is considered bad practice in this project, so this kind of header files exists to wrap those constants instead.
 
